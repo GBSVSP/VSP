@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      >
+<h:head>
+  <link href="css/bootstrap.css" rel="stylesheet"></link>
+   
+     <link href="css/bootstrap.min.css" rel="stylesheet"></link>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet"></link>
+    <link href="css/site.css" rel="stylesheet"></link>
+    <link href="css/base-admin-3.css" rel="stylesheet"></link>
+    <link href="css/font-awesome.css" rel="stylesheet"></link>
+    <link href="css/font-awesome.min.css" rel="stylesheet"></link>
+
+</h:head>
+<h:body>
+  <div align="center">
+  <fieldset class="fieldset" style=" width:400px;">
+                    <legend class="scheduler-border">Login</legend>
+                    
+                    <h:form id="Login" >
+                	<h:panelGrid columns="1">
+		<h:panelGrid columns="3">
+		<h:outputText value="User Name" />
+		<h:inputText id="username" value="#{login.userName}" required="true" requiredMessage="User Name cannot be null">
+		<f:validateRequired />
+		</h:inputText>
+		<p></p>
+		<h:outputText value="Password" />
+		<h:inputSecret id="password" value="#{login.password}" required="true" requiredMessage="Password cannot be null">
+		<f:validateRequired />
+		</h:inputSecret>
+	
+		<h:commandButton action="#{login.validateUser}"
+			value="Login" class="btn-success"></h:commandButton>
+				</h:panelGrid>
+			<h:message for="username" style="color:red;"></h:message>
+			<h:message for="password" style="color:red;"></h:message>
+			<h:message for ="validationMsg" id="validationMsg" style="color:red;"></h:message>
+			
+		</h:panelGrid>	
+		
+	</h:form>
+
+                    </fieldset>
+                    </div>
+
+</h:body>
+</html>

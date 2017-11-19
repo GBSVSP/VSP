@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" output="target/classes" path="src/main/java">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" output="target/test-classes" path="src/test/java">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/com.ibm.websphere.appserver.api.json-1.0.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/cssparser-0.9.5.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/db2jcc_license_cu.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/db2jcc4.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/guava-10.0.1.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/richfaces-components-api-4.1.0.20111111-CR1.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/richfaces-components-ui-4.1.0.20111111-CR1.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/richfaces-core-api-4.1.0.20111111-CR1.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/richfaces-core-impl-4.1.0.20111111-CR1.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/sac-1.3.jar"/>
+	<classpathentry kind="lib" path="/QuizPortal/src/main/webapp/WEB-INF/lib/javax.servlet-3.0.jar"/>
+	<classpathentry kind="lib" path="/QuizPortal/src/main/webapp/WEB-INF/lib/jsf-api-2.2.0.jar" sourcepath="C:/Users/IBM_AD~1/AppData/Local/Temp/decompiler/source/jsf-api-2.2.0-sources.jar"/>
+	<classpathentry kind="lib" path="/QuizPortal/src/main/webapp/WEB-INF/lib/jsf-impl-2.2.0.jar"/>
+	<classpathentry kind="lib" path="/QuizPortal/src/main/webapp/WEB-INF/lib/jstl-1.2.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/bluepagesauth.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/cwa2.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/ibmjsse.jar"/>
+	<classpathentry kind="output" path="target/classes"/>
+</classpath>

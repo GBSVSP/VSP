@@ -1,0 +1,30 @@
+#footer {
+    margin-top: 5pt;
+    color: #888;
+        background-color: #f7f7f7;
+
+}
+
+@media (min-width: 980px) {
+    body {
+        padding-top: 40px;
+        padding-bottom: 40px;
+    }
+}
+
+/* adjust path for Bootstrap icons */
+[class^="icon-"], [class*=" icon-"] {
+    background-image: url("css/images/glyphicons-halflings.png");
+}
+input[type=submit]  {
+  
+ padding: 5;
+ 
+  display: block;
+  padding-right: 10;
+ 
+  padding-left: 10;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}

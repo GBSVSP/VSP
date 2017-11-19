@@ -1,0 +1,9 @@
+applications:
+- path: target/vsp.war
+  memory: 512M
+  instances: 1
+  domain: ng.mybluemix.net
+  name: 
+  host: 
+  disk_quota: 1024M
+

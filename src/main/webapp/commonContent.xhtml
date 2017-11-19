@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" 
+				xmlns:h="http://java.sun.com/jsf/html"
+	            xmlns:p="http://primefaces.org/ui" 
+	            xmlns:ui="http://java.sun.com/jsf/facelets"
+	            xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:body>
+ 	<script src="js/jquery-2.0.3.js"></script>
+	<script src="js/jquery-ui.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/Common.js"></script>
+   
+<h:form prependId="false" >
+<table align="center">
+<tr><td><ui:include src="dealSearch.xhtml" /></td></tr>
+<tr><td>
+<h:panelGrid columns="2" rendered="#{empty deal.dealList}" >
+      <table>
+      <tr><td align="center">Get started and create a new deal form</td></tr>
+                <tr><td align="center"><input type="button" value="NEW DEAL FORM"/></td></tr></table>
+           
+      </h:panelGrid>
+</td></tr>
+</table>
+
+</h:form>
+            	 
+</h:body>
+</html>
+
+
