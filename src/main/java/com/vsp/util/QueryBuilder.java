@@ -1,5 +1,14 @@
 package com.vsp.util;
-
+/**
+ * <p>
+ * SQL queries are generated from this class
+ *
+ * </p>
+ * 
+ * @author Anju Sasidharan (anju.sasidharan@in.ibm.com)
+ * @version 1.0
+ * @Date 13/Nov/2017
+ */
 public class QueryBuilder {
 public static String VALIDATE_LOGIN = "Select ROLE_ID from USER_DATA where USER_NAME=?";
 public static String SEARCH_DEAL = "Select * from DEAL_INFO where ";

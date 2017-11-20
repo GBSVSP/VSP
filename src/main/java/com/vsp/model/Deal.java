@@ -24,7 +24,15 @@ import com.vsp.dao.DealDAO;
 import com.vsp.util.Constants;
 import com.vsp.util.DBConnect;
 import com.vsp.util.QueryBuilder;
-
+/**
+ * <p>
+ * This the bean class for deal
+ *
+ * </p>
+ * 
+ * @author Anju Sasidharan (anju.sasidharan@in.ibm.com)
+ * @version 1.0
+ */
 @ManagedBean
 @SessionScoped
 public class Deal {

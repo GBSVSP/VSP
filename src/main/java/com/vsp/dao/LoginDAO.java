@@ -8,6 +8,16 @@ import java.sql.SQLException;
 import com.vsp.util.DBConnect;
 import com.vsp.util.QueryBuilder;
 import com.vsp.util.SessionUtils;
+/**
+ * <p>
+ * This the DAO class for login
+ *
+ * </p>
+ * 
+ * @author Anju Sasidharan (anju.sasidharan@in.ibm.com)
+ * @version 1.0
+ * @Date 10/Nov/2017
+ */
 
 public class LoginDAO {
 

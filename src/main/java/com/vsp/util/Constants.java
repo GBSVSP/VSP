@@ -1,5 +1,15 @@
 package com.vsp.util;
 
+/**
+ * <p>
+ * This the class for constant variables
+ *
+ * </p>
+ * 
+ * @author Anju Sasidharan (anju.sasidharan@in.ibm.com)
+ * @version 1.0
+ * @Date 13/Nov/2017
+ */
 public class Constants {
 public static String VSP_OPP_NO = "VSP_OPP_NO";
 public static String CLIENT = "CLIENT";

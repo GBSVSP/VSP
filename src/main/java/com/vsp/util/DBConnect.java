@@ -8,7 +8,16 @@ package com.vsp.util;
 	import com.ibm.json.java.JSON;
 	import com.ibm.json.java.JSONArray;
 	import com.ibm.json.java.JSONObject;
-
+	/**
+	 * <p>
+	 * This the DB connection  class for VSP
+	 *
+	 * </p>
+	 * 
+	 * @author Anju Sasidharan (anju.sasidharan@in.ibm.com)
+	 * @version 1.0
+	 * @Date 10/Nov/2017
+	 */
 	public class DBConnect {
 		
 	    public static Connection getConnection() throws Exception { 

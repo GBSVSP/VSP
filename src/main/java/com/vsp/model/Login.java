@@ -13,7 +13,16 @@ import com.ibm.swat.password.cwa2;
 
 import com.vsp.dao.LoginDAO;
 import com.vsp.util.SessionUtils;
-
+/**
+ * <p>
+ * This the bean class for login
+ *
+ * </p>
+ * 
+ * @author Anju Sasidharan (anju.sasidharan@in.ibm.com)
+ * @version 1.0
+ * @Date 10/Nov/2017
+ */
 @ManagedBean(name="login")
 public class Login implements Serializable {
 
@@ -44,7 +53,7 @@ public class Login implements Serializable {
 		 String message = null;
 		 if (userName!=null && password !=null) {
 				cwa2 group = new cwa2();
-				ReturnCode rc = group.authenticate(userName, password);
+				//ReturnCode rc = group.authenticate(userName, password);
 				//int code = rc.getCode();
 				int code = 0;
 				if ( code != 0) {

@@ -1,5 +1,15 @@
 package com.vsp.model;
 
+/**
+ * <p>
+ * This the bean class for deal informations
+ *
+ * </p>
+ * 
+ * @author Anju Sasidharan (anju.sasidharan@in.ibm.com)
+ * @version 1.0
+ * @Date 13/Nov/2017
+ */
 public class DealInfo {
 private int deal_Id;
 private String vSP_Ref_No ;

@@ -10,7 +10,16 @@ import java.util.ArrayList;
 import com.vsp.model.DealInfo;
 import com.vsp.util.DBConnect;
 import com.vsp.util.QueryBuilder;
-
+/**
+ * <p>
+ * This the DAO class for deal
+ *
+ * </p>
+ * 
+ * @author Anju Sasidharan (anju.sasidharan@in.ibm.com)
+ * @version 1.0
+ * @Date 13/Nov/2017
+ */
 
 public class DealDAO {
 

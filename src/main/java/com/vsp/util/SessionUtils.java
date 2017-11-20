@@ -4,7 +4,16 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
+/**
+ * <p>
+ * This the session class for VSP
+ *
+ * </p>
+ * 
+ * @author Anju Sasidharan (anju.sasidharan@in.ibm.com)
+ * @version 1.0
+ * @Date 10/Nov/2017
+ */
 public class SessionUtils {
 
 	public static HttpSession getSession() {
@@ -36,7 +45,7 @@ public class SessionUtils {
 	public static void setUserName(String userName) {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
-		session.setAttribute("username",userName);
+		session.setAttribute("userName",userName);
 	}
 	
 	public static int getRoleId() {
