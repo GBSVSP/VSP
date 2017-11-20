@@ -6,7 +6,7 @@
 <h:body>
 	<ui:composition template="commonLayout.xhtml">
 		<ui:define name="content">
-			<h:dataTable id="dealResult" var="q" value="#{deal.dealList}"
+			<h:dataTable id="dealResult" var="row" value="#{deal.dealList}"
 				headerClass="dealTableHeader" rendered="#{not empty deal.dealList}">
 
 			<h:column>
@@ -17,44 +17,48 @@
 						<table border="0" width="90%">
 							<tr>
 								<td colspan="4" align="left"><b>VSP NUMBER:
-										#{q.VSP_Ref_No} </b></td>
+										#{row.VSP_Ref_No} </b></td>
 							</tr>
 
 							<tr>
-								<td>Client Name: <h:inputText value="#{q.customer_Name}"></h:inputText></td>
+								<td>Client Name: <h:inputText value="#{row.customer_Name}"></h:inputText></td>
 								<td align="left">Opportunity Name: <h:inputText
-										value="#{q.opportunity_Name}" /></td>
+										value="#{row.opportunity_Name}" /></td>
 								<td align="left">Opportunity Owner: <h:inputText
-										value="#{q.opportunity_Owner}" /></td>
+										value="#{row.opportunity_Owner}" /></td>
 							</tr>
 							<tr>
 								<td>Opportunity Description:<h:inputTextarea
-										value="#{q.opportunity_Description}" /></td>
+										value="#{row.opportunity_Description}" /></td>
 								<td>Additional Contacts:<h:inputText
-										value="#{q.sales_Connect_Opp_No}" /></td>
-								<td>Deal Documents :<h:inputText value="#{q.TCV}" /></td>
+										value="#{row.sales_Connect_Opp_No}" /></td>
+								<td>Deal Documents :<h:inputText value="#{row.TCV}" /></td>
 							</tr>
 							<tr>
 								<td>Sales Connect No:<h:inputText
-										value="#{q.sales_Connect_Opp_No}" /></td>
-								<td>SSM Stage :<h:inputText value="#{q.TCV}" /></td>
-								<td>IMT :<h:inputText value="#{q.TCV}" /></td>
+										value="#{row.sales_Connect_Opp_No}" /></td>
+								<td>SSM Stage :<h:inputText value="#{row.TCV}" /></td>
+								<td>IMT :<h:inputText value="#{row.TCV}" /></td>
 								<td>Sales Connect Opportunity Owner:<h:inputText
-										value="#{q.TCV}" /></td>
+										value="#{row.TCV}" /></td>
 							</tr>
 							<tr>
-								<td>Sector:<h:inputText value="#{q.sales_Connect_Opp_No}" /></td>
-								<td>Industry:<h:inputText value="#{q.TCV}" /></td>
-								<td>TCV:<h:inputText value="#{q.TCV}" /></td>
+								<td>Sector:<h:inputText value="#{row.sales_Connect_Opp_No}" /></td>
+								<td>Industry:<h:inputText value="#{row.TCV}" /></td>
+								<td>TCV:<h:inputText value="#{row.TCV}" /></td>
 								<td>Opportunity's Business Partner:<h:inputText
-										value="#{q.TCV}" /></td>
+										value="#{row.TCV}" /></td>
 							</tr>
 							<tr>
-								<td>Led By:<h:inputText value="#{q.sales_Connect_Opp_No}" /></td>
-								<td>Decision Date:<h:inputText value="#{q.TCV}" /></td>
-								<td>B and P Spend:<h:inputText value="#{q.bnP_Spent}" /></td>
-								<td>IPFF Number:<h:inputText value="#{q.IPPF_Number}" /></td>
-								<td>Other Linked OPP Number:<h:inputText value="#{q.other_Linked_Opp_No}" /></td>
+								<td>
+								<h:selectOneMenu  required="true" requiredMessage="Please Select">
+									<f:selectItems value="#{deal.ledByList}" immediate="true"/>
+    								</h:selectOneMenu>
+								</td>
+								<td>Decision Date:<h:inputText value="#{row.TCV}" /></td>
+								<td>B and P Spend:<h:inputText value="#{row.bnP_Spent}" /></td>
+								<td>IPFF Number:<h:inputText value="#{row.IPPF_Number}" /></td>
+								<td>Other Linked OPP Number:<h:inputText value="#{row.other_Linked_Opp_No}" /></td>
 							</tr>
 						</table>
 						<hr />

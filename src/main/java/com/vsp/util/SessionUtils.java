@@ -38,14 +38,11 @@ public class SessionUtils {
 	}
 
 	public static String getUserName() {
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		return session.getAttribute("userName").toString();
+
+		return getSession().getAttribute("userName").toString();
 	}
 	public static void setUserName(String userName) {
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		session.setAttribute("userName",userName);
+		getSession().setAttribute("userName",userName);
 	}
 	
 	public static int getRoleId() {
@@ -57,9 +54,8 @@ public class SessionUtils {
 	}
 	
 	public static void setRoleId(String roleId) {
-		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-		session.setAttribute("roleId",roleId);
+
+		getSession().setAttribute("roleId",roleId);
 	}
 	
 	

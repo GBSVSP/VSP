@@ -18,6 +18,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIData;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.model.SelectItem;
 
 import com.sun.javafx.collections.MappingChange.Map;
 import com.vsp.dao.DealDAO;
@@ -32,16 +33,18 @@ import com.vsp.util.QueryBuilder;
  * 
  * @author Anju Sasidharan (anju.sasidharan@in.ibm.com)
  * @version 1.0
+ * @Date 13/Nov/2017
  */
 @ManagedBean
 @SessionScoped
-public class Deal {
+public class Deal implements Serializable{
 	private static final long serialVersionUID = 1094801825228386363L;
 	private String searchType = Constants.DEFAULT_DEARCH_TYPE;
 	private static  ArrayList<DealInfo> dealList ; 
+	private static   ArrayList<String> ledByList ; 
 	private String searchValue;
 	private  static Connection con = null;
-	private String  sql = null;
+	private static String  sql = null;
 	ResultSet dealResult = null;
 	private String whereClause = null;
 	private boolean show = false;
@@ -158,7 +161,19 @@ public class Deal {
 				dealList.remove(i);
 			}
 		}
+		System.out.println("size:"+dealList.size());
 		return "dealForm";
 		
+	}
+
+
+	public ArrayList<String> getLedByList() {
+		sql = QueryBuilder.SELECT_LED_BY;
+		try {
+			ledByList =  DealDAO.getLedByList(con, sql);
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+		}
+		return ledByList;
 	}
 }

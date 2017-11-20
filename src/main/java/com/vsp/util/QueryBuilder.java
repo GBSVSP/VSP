@@ -16,5 +16,6 @@ public static String SELECT_VSP_REF_NO = "Select distinct VSP_REF_NO from DEAL_I
 public static String SELECT_DEAL_ID = "Select distinct DEAL_ID from DEAL_INFO";
 public static String SELECT_CUSTOMER_NAME = "Select distinct CUSTOMER_NAME from DEAL_INFO";
 public static String SELECT_SALES_CONNECT_OPP_NO = "Select distinct SALES_CONNECT_OPP_NO from DEAL_INFO";
+public static String SELECT_LED_BY = "Select VALUE_ID, VALUE_NAME from VSP_OPTION_MASTER";
 
 }

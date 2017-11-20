@@ -83,5 +83,26 @@ public class DealDAO {
 		}
 	return dealInfoList;
 	}
+public static ArrayList<String> getLedByList(Connection con,String sql) throws Exception {
+		
+		PreparedStatement ps = null;
+		ArrayList<String> ledByList = new ArrayList<String>();
 	
+		try {
+			
+			ps = con.prepareStatement(sql);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				ledByList.add(rs.getString(2));
+			}
+			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			
+		}
+	return ledByList;
+	}
+
 }
