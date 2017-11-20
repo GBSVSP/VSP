@@ -40,7 +40,7 @@ public class SessionUtils {
 	public static String getUserName() {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
-		return session.getAttribute("username").toString();
+		return session.getAttribute("userName").toString();
 	}
 	public static void setUserName(String userName) {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
@@ -51,11 +51,16 @@ public class SessionUtils {
 	public static int getRoleId() {
 		HttpSession session = getSession();
 		if (session != null)
-			return (Integer.parseInt((String)session.getAttribute("roleid")));
+			return (Integer.parseInt((String)session.getAttribute("roleId")));
 		else
 			return 0;
 	}
 	
+	public static void setRoleId(String roleId) {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+		session.setAttribute("roleId",roleId);
+	}
 	
 	
 }
