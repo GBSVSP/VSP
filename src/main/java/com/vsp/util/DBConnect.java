@@ -19,8 +19,21 @@ package com.vsp.util;
 	 * @Date 10/Nov/2017
 	 */
 	public class DBConnect {
+		public static Connection getConnection() throws Exception { 
+	    	try {
+				Class.forName("com.ibm.db2.jcc.DB2Driver");
+				Connection con = DriverManager.getConnection(
+						"jdbc:db2://dashdb-entry-yp-dal09-09.services.dal.bluemix.net:50000/BLUDB", "dash9924", "05CL_zl_PKpz");
+				return con;
+			} catch (Exception ex) {
+				System.out.println(ex);
+				System.out.println("Database.getConnection() Error -->"
+						+ ex.getMessage());
+				return null;
+			}
+	  	 }
 		
-	    public static Connection getConnection() throws Exception { 
+	   /* public static Connection getConnection() throws Exception { 
 	    	 Map<String, String> env = System.getenv(); 
 	    	   
 	     	  if (env.containsKey("VCAP_SERVICES")) { 
@@ -52,7 +65,7 @@ package com.vsp.util;
 	     	  } 
 	     	   
 	     	  throw new Exception("DB2 service URL found. Make sure you have bound the correct services to your app."); 
-	     	 }
+	     	 }*/
 	
 		
 	public static void close(Connection con) {
