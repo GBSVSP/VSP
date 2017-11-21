@@ -22,6 +22,7 @@ import javax.faces.model.SelectItem;
 
 import com.sun.javafx.collections.MappingChange.Map;
 import com.vsp.dao.DealDAO;
+import com.vsp.dao.FormDAO;
 import com.vsp.util.Constants;
 import com.vsp.util.DBConnect;
 import com.vsp.util.QueryBuilder;
@@ -42,6 +43,12 @@ public class Deal implements Serializable{
 	private String searchType = Constants.DEFAULT_DEARCH_TYPE;
 	private static  ArrayList<DealInfo> dealList ; 
 	private static   ArrayList<String> ledByList ; 
+	private static   ArrayList<String> potentialTCVList ; 
+	private static   ArrayList<String> a1StatusList ;
+	private static   ArrayList<String> nextStepList ;
+	private static   ArrayList<String> shouldweSellList ;
+	private static   ArrayList<String> canweSellList ;
+	private static   ArrayList<String> a1EvaluationList ;
 	private static   ArrayList<String> IMTList ; 
 	private static   ArrayList<String> sectorList ;
 	private String searchValue;
@@ -169,20 +176,87 @@ public class Deal implements Serializable{
 		
 	}
 
-
 	public ArrayList<String> getLedByList() {
-		sql = QueryBuilder.SELECT_LED_BY;
+		whereClause = Constants.LED_BY_CONDITION;
+		sql = QueryBuilder.SELECT_OPTION+""+whereClause;
+	
 		try {
-			ledByList =  DealDAO.getOptionList(sql);
+			ledByList =  FormDAO.getOptionList(sql);
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
 		}
 		return ledByList;
 	}
+	public ArrayList<String> getPotentialTCVList() {
+		whereClause = Constants.PPOTENTIAL_TCV_CONDITION;
+		sql = QueryBuilder.SELECT_OPTION+""+whereClause;
+
+		try {
+			potentialTCVList =  FormDAO.getOptionList(sql);
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+		}
+		return potentialTCVList;
+	}
+	public ArrayList<String> getA1StatusList() {
+		whereClause = Constants.A1STATUS_CONDITION;
+		sql = QueryBuilder.SELECT_OPTION+""+whereClause;
+
+		try {
+			a1StatusList =  FormDAO.getOptionList(sql);
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+		}
+		return a1StatusList;
+	}
+	public ArrayList<String> getNextStepList() {
+		whereClause = Constants.NEXT_STEP_CONDITION;
+		sql = QueryBuilder.SELECT_OPTION+""+whereClause;
+
+		try {
+			nextStepList =  FormDAO.getOptionList(sql);
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+		}
+		return nextStepList;
+	}
+	public ArrayList<String> getShouldweSellList() {
+		whereClause = Constants.SHOULD_WE_SELL_CONDITION;
+		sql = QueryBuilder.SELECT_OPTION+""+whereClause;
+
+		try {
+			shouldweSellList =  FormDAO.getOptionList(sql);
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+		}
+		return shouldweSellList;
+	}
+	public ArrayList<String> getCanweSellList() {
+		whereClause = Constants.CAN_WE_SELL_CONDITION;
+		sql = QueryBuilder.SELECT_OPTION+""+whereClause;
+
+		try {
+			canweSellList =  FormDAO.getOptionList(sql);
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+		}
+		return canweSellList;
+	}
+	public ArrayList<String> getA1EvaluationList() {
+		whereClause = Constants.A1EVALUATION_CONDITION;
+		sql = QueryBuilder.SELECT_OPTION+""+whereClause;
+
+		try {
+			a1EvaluationList =  FormDAO.getOptionList(sql);
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+		}
+		return a1EvaluationList;
+	}
 	public ArrayList<String> getIMTList() {
 		sql = QueryBuilder.SELECT_IMT;
 		try {
-			IMTList =  DealDAO.getOptionList(sql);
+			IMTList =  FormDAO.getOptionList(sql);
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
 		}
@@ -191,7 +265,7 @@ public class Deal implements Serializable{
 	public ArrayList<String> getSectorList() {
 		sql = QueryBuilder.SELECT_SECTOR;
 		try {
-			sectorList =  DealDAO.getOptionList(sql);
+			sectorList =  FormDAO.getOptionList(sql);
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
 		}

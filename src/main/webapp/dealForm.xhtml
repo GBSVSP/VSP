@@ -17,7 +17,7 @@
 
 						<br></br>
 						<br></br>
-						<table border="0" width="80%">
+						<table border="0" width="60%">
 							<tr>
 								<td colspan="4" align="left"><b>Reference Number:
 										#{row.VSP_Ref_No} </b></td>
@@ -35,7 +35,7 @@
 										value="#{row.opportunity_Description}" /></td>
 								<td>Additional Contacts:<h:inputText
 										value="#{row.additional_Contacts}" /></td>
-								<td>Deal Documents :<h:inputText value="#{row.VSP_Document_Link}" /></td>
+								<td>Box :<h:inputText value="#{row.VSP_Document_Link}" /></td>
 							</tr>
 
 
@@ -55,6 +55,12 @@
 										<f:selectItems value="#{deal.ledByList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
+								</tr>
+								<tr>
+								<td>SSM Stage:<h:inputText
+										value="#{row.SSM_Stage_Id}" /></td>
+								<td>SC TCV:<h:inputText
+										value="#{row.TCV}" /></td>
 								<td>Sales Connect No:<h:inputText
 										value="#{row.sales_Connect_Opp_No}" /></td>
 							</tr>

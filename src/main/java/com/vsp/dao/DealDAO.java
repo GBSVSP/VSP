@@ -76,7 +76,7 @@ public class DealDAO {
 				dealInfo.setIPPF_Number(rs.getString(18));
 				dealInfo.setGBS_GTS_Led(rs.getString(19));
 				dealInfo.setOther_Linked_Opp_No(rs.getString(20));
-				dealInfo.setSSM_State_Id(rs.getInt(21));
+				dealInfo.setSSM_Stage_Id(rs.getInt(21));
 				dealInfo.setOpp_Business_Partners(rs.getString(22));
 				dealInfo.setOpp_Close_Date(rs.getString(23));
 				dealInfo.setBnP_Spent(rs.getDouble(24));

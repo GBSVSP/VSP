@@ -22,16 +22,16 @@
 							<tr>
 								<td>A1 Status: <h:selectOneMenu required="true"
 										requiredMessage="Please Select">
-										<f:selectItems value="#{deal.ledByList}" immediate="true" />
+										<f:selectItems value="#{deal.a1StatusList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
-								<td>A1 Coach:<h:inputText value="#{row.TCV}" />
+								<td>A1 Manager:<h:inputText  />
 								</td>
-								<td>A1 Complete:<h:inputText value="#{row.TCV}" />
+								<td>A1 Complete:<h:inputText  />
 								</td>
 								<td>Next Step: <h:selectOneMenu required="true"
 										requiredMessage="Please Select">
-										<f:selectItems value="#{deal.ledByList}" immediate="true" />
+										<f:selectItems value="#{deal.nextStepList}" immediate="true" />
 									</h:selectOneMenu>
 								</td></tr>
 								<tr>
@@ -40,25 +40,18 @@
 							<tr>
 								<td>Should we sell: <h:selectOneMenu required="true"
 										requiredMessage="Please Select">
-										<f:selectItems value="#{deal.ledByList}" immediate="true" />
+										<f:selectItems value="#{deal.shouldweSellList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
 								
 								<td>A1 Can we sell?: <h:selectOneMenu required="true"
 										requiredMessage="Please Select">
-										<f:selectItems value="#{deal.ledByList}" immediate="true" />
+										<f:selectItems value="#{deal.canweSellList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
-								<td>Deal Size Range: <h:selectOneMenu required="true"
-										requiredMessage="Please Select">
-										<f:selectItems value="#{deal.ledByList}" immediate="true" />
-									</h:selectOneMenu>
-								</td>
-								</tr>
-								<tr>
 								<td>A1 Evaluation: <h:selectOneMenu required="true"
 										requiredMessage="Please Select">
-										<f:selectItems value="#{deal.ledByList}" immediate="true" />
+										<f:selectItems value="#{deal.a1EvaluationList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
 								<td>A1 Pursuit profile win chance:<h:inputText value="#{row.TCV}" />

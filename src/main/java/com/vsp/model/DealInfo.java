@@ -31,7 +31,7 @@ private String vSP_Document_Link ;
 private String iPPF_Number ;
 private String gBS_GTS_Led ;
 private String other_Linked_Opp_No ;
-private int sSM_State_Id ;
+private int sSM_Stage_Id ;
 private String opp_Business_Partners ;
 private String opp_Close_Date ;
 private double bnP_Spent;
@@ -133,11 +133,11 @@ public String getOther_Linked_Opp_No() {
 public void setOther_Linked_Opp_No(String other_Linked_Opp_No) {
 	this.other_Linked_Opp_No = other_Linked_Opp_No;
 }
-public int getSSM_State_Id() {
-	return sSM_State_Id;
+public int getSSM_Stage_Id() {
+	return sSM_Stage_Id;
 }
-public void setSSM_State_Id(int sSM_State_Id) {
-	this.sSM_State_Id = sSM_State_Id;
+public void setSSM_Stage_Id(int sSM_Stage_Id) {
+	this.sSM_Stage_Id = sSM_Stage_Id;
 }
 public String getOpp_Business_Partners() {
 	return opp_Business_Partners;
