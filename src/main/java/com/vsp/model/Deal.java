@@ -42,16 +42,18 @@ public class Deal implements Serializable{
 	private String searchType = Constants.DEFAULT_DEARCH_TYPE;
 	private static  ArrayList<DealInfo> dealList ; 
 	private static   ArrayList<String> ledByList ; 
+	private static   ArrayList<String> IMTList ; 
+	private static   ArrayList<String> sectorList ;
 	private String searchValue;
-	private  static Connection con = null;
+	
 	private static String  sql = null;
-	ResultSet dealResult = null;
+	
 	private String whereClause = null;
 	private boolean show = false;
 	private int count;
 	public Deal() throws Exception{
 		
-		con = DBConnect.getConnection();
+		
 		
 	}
 	
@@ -90,7 +92,7 @@ public class Deal implements Serializable{
 	public void searchDeal() throws Exception {
 		show = false;
 		sql = QueryBuilder.SEARCH_DEAL+ ""+whereClause;
-		dealList = DealDAO.getDealList(con,sql,searchValue);
+		dealList = DealDAO.getDealList(sql,searchValue);
 		if(dealList.isEmpty()){
 			show = true;
 		}
@@ -122,8 +124,8 @@ public class Deal implements Serializable{
 				whereClause = Constants.SALES_CONNECT_NO_SQL;
 			}
 			
-			dealResult = DealDAO.getDeal(con,sql);
-			System.out.println("sql:"+sql);
+			ResultSet dealResult  = DealDAO.getDeal(sql);
+			
 			if(dealResult.next()){
 			do {
 				String data = dealResult.getString(1);	
@@ -135,6 +137,7 @@ public class Deal implements Serializable{
 			}
 		}
 		catch(Exception e) {
+			System.out.println("Error in getDeal();:"+e);
 			e.printStackTrace();
 		}
 		
@@ -170,10 +173,28 @@ public class Deal implements Serializable{
 	public ArrayList<String> getLedByList() {
 		sql = QueryBuilder.SELECT_LED_BY;
 		try {
-			ledByList =  DealDAO.getLedByList(con, sql);
+			ledByList =  DealDAO.getOptionList(sql);
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
 		}
 		return ledByList;
+	}
+	public ArrayList<String> getIMTList() {
+		sql = QueryBuilder.SELECT_IMT;
+		try {
+			IMTList =  DealDAO.getOptionList(sql);
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+		}
+		return IMTList;
+	}
+	public ArrayList<String> getSectorList() {
+		sql = QueryBuilder.SELECT_SECTOR;
+		try {
+			sectorList =  DealDAO.getOptionList(sql);
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+		}
+		return sectorList;
 	}
 }

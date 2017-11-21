@@ -27,7 +27,7 @@ public class LoginDAO {
 		String sql = QueryBuilder.VALIDATE_LOGIN;
 		int roleId=0;
 		try {
-			con = DBConnect.getConnection();
+			con = DBConnect.getInstance().getConnInst();
 			ps = con.prepareStatement(sql);
 			ps.setString(1,user);	
 			ResultSet rs = ps.executeQuery();

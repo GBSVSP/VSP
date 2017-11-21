@@ -3,9 +3,12 @@ package com.vsp.util;
 	import java.net.URI;
 	import java.sql.Connection;
 	import java.sql.DriverManager;
-	import java.util.Map;
+import java.sql.SQLException;
+import java.util.Map;
 
-	import com.ibm.json.java.JSON;
+import javax.sql.DataSource;
+
+import com.ibm.json.java.JSON;
 	import com.ibm.json.java.JSONArray;
 	import com.ibm.json.java.JSONObject;
 	/**
@@ -19,20 +22,51 @@ package com.vsp.util;
 	 * @Date 10/Nov/2017
 	 */
 	public class DBConnect {
-		public static Connection getConnection() throws Exception { 
+		
+		private static DBConnect singleInstance;
+		private static Connection connection;
+	;
+		private DBConnect() { 
 	    	try {
 				Class.forName("com.ibm.db2.jcc.DB2Driver");
-				Connection con = DriverManager.getConnection(
-						"jdbc:db2://dashdb-entry-yp-dal09-09.services.dal.bluemix.net:50000/BLUDB", "dash9924", "05CL_zl_PKpz");
-				return con;
+				
+				System.out.println("connection got");
+				
 			} catch (Exception ex) {
 				System.out.println(ex);
 				System.out.println("Database.getConnection() Error -->"
 						+ ex.getMessage());
-				return null;
+				
 			}
 	  	 }
-		
+		 public static DBConnect getInstance()
+		  {
+		    if(singleInstance == null)
+		    {
+		      synchronized (DBConnect.class)
+		      {
+		        if(singleInstance == null)
+		        {
+		          singleInstance = new DBConnect();
+		        }
+		      }
+		    }
+		 
+		    return singleInstance;
+		  }
+		 
+		 public Connection getConnInst()
+		  {
+		 try {
+		  connection = DriverManager.getConnection(
+					"jdbc:db2://dashdb-entry-yp-dal09-09.services.dal.bluemix.net:50000/BLUDB", "dash9924", "05CL_zl_PKpz");
+		      
+		 }
+		 catch(Exception e) {
+			 e.printStackTrace();
+		 }
+		    return connection;   
+		  }
 	   /* public static Connection getConnection() throws Exception { 
 	    	 Map<String, String> env = System.getenv(); 
 	    	   

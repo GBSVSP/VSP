@@ -14,8 +14,11 @@ public class DealInfo {
 private int deal_Id;
 private String vSP_Ref_No ;
 private int sector_Id ;
+private String sector_Name ;
 private int industry_Id ;
+private String industry_Name ;
 private int iMT_Id ;
+private String iMT_Name;
 private String sales_Connect_Opp_No ;
 private String customer_Name ;
 private String opportunity_Name;
@@ -172,6 +175,25 @@ public String getOpportunity_Owner() {
 public void setOpportunity_Owner(String opportunity_Owner) {
 	this.opportunity_Owner = opportunity_Owner;
 }
+public String getSector_Name() {
+	return sector_Name;
+}
+public void setSector_Name(String sector_Name) {
+	this.sector_Name = sector_Name;
+}
+public String getIndustry_Name() {
+	return industry_Name;
+}
+public void setIndustry_Name(String industry_Name) {
+	this.industry_Name = industry_Name;
+}
+public String getIMT_Name() {
+	return iMT_Name;
+}
+public void setIMT_Name(String iMT_Name) {
+	this.iMT_Name = iMT_Name;
+}
+
 
 
 }

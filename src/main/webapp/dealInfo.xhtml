@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+
+			<h:dataTable id="dealInfo" var="row" value="#{deal.dealList}"
+				headerClass="dealTableHeader" width="100%">
+
+			<h:column>
+
+						<table border="0" width="70%">
+							
+							<tr>
+								<td colspan="4" align="left"><b>Deal Information:</b>
+									<hr /></td></tr>
+							<tr>
+								<td>SSM State: <h:selectOneMenu required="true" value="#{row.SSM_State_Id}"
+										requiredMessage="Please Select">
+										<f:selectItems value="#{deal.ledByList}" immediate="true" />
+									</h:selectOneMenu>
+								</td>
+								
+								<td>SCIMT: <h:selectOneMenu required="true" value=""
+										requiredMessage="Please Select">
+										<f:selectItems value="#{deal.ledByList}" immediate="true" />
+									</h:selectOneMenu>
+								</td>
+								<td>TCV: <h:selectOneMenu required="true"
+										requiredMessage="Please Select" value="#{row.TCV}">
+										<f:selectItems value="#{deal.ledByList}" immediate="true" />
+									</h:selectOneMenu>
+								</td>
+								<td>Sales Connect Opportunity Owner:<h:inputText value="#{row.opportunity_Owner}" /></td>
+								</tr>
+								<tr>
+								<td>Decision Date:<h:inputText value="#{row.opp_Close_Date}" /></td>
+								<td>B and P Spend:<h:inputText value="#{row.bnP_Spent}" /></td>
+								<td>IPFF Number:<h:inputText value="#{row.IPPF_Number}" /></td>
+								<td>Opportunity's Business Partner:<h:inputText value="#{row.opp_Business_Partners}" /></td>
+								</tr>
+								<tr>
+								<td>Other Linked Opp No:<h:inputText value="#{row.other_Linked_Opp_No}" />
+								</td>
+								</tr>
+								
+						</table>
+						
+
+				</h:column>
+
+			</h:dataTable>
+	
+</h:body>
+
+</html>

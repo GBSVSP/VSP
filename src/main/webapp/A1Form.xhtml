@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+
+			<h:dataTable id="a1Result" var="row" value="#{deal.dealList}"
+				headerClass="dealTableHeader" width="100%">
+
+			<h:column>
+
+						<table border="0" width="70%">
+							<tr>
+								<td colspan="4" align="left"><b>A1 Ref No:
+										#{row.VSP_Ref_No} </b></td>
+							</tr>
+
+							<tr>
+								<td colspan="4" align="left"><b>A1 Status:</b>
+									<hr /></td></tr>
+							<tr>
+								<td>A1 Status: <h:selectOneMenu required="true"
+										requiredMessage="Please Select">
+										<f:selectItems value="#{deal.ledByList}" immediate="true" />
+									</h:selectOneMenu>
+								</td>
+								<td>A1 Coach:<h:inputText value="#{row.TCV}" />
+								</td>
+								<td>A1 Complete:<h:inputText value="#{row.TCV}" />
+								</td>
+								<td>Next Step: <h:selectOneMenu required="true"
+										requiredMessage="Please Select">
+										<f:selectItems value="#{deal.ledByList}" immediate="true" />
+									</h:selectOneMenu>
+								</td></tr>
+								<tr>
+								<td colspan="10" align="left"><b>A1 Evaluation:</b>
+									<hr /></td></tr>
+							<tr>
+								<td>Should we sell: <h:selectOneMenu required="true"
+										requiredMessage="Please Select">
+										<f:selectItems value="#{deal.ledByList}" immediate="true" />
+									</h:selectOneMenu>
+								</td>
+								
+								<td>A1 Can we sell?: <h:selectOneMenu required="true"
+										requiredMessage="Please Select">
+										<f:selectItems value="#{deal.ledByList}" immediate="true" />
+									</h:selectOneMenu>
+								</td>
+								<td>Deal Size Range: <h:selectOneMenu required="true"
+										requiredMessage="Please Select">
+										<f:selectItems value="#{deal.ledByList}" immediate="true" />
+									</h:selectOneMenu>
+								</td>
+								</tr>
+								<tr>
+								<td>A1 Evaluation: <h:selectOneMenu required="true"
+										requiredMessage="Please Select">
+										<f:selectItems value="#{deal.ledByList}" immediate="true" />
+									</h:selectOneMenu>
+								</td>
+								<td>A1 Pursuit profile win chance:<h:inputText value="#{row.TCV}" />
+								</td>
+								</tr>
+								<tr>
+								<td colspan="10" align="left"><hr /></td></tr>
+								<tr>
+								<td colspan="10" align="left">Historical A1 Info:</td></tr>
+						</table>
+						
+
+				</h:column>
+
+			</h:dataTable>
+	
+</h:body>
+
+</html>

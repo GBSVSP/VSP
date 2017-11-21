@@ -2,21 +2,24 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" 
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:body>
 	<ui:composition template="commonLayout.xhtml">
 		<ui:define name="content">
-			<h:dataTable id="dealResult" var="row" value="#{deal.dealList}"
-				headerClass="dealTableHeader" rendered="#{not empty deal.dealList}">
+		<p:scrollPanel mode="native" style="position: absolute; height: 100%;">
+			<h:form>
+				<h:dataTable id="dealResult" var="row" value="#{deal.dealList}"
+					headerClass="dealTableHeader" rendered="#{not empty deal.dealList}">
 
-			<h:column>
+					<h:column>
 
-					<h:form>
+
 						<br></br>
 						<br></br>
-						<table border="0" width="90%">
+						<table border="0" width="80%">
 							<tr>
-								<td colspan="4" align="left"><b>VSP NUMBER:
+								<td colspan="4" align="left"><b>Reference Number:
 										#{row.VSP_Ref_No} </b></td>
 							</tr>
 
@@ -31,46 +34,45 @@
 								<td>Opportunity Description:<h:inputTextarea
 										value="#{row.opportunity_Description}" /></td>
 								<td>Additional Contacts:<h:inputText
-										value="#{row.sales_Connect_Opp_No}" /></td>
-								<td>Deal Documents :<h:inputText value="#{row.TCV}" /></td>
+										value="#{row.additional_Contacts}" /></td>
+								<td>Deal Documents :<h:inputText value="#{row.VSP_Document_Link}" /></td>
 							</tr>
+
+
 							<tr>
+								<td>IMT: <h:selectOneMenu value="#{row.IMT_Name}" required="true"
+										requiredMessage="Please Select">
+										<f:selectItems value="#{deal.IMTList}" immediate="true" />
+									</h:selectOneMenu>
+								</td>
+								<td>Sector: <h:selectOneMenu value="#{row.sector_Name}" required="true"
+										requiredMessage="Please Select">
+										<f:selectItems value="#{deal.sectorList}" immediate="true" />
+									</h:selectOneMenu>
+								</td>
+								<td>Led By: <h:selectOneMenu value="#{row.GBS_GTS_Led}" required="true"
+										requiredMessage="Please Select">
+										<f:selectItems value="#{deal.ledByList}" immediate="true" />
+									</h:selectOneMenu>
+								</td>
 								<td>Sales Connect No:<h:inputText
 										value="#{row.sales_Connect_Opp_No}" /></td>
-								<td>SSM Stage :<h:inputText value="#{row.TCV}" /></td>
-								<td>IMT :<h:inputText value="#{row.TCV}" /></td>
-								<td>Sales Connect Opportunity Owner:<h:inputText
-										value="#{row.TCV}" /></td>
-							</tr>
-							<tr>
-								<td>Sector:<h:inputText value="#{row.sales_Connect_Opp_No}" /></td>
-								<td>Industry:<h:inputText value="#{row.TCV}" /></td>
-								<td>TCV:<h:inputText value="#{row.TCV}" /></td>
-								<td>Opportunity's Business Partner:<h:inputText
-										value="#{row.TCV}" /></td>
-							</tr>
-							<tr>
-								<td>Led By:
-								<h:selectOneMenu  required="true" requiredMessage="Please Select">
-									<f:selectItems value="#{deal.ledByList}" immediate="true"/>
-    								</h:selectOneMenu>
-								</td>
-								<td>Decision Date:<h:inputText value="#{row.TCV}" /></td>
-								<td>B and P Spend:<h:inputText value="#{row.bnP_Spent}" /></td>
-								<td>IPFF Number:<h:inputText value="#{row.IPPF_Number}" /></td>
-								<td>Other Linked OPP Number:<h:inputText value="#{row.other_Linked_Opp_No}" /></td>
 							</tr>
 						</table>
 						<hr />
 
-					</h:form>
-				</h:column>
 
-			</h:dataTable>
-			<h:commandButton id="searchButton" value="SAVE CHANGES"
-				class="btn-default">
+					</h:column>
 
-			</h:commandButton>
+				</h:dataTable>
+				<ui:include src="A1Form.xhtml" />
+				<ui:include src="dealInfo.xhtml" />
+				<h:commandButton id="searchButton" value="SAVE CHANGES"
+					class="btn-default">
+
+				</h:commandButton>
+			</h:form>
+			</p:scrollPanel>
 		</ui:define>
 
 	</ui:composition>
