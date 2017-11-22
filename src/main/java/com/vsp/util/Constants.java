@@ -27,4 +27,11 @@ public static String NEXT_STEP_CONDITION="VALUE_NAME='Next_step?'";
 public static String SHOULD_WE_SELL_CONDITION="VALUE_NAME='Should_we_sell?'";
 public static String CAN_WE_SELL_CONDITION="VALUE_NAME='Can_we_sell?'";
 public static String A1EVALUATION_CONDITION="VALUE_NAME='Evaluation'";
+
+
+//message constants
+public static String LOGIN_INVALID = "login_invalid";
+public static String LOGIN_ACCESS_DENIED = "login_access_denied";
+
+
 }

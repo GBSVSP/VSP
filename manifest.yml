@@ -1,5 +1,5 @@
 applications:
-- path: target/vsp.war
+- path: target/VSP.war
   memory: 512M
   instances: 1
   domain: ng.mybluemix.net

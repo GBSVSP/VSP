@@ -2,6 +2,7 @@ package com.vsp.model;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ResourceBundle;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -10,9 +11,10 @@ import javax.servlet.http.HttpSession;
 
 import com.ibm.swat.password.ReturnCode;
 import com.ibm.swat.password.cwa2;
-
 import com.vsp.dao.LoginDAO;
 import com.vsp.util.SessionUtils;
+import com.vsp.util.Constants;
+
 /**
  * <p>
  * This the bean class for login
@@ -23,10 +25,15 @@ import com.vsp.util.SessionUtils;
  * @version 1.0
  * @Date 10/Nov/2017
  */
+
+
 @ManagedBean(name="login")
 public class Login implements Serializable {
 
 	private static final long serialVersionUID = 1094801825228386363L;
+	
+	//Specify the property file name 
+	public final static ResourceBundle bundle = ResourceBundle.getBundle("com.vsp.util.vspMessages");
 	
 	private String password;
 	private String userName;
@@ -58,15 +65,12 @@ public class Login implements Serializable {
 				int code = 0;
 				if ( code != 0) {
 
-					message = "User Name/Password invalid. Please, try again.";
-					FacesContext.getCurrentInstance().addMessage(
-							"Login:validationMsg",
-							new FacesMessage(FacesMessage.SEVERITY_WARN,
-									message,
-									message));
+					FacesContext.getCurrentInstance().addMessage("Login:validationMsg", 
+							new FacesMessage(FacesMessage.SEVERITY_WARN,bundle.getString(Constants.LOGIN_INVALID),
+									bundle.getString(Constants.LOGIN_INVALID)));
 
 				} else {
-					System.out.println("Login Successfull. Thanks.");
+					 System.out.println("Login Successfull. Thanks.");
 					 int roleId = LoginDAO.validate(userName, password);
 					 if (roleId > 0) {
 						 SessionUtils.setUserName(userName);
@@ -76,14 +80,14 @@ public class Login implements Serializable {
 					 else if(roleId==2) {
 						 page= "user";
 					 }
+					 
 					 }
 					 else {
-						 message = "VSP access denied. Please contact Administrator...";
-							FacesContext.getCurrentInstance().addMessage(
-									"Login:validationMsg",
-									new FacesMessage(FacesMessage.SEVERITY_WARN,
-											message,
-											message));
+
+							FacesContext.getCurrentInstance().addMessage("Login:validationMsg", 
+									new FacesMessage(FacesMessage.SEVERITY_WARN,bundle.getString(Constants.LOGIN_ACCESS_DENIED),
+											bundle.getString(Constants.LOGIN_ACCESS_DENIED)));
+
 							page="index";
 						}
 					

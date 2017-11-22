@@ -8,5 +8,13 @@
     <managed-bean-name>currentDate</managed-bean-name>
     <managed-bean-class>java.util.Date</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
-</managed-bean>
+  </managed-bean>
+  
+  <application>
+	<resource-bundle>
+	<base-name>com.vsp.util.vspMessages</base-name>
+	<var>msgbundle</var>
+	</resource-bundle>
+  </application>
+
 </faces-config>
