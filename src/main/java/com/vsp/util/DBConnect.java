@@ -1,16 +1,7 @@
 package com.vsp.util;
 
-	import java.net.URI;
 	import java.sql.Connection;
-	import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.Map;
-
-import javax.sql.DataSource;
-
-import com.ibm.json.java.JSON;
-	import com.ibm.json.java.JSONArray;
-	import com.ibm.json.java.JSONObject;
+    import java.sql.DriverManager;
 	/**
 	 * <p>
 	 * This the DB connection  class for VSP

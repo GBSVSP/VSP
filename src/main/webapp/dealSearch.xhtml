@@ -31,17 +31,18 @@
 			<tr><td colspan="2"><h:outputText value="No records found" rendered="#{deal.show}"/></td></tr>
             </table>
             	 
-						   <h:dataTable id="dealResult"  var="q" value="#{deal.dealList}" styleClass = "dealTable"
+						   <h:dataTable id="dealResult"  var="row" value="#{deal.dealList}" styleClass = "dealTable"
                     headerClass = "dealTableHeader" rendered="#{not empty deal.dealList}">   
     
   
     <h:column>
-    <f:facet name = "header" style="align:left">Showing #{deal.count} results for: #{deal.searchValue} <input type="button" value="NEW DEAL FORM"/></f:facet>
+    <f:facet name = "header" style="align:left">Showing #{deal.count} results for: #{deal.searchValue} <h:commandButton action="#{deal.newDeal}"
+			class="btn-default" value="NEW DEAL FORM"/></f:facet>
     <table border="0">
-    <tr><td colspan="7" align="left">VSP Number: #{q.VSP_Ref_No}   </td></tr>
-    <tr><td align="left">#{q.opportunity_Description}</td></tr>
-    <tr><td>Client:#{q.customer_Name}</td><td>Sales Connect No:#{q.sales_Connect_Opp_No}</td><td>TCV$ :#{q.TCV}</td>
-    <td><h:commandButton action="#{deal.openDeal(q.deal_Id)}"
+    <tr><td colspan="7" align="left">VSP Number: #{row.reference_No}   </td></tr>
+    <tr><td align="left">#{row.opportunity_Description}</td></tr>
+    <tr><td>Client:#{row.customer_Name}</td><td>Sales Connect No:#{row.sales_Connect_No}</td><td>TCV$ :#{row.tcv}</td>
+    <td><h:commandButton action="#{deal.openDeal(row.reference_No)}"
 			id="searchButton" value="VIEW DEAL DETAILS" class="btn-default">
 	
 			</h:commandButton></td></tr>

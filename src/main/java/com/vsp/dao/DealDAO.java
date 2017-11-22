@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 import com.vsp.model.DealInfo;
 import com.vsp.util.DBConnect;
-import com.vsp.util.QueryBuilder;
 /**
  * <p>
  * This the DAO class for deal
@@ -56,31 +55,37 @@ public class DealDAO {
 			
 			while (rs.next()) {
 				DealInfo dealInfo = new DealInfo();
-				dealInfo.setDeal_Id(rs.getInt(1));
-				dealInfo.setVSP_Ref_No(rs.getString(2));
-				dealInfo.setSector_Id(rs.getInt(3));
-				dealInfo.setSector_Name(rs.getString(4));
-				dealInfo.setIndustry_Id(rs.getInt(5));
-				dealInfo.setIndustry_Name(rs.getString(6));
-				dealInfo.setIMT_Id(rs.getInt(7));
-				dealInfo.setIMT_Name(rs.getString(8));
-				dealInfo.setSales_Connect_Opp_No(rs.getString(9));
-				dealInfo.setCustomer_Name(rs.getString(10));
-				dealInfo.setOpportunity_Name(rs.getString(11));
-				dealInfo.setOpportunity_Owner(rs.getString(12));
-				dealInfo.setOpportunity_Description(rs.getString(13));
-				dealInfo.setAdditional_Contacts(rs.getString(14));
-				dealInfo.setTCV(rs.getDouble(15));
-				dealInfo.setDeal_Size_Range(rs.getString(16));
-				dealInfo.setVSP_Document_Link(rs.getString(17));
-				dealInfo.setIPPF_Number(rs.getString(18));
-				dealInfo.setGBS_GTS_Led(rs.getString(19));
-				dealInfo.setOther_Linked_Opp_No(rs.getString(20));
-				dealInfo.setSSM_Stage_Id(rs.getInt(21));
-				dealInfo.setOpp_Business_Partners(rs.getString(22));
-				dealInfo.setOpp_Close_Date(rs.getString(23));
-				dealInfo.setBnP_Spent(rs.getDouble(24));
+				
+				dealInfo.setReference_No(rs.getInt(1));
+				dealInfo.setSector_Id(rs.getInt(2));
+				dealInfo.setSector_Name(rs.getString(3));
+				dealInfo.setIndustry_Id(rs.getInt(4));
+				dealInfo.setIndustry_Name(rs.getString(5));
+				dealInfo.setImt_Id(rs.getInt(6));
+				dealInfo.setImt_Name(rs.getString(7));
+				dealInfo.setSc_No(rs.getString(8));
+				dealInfo.setCustomer_Name(rs.getString(9));
+				dealInfo.setOpportunity_Name(rs.getString(10));
+				dealInfo.setOpportunity_Owner(rs.getString(11));
+				dealInfo.setOpportunity_Description(rs.getString(12));
+				dealInfo.setAdditional_Contacts(rs.getString(13));
+				dealInfo.setTcv(rs.getDouble(14));
+				dealInfo.setPotential_TCV(rs.getString(15));
+				dealInfo.setBox_Link(rs.getString(16));
+				dealInfo.setIppf_Number(rs.getString(17));
+				dealInfo.setGbs_gts_Led(rs.getString(18));
+				dealInfo.setOther_Linked_Opp_No(rs.getString(19));
+				dealInfo.setSsm_Stage_Id(rs.getInt(20));
+				dealInfo.setSsm_Stage(rs.getInt(21));
+				dealInfo.setSales_Connect_No(rs.getString(22));
+				dealInfo.setSc_Opp_Owner(rs.getString(23));
+				dealInfo.setDecision_Date(rs.getString(24));
+				dealInfo.setBnp_Spent(rs.getDouble(25));
+				dealInfo.setSc_Imt_Id(rs.getInt(26));
 				dealInfoList.add(dealInfo);	
+				
+							
+				
 			}
 			
 		} catch (SQLException ex) {
@@ -110,5 +115,25 @@ public static ArrayList<String> getOptionList(String sql) throws Exception {
 		}
 	return ledByList;
 	}
+public static int getReferenceNumber(String sql) {
+   
+	PreparedStatement ps = null;
+	int referenceNum = 0;
+	try {
+		
+		ps = con.prepareStatement(sql);
+		
+		ResultSet rs = ps.executeQuery();
+		
+		while (rs.next()) {
+			referenceNum = rs.getInt(1);
+		}
+		
+	} catch (SQLException ex) {
+		ex.printStackTrace();
+		
+	}
+return referenceNum;
+}
 
 }

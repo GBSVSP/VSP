@@ -20,7 +20,8 @@
 <h:panelGrid columns="2" rendered="#{empty deal.dealList}" >
       <table>
       <tr><td align="center">Get started and create a new deal form</td></tr>
-                <tr><td align="center"><input type="button" value="NEW DEAL FORM"/></td></tr></table>
+                <tr><td align="center"><h:commandButton action="#{deal.newDeal}"
+			class="btn-default" value="NEW DEAL FORM"/></td></tr></table>
            
       </h:panelGrid>
 </td></tr>

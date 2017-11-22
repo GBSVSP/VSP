@@ -17,22 +17,22 @@
 									<hr /></td></tr>
 							<tr>
 																
-								<td>SCIMT: <h:selectOneMenu value="#{row.IMT_Name}" required="true"
+								<td>SCIMT: <h:selectOneMenu value="#{row.imt_Name}" required="true"
 										requiredMessage="Please Select">
 										<f:selectItems value="#{deal.IMTList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
-								<td>Decision Date:<h:inputText value="#{row.opp_Close_Date}" /></td>
-								<td>B and P Spend:<h:inputText value="#{row.bnP_Spent}" /></td>
+								<td>Decision Date:<h:inputText value="#{row.decision_Date}" /></td>
+								<td>B and P Spend:<h:inputText value="#{row.bnp_Spent}" /></td>
 								<td>Sales Connect Opportunity Owner:<h:inputText value="#{row.opportunity_Owner}" /></td>
 								</tr>
 								<tr>
 								
 								
-								<td>IPFF Number:<h:inputText value="#{row.IPPF_Number}" /></td>
+								<td>IPFF Number:<h:inputText value="#{row.ippf_Number}" /></td>
 									<td>Other Linked Opp No:<h:inputText value="#{row.other_Linked_Opp_No}" />
 								</td>
-								<td>Potential TCV($m):<h:selectOneMenu value="#{row.IMT_Name}" required="true"
+								<td>Potential TCV($m):<h:selectOneMenu value="#{row.potential_TCV}" required="true"
 										requiredMessage="Please Select">
 										<f:selectItems value="#{deal.potentialTCVList}" immediate="true" />
 									</h:selectOneMenu>

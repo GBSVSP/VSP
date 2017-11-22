@@ -7,13 +7,11 @@ import java.util.ResourceBundle;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
 
-import com.ibm.swat.password.ReturnCode;
 import com.ibm.swat.password.cwa2;
 import com.vsp.dao.LoginDAO;
-import com.vsp.util.SessionUtils;
 import com.vsp.util.Constants;
+import com.vsp.util.SessionUtils;
 
 /**
  * <p>

@@ -7,7 +7,6 @@ import java.sql.SQLException;
 
 import com.vsp.util.DBConnect;
 import com.vsp.util.QueryBuilder;
-import com.vsp.util.SessionUtils;
 /**
  * <p>
  * This the DAO class for login
