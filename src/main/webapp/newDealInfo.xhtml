@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+
+								<table border="0" width="70%">
+							
+							<tr>
+								<td colspan="4" align="left"><b>Deal Information:</b>
+									<hr /></td></tr>
+							<tr>
+																
+								<td>SCIMT: <h:selectOneMenu value="#{dealInfo.imt_Name}" required="true"
+										requiredMessage="Please Select">
+										<f:selectItems value="#{deal.SCIMTList}" immediate="true" />
+									</h:selectOneMenu>
+								</td>
+								<td>Decision Date:<h:inputText value="#{dealInfo.decision_Date}" /></td>
+								<td>B and P Spend:<h:inputText value="#{dealInfo.bnp_Spent}" /></td>
+								<td>Sales Connect Opportunity Owner:<h:inputText value="#{dealInfo.opportunity_Owner}" /></td>
+								</tr>
+								<tr>
+								
+								
+								<td>IPFF Number:<h:inputText value="#{dealInfo.ippf_Number}" /></td>
+									<td>Other Linked Opp No:<h:inputText value="#{dealInfo.other_Linked_Opp_No}" />
+								</td>
+								<td>Potential TCV($m):<h:selectOneMenu value="#{dealInfo.potential_TCV}" required="true"
+										requiredMessage="Please Select">
+										<f:selectItems value="#{deal.potentialTCVList}" immediate="true" />
+									</h:selectOneMenu>
+								</td>
+								</tr>
+								<tr>
+							
+								</tr>
+								
+						</table>
+				
+	
+</h:body>
+
+</html>
