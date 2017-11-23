@@ -1,10 +1,9 @@
 package com.vsp.model;
 
-import java.util.Calendar;
+import java.io.Serializable;
 
-import com.vsp.dao.DealDAO;
-import com.vsp.util.Constants;
-import com.vsp.util.QueryBuilder;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 
 /**
  * <p>
@@ -16,9 +15,12 @@ import com.vsp.util.QueryBuilder;
  * @version 1.0
  * @Date 13/Nov/2017
  */
-public class DealInfo {
+@ManagedBean(name="dealInfo")
+@RequestScoped
+public class DealInfo implements Serializable{
 
-private int reference_No ;
+private static final long serialVersionUID = 5688413565870287494L;
+private static int reference_No ;
 private int sector_Id ;
 private String sector_Name ;
 private int industry_Id ;
@@ -26,7 +28,7 @@ private String industry_Name ;
 private int imt_Id ;
 private String imt_Name;
 private String sc_No;
-private String customer_Name ;
+public  String customer_Name ;
 private String opportunity_Name;
 private String opportunity_Owner;
 private String opportunity_Description;
@@ -45,8 +47,16 @@ private String decision_Date ;
 private double bnp_Spent ;
 private int sc_Imt_Id ;
 
+
+public DealInfo(String pcustomer_Name) {
+	customer_Name = pcustomer_Name ;
+	
+}
+public DealInfo() {
+	
+}
 public void setReference_No(int reference_No) {
-	this.reference_No = reference_No;
+	DealInfo.reference_No = reference_No;
 }
 
 public int getSector_Id() {
@@ -105,7 +115,7 @@ public void setSc_No(String sc_No) {
 	this.sc_No = sc_No;
 }
 
-public String getCustomer_Name() {
+public   String getCustomer_Name() {
 	return customer_Name;
 }
 
@@ -248,22 +258,9 @@ public void setSc_Imt_Id(int sc_Imt_Id) {
 	this.sc_Imt_Id = sc_Imt_Id;
 }
 
-private static String  sql = null;
-
 public int getReference_No() {
-/*	Calendar now = Calendar.getInstance();  
-	int year = now.get(Calendar.YEAR); 
-	sql = QueryBuilder.SELECT_MAX_VSP_REF_NO;
-	int currentRefNo = DealDAO.getReferenceNumber(sql);
-	System.out.println("currentRefNo:"+currentRefNo+"year:"+year);
-	if(Integer.parseInt(Integer.toString(currentRefNo).substring(0, 4))==year) {
-		currentRefNo ++;
-		reference_No = currentRefNo;
-	}
-	else {
-		reference_No = Integer.parseInt(String.valueOf(year)+Constants.VSP_REF_NO_START);
-	}
-	*/
+
 	return reference_No;
 }
+
 }

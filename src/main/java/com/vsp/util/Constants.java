@@ -30,6 +30,7 @@ public static String SHOULD_WE_SELL_CONDITION="VALUE_NAME='Should_we_sell?'";
 public static String CAN_WE_SELL_CONDITION="VALUE_NAME='Can_we_sell?'";
 public static String A1EVALUATION_CONDITION="VALUE_NAME='Evaluation'";
 public static String VSP_REF_NO_START="001";
+public static String VSP_REF_NO = "REFERENCE_NO=?";
 
 //message constants
 public static String LOGIN_INVALID = "login_invalid";

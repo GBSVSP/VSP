@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.vsp.util.DBConnect;
 /**
@@ -23,10 +24,10 @@ public class FormDAO {
 	static Connection con = DBConnect.getInstance().getConnInst();
 
 	
-public static ArrayList<String> getOptionList(String sql) throws Exception {
+public static HashMap<Integer,String> getOptionList(String sql) throws Exception {
 		
 		PreparedStatement ps = null;
-		ArrayList<String> ledByList = new ArrayList<String>();
+		HashMap<Integer,String> ledByMap = new HashMap<Integer,String>();
 	
 		try {
 			
@@ -35,14 +36,14 @@ public static ArrayList<String> getOptionList(String sql) throws Exception {
 			ResultSet rs = ps.executeQuery();
 			
 			while (rs.next()) {
-				ledByList.add(rs.getString(2));
+				ledByMap.put(rs.getInt(1),rs.getString(2));
 			}
 			
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 			
 		}
-	return ledByList;
+	return ledByMap;
 	}
 
 }

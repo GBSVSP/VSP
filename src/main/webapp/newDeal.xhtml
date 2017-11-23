@@ -9,17 +9,11 @@
 		<ui:define name="content">
 		<p:scrollPanel mode="native" style="position: absolute; height: 100%;">
 			<h:form>
-				<h:dataTable id="dealResult"  headerClass="dealTableHeader">
-
-					<h:column>
-
-
-						<br></br>
-						<br></br>
+			<br></br><br></br>
 						<table border="0" width="60%">
 							<tr>
 								<td colspan="4" align="left"><b>Reference Number:
-										#{dealInfo.VSP_Ref_No} </b></td>
+										#{deal.reference_No} </b></td>
 							</tr>
 
 							<tr>
@@ -34,12 +28,12 @@
 										value="#{dealInfo.opportunity_Description}" /></td>
 								<td>Additional Contacts:<h:inputText
 										value="#{dealInfo.additional_Contacts}" /></td>
-								<td>Box :<h:inputText value="#{dealInfo.VSP_Document_Link}" /></td>
+								<td>Box :<h:inputText value="#{dealInfo.box_Link}" /></td>
 							</tr>
 
 
 							<tr>
-								<td>IMT: <h:selectOneMenu value="#{dealInfo.IMT_Name}" required="true"
+								<td>IMT: <h:selectOneMenu value="#{dealInfo.imt_Name}" required="true"
 										requiredMessage="Please Select">
 										<f:selectItems value="#{deal.IMTList}" immediate="true" />
 									</h:selectOneMenu>
@@ -49,7 +43,7 @@
 										<f:selectItems value="#{deal.sectorList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
-								<td>Led By: <h:selectOneMenu value="#{dealInfo.GBS_GTS_Led}" required="true"
+								<td>Led By: <h:selectOneMenu value="#{dealInfo.gbs_gts_Led}" required="true"
 										requiredMessage="Please Select">
 										<f:selectItems value="#{deal.ledByList}" immediate="true" />
 									</h:selectOneMenu>
@@ -57,22 +51,18 @@
 								</tr>
 								<tr>
 								<td>SSM Stage:<h:inputText
-										value="#{dealInfo.SSM_Stage_Id}" /></td>
+										value="#{dealInfo.ssm_Stage}" /></td>
 								<td>SC TCV:<h:inputText
-										value="#{dealInfo.TCV}" /></td>
+										value="#{dealInfo.tcv}" /></td>
 								<td>Sales Connect No:<h:inputText
-										value="#{dealInfo.sales_Connect_Opp_No}" /></td>
+										value="#{dealInfo.sales_Connect_No}" /></td>
 							</tr>
 						</table>
 						<hr />
 
-
-					</h:column>
-
-				</h:dataTable>
-				<ui:include src="A1Form.xhtml" />
-				<ui:include src="dealInfo.xhtml" />
-				<h:commandButton id="searchButton" value="SAVE CHANGES"
+				<ui:include src="newA1Form.xhtml" />
+				<ui:include src="newDealInfo.xhtml" />
+				<h:commandButton id="saveButton" value="SAVE CHANGES" action="#{deal.insertDeal}"
 					class="btn-default">
 
 				</h:commandButton>

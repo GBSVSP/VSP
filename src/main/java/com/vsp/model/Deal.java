@@ -4,12 +4,16 @@ import java.io.Serializable;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.model.SelectItem;
 
 import com.vsp.dao.DealDAO;
 import com.vsp.dao.FormDAO;
@@ -32,26 +36,45 @@ public class Deal implements Serializable {
 	private static final long serialVersionUID = 1094801825228386363L;
 	private String searchType = Constants.DEFAULT_SEARCH_TYPE;
 	private static ArrayList<DealInfo> dealList = null ;
-	private static ArrayList<String> ledByList;
-	private static ArrayList<String> potentialTCVList;
-	private static ArrayList<String> a1StatusList;
-	private static ArrayList<String> nextStepList;
-	private static ArrayList<String> shouldweSellList;
-	private static ArrayList<String> canweSellList;
-	private static ArrayList<String> a1EvaluationList;
-	private static ArrayList<String> IMTList;
-	private static ArrayList<String> sectorList;
-
+	
+	private static HashMap<Integer,String> optionMap;
 	private String searchValue;
 
 	private static String sql = null;
-
+	private int reference_No ;
 	private String whereClause = null;
 	private boolean show = false;
 	private int count;
-
+	private DealInfo dealInfo ;
+	
 	public Deal() throws Exception {
 
+	}
+	@ManagedProperty(value="#{dealInfo}")
+	private DealInfo dealInfoObj = new DealInfo();
+
+	public void setDealInfoObj(DealInfo dealInfo) {
+		this.dealInfoObj = dealInfo;
+	}
+	//generating the reference number in YYYY+4 digit serial number format
+	public int getReference_No() {
+		Calendar now = Calendar.getInstance();  
+		int year = now.get(Calendar.YEAR); 
+		sql = QueryBuilder.SELECT_MAX_VSP_REF_NO;
+		int currentRefNo = DealDAO.getReferenceNumber(sql);
+		if(Integer.parseInt(Integer.toString(currentRefNo).substring(0, 4))==year) {
+			currentRefNo ++;
+			reference_No = currentRefNo;
+		}
+		else {
+			reference_No = Integer.parseInt(String.valueOf(year)+Constants.VSP_REF_NO_START);
+		}
+		dealInfoObj.setReference_No(reference_No);
+		return reference_No;
+	}
+
+	public void setReference_No(int reference_No) {
+		this.reference_No = reference_No;
 	}
 
 	public int getCount() {
@@ -159,10 +182,10 @@ public class Deal implements Serializable {
 	public String openDeal(int referenceNo) {
 
 		System.out.println("referenceNo>" + referenceNo);
-		DealInfo deal = new DealInfo();
+		dealInfo = new DealInfo();
 		for (int i = 0; i < dealList.size(); i++) {
-			deal = dealList.get(i);
-			if (!(deal.getReference_No() == referenceNo)) {
+			dealInfo = dealList.get(i);
+			if (!(dealInfo.getReference_No() == referenceNo)) {
 				dealList.remove(i);
 			}
 		}
@@ -173,8 +196,9 @@ public class Deal implements Serializable {
 
 	// Invoked from NEW DEAL FORM button
 	public String newDeal() {
-		System.out.println("inside newDeal");
+		
 		if (dealList != null) {
+			System.out.println("inside newDeal");
 			dealList.clear();
 		}
 		return "newDeal";
@@ -182,116 +206,218 @@ public class Deal implements Serializable {
 	}
 
 	// Populating Led By drop down
-	public ArrayList<String> getLedByList() {
+	public ArrayList<SelectItem> getLedByList() {
 		whereClause = Constants.LED_BY_CONDITION;
 		sql = QueryBuilder.SELECT_OPTION + "" + whereClause;
-
+		ArrayList<SelectItem> optionList = new ArrayList<SelectItem>();
 		try {
-			ledByList = FormDAO.getOptionList(sql);
+			optionMap = FormDAO.getOptionList(sql);
+			for (Map.Entry<Integer,String> entry : optionMap.entrySet()) {
+				optionList.add(new SelectItem(entry.getKey(), entry.getValue()));
+			}
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
 		}
-		return ledByList;
+		return optionList;
 	}
 
 	// Populating Potential TCV drop down
-	public ArrayList<String> getPotentialTCVList() {
+	public ArrayList<SelectItem> getPotentialTCVList() {
 		whereClause = Constants.PPOTENTIAL_TCV_CONDITION;
 		sql = QueryBuilder.SELECT_OPTION + "" + whereClause;
-
+		ArrayList<SelectItem> optionList = new ArrayList<SelectItem>();
 		try {
-			potentialTCVList = FormDAO.getOptionList(sql);
+			optionMap = FormDAO.getOptionList(sql);
+			for (Map.Entry<Integer,String> entry : optionMap.entrySet()) {
+				optionList.add(new SelectItem(entry.getKey(), entry.getValue()));
+			}
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
 		}
-		return potentialTCVList;
+		return optionList;
 	}
 
 	// Populating A1 Status drop down
-	public ArrayList<String> getA1StatusList() {
+	public ArrayList<SelectItem> getA1StatusList() {
 		whereClause = Constants.A1STATUS_CONDITION;
 		sql = QueryBuilder.SELECT_OPTION + "" + whereClause;
-
+		ArrayList<SelectItem> optionList = new ArrayList<SelectItem>();
 		try {
-			a1StatusList = FormDAO.getOptionList(sql);
+			optionMap = FormDAO.getOptionList(sql);
+			for (Map.Entry<Integer,String> entry : optionMap.entrySet()) {
+				optionList.add(new SelectItem(entry.getKey(), entry.getValue()));
+			}
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
 		}
-		return a1StatusList;
+		return optionList;
 	}
 
 	// Populating Next Step drop down
-	public ArrayList<String> getNextStepList() {
+	public ArrayList<SelectItem> getNextStepList() {
 		whereClause = Constants.NEXT_STEP_CONDITION;
 		sql = QueryBuilder.SELECT_OPTION + "" + whereClause;
-
+		ArrayList<SelectItem> optionList = new ArrayList<SelectItem>();
 		try {
-			nextStepList = FormDAO.getOptionList(sql);
+			optionMap = FormDAO.getOptionList(sql);
+			for (Map.Entry<Integer,String> entry : optionMap.entrySet()) {
+				optionList.add(new SelectItem(entry.getKey(), entry.getValue()));
+			}
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
 		}
-		return nextStepList;
+		return optionList;
 	}
 
 	// Populating Should we sell drop down
-	public ArrayList<String> getShouldweSellList() {
+	public ArrayList<SelectItem> getShouldweSellList() {
 		whereClause = Constants.SHOULD_WE_SELL_CONDITION;
 		sql = QueryBuilder.SELECT_OPTION + "" + whereClause;
-
+		ArrayList<SelectItem> optionList = new ArrayList<SelectItem>();
 		try {
-			shouldweSellList = FormDAO.getOptionList(sql);
+			optionMap = FormDAO.getOptionList(sql);
+			for (Map.Entry<Integer,String> entry : optionMap.entrySet()) {
+				optionList.add(new SelectItem(entry.getKey(), entry.getValue()));
+			}
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
 		}
-		return shouldweSellList;
+		return optionList;
 	}
 
 	// Populating can we sell drop down
-	public ArrayList<String> getCanweSellList() {
+	public ArrayList<SelectItem> getCanweSellList() {
 		whereClause = Constants.CAN_WE_SELL_CONDITION;
 		sql = QueryBuilder.SELECT_OPTION + "" + whereClause;
 
+		ArrayList<SelectItem> optionList = new ArrayList<SelectItem>();
 		try {
-			canweSellList = FormDAO.getOptionList(sql);
+			optionMap = FormDAO.getOptionList(sql);
+			for (Map.Entry<Integer,String> entry : optionMap.entrySet()) {
+				optionList.add(new SelectItem(entry.getKey(), entry.getValue()));
+			}
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
 		}
-		return canweSellList;
+		return optionList;
 	}
 
 	// Populating Evaluation drop down
-	public ArrayList<String> getA1EvaluationList() {
+	public ArrayList<SelectItem> getA1EvaluationList() {
 		whereClause = Constants.A1EVALUATION_CONDITION;
 		sql = QueryBuilder.SELECT_OPTION + "" + whereClause;
-
+		ArrayList<SelectItem> optionList = new ArrayList<SelectItem>();
 		try {
-			a1EvaluationList = FormDAO.getOptionList(sql);
+			optionMap = FormDAO.getOptionList(sql);
+			for (Map.Entry<Integer,String> entry : optionMap.entrySet()) {
+				optionList.add(new SelectItem(entry.getKey(), entry.getValue()));
+			}
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
 		}
-		return a1EvaluationList;
+		return optionList;
 	}
 
 	// Populating IMT drop down
-	public ArrayList<String> getIMTList() {
+	public  List<SelectItem> getIMTList() {
 		sql = QueryBuilder.SELECT_IMT;
+		ArrayList<SelectItem> optionList = new ArrayList<SelectItem>();
 		try {
-			IMTList = FormDAO.getOptionList(sql);
+			optionMap = FormDAO.getOptionList(sql);
+			for (Map.Entry<Integer,String> entry : optionMap.entrySet()) {
+				optionList.add(new SelectItem(entry.getKey(), entry.getValue()));
+			}
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
 		}
-		return IMTList;
+		return optionList;
 	}
 
+	// Populating SCIMT drop down
+		public  List<SelectItem> getSCIMTList() {
+			sql = QueryBuilder.SELECT_IMT;
+			ArrayList<SelectItem> optionList = new ArrayList<SelectItem>();
+			try {
+				optionMap = FormDAO.getOptionList(sql);
+				for (Map.Entry<Integer,String> entry : optionMap.entrySet()) {
+					optionList.add(new SelectItem(entry.getKey(), entry.getValue()));
+				}
+			} catch (Exception ex) {
+				System.out.println(ex.getMessage());
+			}
+			return optionList;
+		}
+		
 	// Populating Sector drop down
-	public ArrayList<String> getSectorList() {
+	public ArrayList<SelectItem> getSectorList() {
 		sql = QueryBuilder.SELECT_SECTOR;
+		ArrayList<SelectItem> optionList = new ArrayList<SelectItem>();
 		try {
-			sectorList = FormDAO.getOptionList(sql);
+			optionMap = FormDAO.getOptionList(sql);
+			for (Map.Entry<Integer,String> entry : optionMap.entrySet()) {
+				optionList.add(new SelectItem(entry.getKey(), entry.getValue()));
+			}
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
 		}
-		return sectorList;
+		return optionList;
 	}
+	
+	/**
+	 * Method to add a new deal to database
+	 * @param value
+	 * @return
+	 * @throws Exception
+	 */
+	public void insertDeal() throws Exception {
+		
+		try {
+			
+			String sql = QueryBuilder.INSERT_DEAL;
+			
+			int insertFlag = DealDAO.insertDeal(sql,dealInfoObj);
+			
+			if(insertFlag > 0) {
+				System.out.println("Deal insert successful.");
+			}else {
+				System.out.println("Deal insert unsuccessful.");
+			}
+				
+			
+	     }catch(Exception e) {
+			System.out.println("Error in insertDeal();:"+e);
+			e.printStackTrace();
+		 }
+		
+	}
+	
+	
+    /**
+     * Method to update an existing deal into database	
+     * @param value
+     * @return
+     * @throws Exception
+     */
+	public void updateDeal(String value) throws Exception {
+
+		try {
+			    whereClause = Constants.VSP_REF_NO;
+				sql = QueryBuilder.UPDATE_DEAL +" "+ whereClause;
+			
+			int updateFlag = DealDAO.updateDeal(sql, dealList.get(0));
+			
+			if(updateFlag > 0) {
+				System.out.println("Deal update successful.");
+			}else {
+				System.out.println("Deal update unsuccessful.");
+			}
+						
+		} catch(Exception e) {
+			System.out.println("Error in updateDeal();:"+e);
+			e.printStackTrace();
+		}
+		
+		//return tempList;
+}
 
 }
