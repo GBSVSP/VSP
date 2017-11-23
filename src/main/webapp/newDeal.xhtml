@@ -13,7 +13,7 @@
 						<table border="0" width="60%">
 							<tr>
 								<td colspan="4" align="left"><b>Reference Number:
-										#{deal.reference_No} </b></td>
+										#{deal.reference_No} #{deal.insertFlag} #{deal.insertFlag gt 0 }</b></td>
 							</tr>
 
 							<tr>
@@ -29,16 +29,16 @@
 								<td>Additional Contacts:<h:inputText
 										value="#{dealInfo.additional_Contacts}" /></td>
 								<td>Box :<h:inputText value="#{dealInfo.box_Link}" /></td>
-							</tr>
+						</tr>
 
 
 							<tr>
-								<td>IMT: <h:selectOneMenu value="#{dealInfo.imt_Name}" required="true"
+								<td>IMT: <h:selectOneMenu value="#{dealInfo.imt_Id}" required="true"
 										requiredMessage="Please Select">
 										<f:selectItems value="#{deal.IMTList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
-								<td>Sector: <h:selectOneMenu value="#{dealInfo.sector_Name}" required="true"
+								<td>Sector: <h:selectOneMenu value="#{dealInfo.sector_Id}" required="true"
 										requiredMessage="Please Select">
 										<f:selectItems value="#{deal.sectorList}" immediate="true" />
 									</h:selectOneMenu>
@@ -59,8 +59,9 @@
 							</tr>
 						</table>
 						<hr />
-
+				<h:panelGrid rendered="#{deal.insertFlag gt 0 }">
 				<ui:include src="newA1Form.xhtml" />
+				</h:panelGrid>
 				<ui:include src="newDealInfo.xhtml" />
 				<h:commandButton id="saveButton" value="SAVE CHANGES" action="#{deal.insertDeal}"
 					class="btn-default">

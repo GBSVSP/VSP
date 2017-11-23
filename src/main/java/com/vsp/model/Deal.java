@@ -42,7 +42,7 @@ public class Deal implements Serializable {
 
 	private static String sql = null;
 	private int reference_No ;
-	private int insertFlag ;
+	private int insertFlag = 0;
 	private String whereClause = null;
 	private boolean show = false;
 	private int count;
@@ -220,7 +220,7 @@ public class Deal implements Serializable {
 		try {
 			optionMap = FormDAO.getOptionList(sql);
 			for (Map.Entry<Integer,String> entry : optionMap.entrySet()) {
-				optionList.add(new SelectItem(entry.getKey(), entry.getValue()));
+				optionList.add(new SelectItem(entry.getValue(), entry.getValue()));
 			}
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());

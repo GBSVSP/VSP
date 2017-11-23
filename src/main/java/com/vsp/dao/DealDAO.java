@@ -143,7 +143,7 @@ public static int insertDeal(String sql,DealInfo dealInfo) throws Exception {
 	
 	PreparedStatement ps = null;
 	int insertFlag =0;
-	System.out.println("date:"+dealInfo.getDecision_Date());
+	System.out.println("selected:"+dealInfo.getImt_Id());
 	try {
 		
 		ps = con.prepareStatement(sql);
