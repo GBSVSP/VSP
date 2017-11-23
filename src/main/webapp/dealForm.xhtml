@@ -19,37 +19,37 @@
 						<table border="0" width="60%">
 							<tr>
 								<td colspan="4" align="left"><b>Reference Number:
-										#{row.reference_No} </b></td>
+										#{deal.reference_No}</b></td>
 							</tr>
 
 							<tr>
-								<td>Client Name: <h:inputText value="#{row.customer_Name}"></h:inputText></td>
+								<td>Client Name: <h:inputText value="#{dealInfo.customer_Name}"></h:inputText></td>
 								<td align="left">Opportunity Name: <h:inputText
-										value="#{row.opportunity_Name}" /></td>
+										value="#{dealInfo.opportunity_Name}" /></td>
 								<td align="left">Opportunity Owner: <h:inputText
-										value="#{row.opportunity_Owner}" /></td>
+										value="#{dealInfo.opportunity_Owner}" /></td>
 							</tr>
 							<tr>
 								<td>Opportunity Description:<h:inputTextarea
-										value="#{row.opportunity_Description}" /></td>
+										value="#{dealInfo.opportunity_Description}" /></td>
 								<td>Additional Contacts:<h:inputText
-										value="#{row.additional_Contacts}" /></td>
-								<td>Box :<h:inputText value="#{row.box_Link}" /></td>
-							</tr>
+										value="#{dealInfo.additional_Contacts}" /></td>
+								<td>Box :<h:inputText value="#{dealInfo.box_Link}" /></td>
+						</tr>
 
 
 							<tr>
-								<td>IMT: <h:selectOneMenu value="#{row.imt_Name}" required="true"
+								<td>IMT: <h:selectOneMenu value="#{dealInfo.imt_Id}" required="true"
 										requiredMessage="Please Select">
 										<f:selectItems value="#{deal.IMTList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
-								<td>Sector: <h:selectOneMenu value="#{row.sector_Name}" required="true"
+								<td>Sector: <h:selectOneMenu value="#{dealInfo.sector_Id}" required="true"
 										requiredMessage="Please Select">
 										<f:selectItems value="#{deal.sectorList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
-								<td>Led By: <h:selectOneMenu value="#{row.gbs_gts_Led}" required="true"
+								<td>Led By: <h:selectOneMenu value="#{dealInfo.gbs_gts_Led}" required="true"
 										requiredMessage="Please Select">
 										<f:selectItems value="#{deal.ledByList}" immediate="true" />
 									</h:selectOneMenu>
@@ -57,11 +57,11 @@
 								</tr>
 								<tr>
 								<td>SSM Stage:<h:inputText
-										value="#{row.ssm_Stage}" /></td>
+										value="#{dealInfo.ssm_Stage}" /></td>
 								<td>SC TCV:<h:inputText
-										value="#{row.tcv}" /></td>
+										value="#{dealInfo.tcv}" /></td>
 								<td>Sales Connect No:<h:inputText
-										value="#{row.sales_Connect_No}" /></td>
+										value="#{dealInfo.sales_Connect_No}" /></td>
 							</tr>
 						</table>
 						<hr />
