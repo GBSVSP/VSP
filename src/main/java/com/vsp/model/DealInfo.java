@@ -3,7 +3,7 @@ package com.vsp.model;
 import java.io.Serializable;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
 
 /**
  * <p>
@@ -16,7 +16,7 @@ import javax.faces.bean.RequestScoped;
  * @Date 13/Nov/2017
  */
 @ManagedBean(name="dealInfo")
-@RequestScoped
+@SessionScoped
 public class DealInfo implements Serializable{
 
 private static final long serialVersionUID = 5688413565870287494L;

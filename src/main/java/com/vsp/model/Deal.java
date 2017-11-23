@@ -42,6 +42,7 @@ public class Deal implements Serializable {
 
 	private static String sql = null;
 	private int reference_No ;
+	private int insertFlag ;
 	private String whereClause = null;
 	private boolean show = false;
 	private int count;
@@ -73,6 +74,12 @@ public class Deal implements Serializable {
 		return reference_No;
 	}
 
+	public int getInsertFlag() {
+		return insertFlag;
+	}
+	public void setInsertFlag(int insertFlag) {
+		this.insertFlag = insertFlag;
+	}
 	public void setReference_No(int reference_No) {
 		this.reference_No = reference_No;
 	}
@@ -375,7 +382,7 @@ public class Deal implements Serializable {
 			
 			String sql = QueryBuilder.INSERT_DEAL;
 			
-			int insertFlag = DealDAO.insertDeal(sql,dealInfoObj);
+			insertFlag = DealDAO.insertDeal(sql,dealInfoObj);
 			
 			if(insertFlag > 0) {
 				System.out.println("Deal insert successful.");

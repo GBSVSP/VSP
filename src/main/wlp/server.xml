@@ -11,6 +11,6 @@
         <tcpOptions soReuseAddr="true"/>
     </httpEndpoint>
 
-    <application name="vsp" context-root="/vsp" location="${appLocation}" type="war"/>
+    <application name="vsp" context-root="vsp" location="${appLocation}" type="war"/>
 
 </server>
