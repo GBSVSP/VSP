@@ -12,12 +12,12 @@
 									<hr /></td></tr>
 							<tr>
 																
-								<td>SCIMT: <h:selectOneMenu value="#{dealInfo.sc_Imt_Id}" required="true"
-										requiredMessage="Please Select">
+								<td>SCIMT: <h:selectOneMenu value="#{dealInfo.sc_Imt_Id}">
+											<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
 										<f:selectItems value="#{deal.SCIMTList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
-								<td>Decision Date:<h:inputText value="#{dealInfo.decision_Date}" /></td>
+								<td>Decision Date:<h:inputText value="#{dealInfo.decision_Date}" id="datepicker" styleClass="form-control datepicker"/></td>
 								<td>B and P Spend:<h:inputText value="#{dealInfo.bnp_Spent}" /></td>
 								<td>Sales Connect Opportunity Owner:<h:inputText value="#{dealInfo.sc_Opp_Owner}" /></td>
 								</tr>
@@ -27,8 +27,8 @@
 								<td>IPFF Number:<h:inputText value="#{dealInfo.ippf_Number}" /></td>
 									<td>Other Linked Opp No:<h:inputText value="#{dealInfo.other_Linked_Opp_No}" />
 								</td>
-								<td>Potential TCV($m):<h:selectOneMenu value="#{dealInfo.potential_TCV}" required="true"
-										requiredMessage="Please Select">
+								<td>Potential TCV($m):<h:selectOneMenu value="#{dealInfo.potential_TCV}" >
+											<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
 										<f:selectItems value="#{deal.potentialTCVList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>

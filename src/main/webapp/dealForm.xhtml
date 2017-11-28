@@ -7,7 +7,7 @@
 <h:body>
 	<ui:composition template="commonLayout.xhtml">
 		<ui:define name="content">
-		<p:scrollPanel mode="native" style="position: absolute; height: 100%;">
+		<p:scrollPanel mode="native" style="position: absolute; height: 88%;">
 			<h:form>
 				<h:dataTable id="dealResult" var="row" value="#{deal.dealList}" headerClass="dealTableHeader">
 
@@ -16,40 +16,41 @@
 
 						<br></br>
 						<br></br>
+						<br></br>
 						<table border="0" width="60%">
 							<tr>
 								<td colspan="4" align="left"><b>Reference Number:
-										#{deal.reference_No}</b></td>
+										#{row.reference_No}</b></td>
 							</tr>
 
 							<tr>
-								<td>Client Name: <h:inputText value="#{dealInfo.customer_Name}"></h:inputText></td>
+								<td>Client Name: <h:inputText value="#{row.customer_Name}"></h:inputText></td>
 								<td align="left">Opportunity Name: <h:inputText
-										value="#{dealInfo.opportunity_Name}" /></td>
+										value="#{row.opportunity_Name}" /></td>
 								<td align="left">Opportunity Owner: <h:inputText
-										value="#{dealInfo.opportunity_Owner}" /></td>
+										value="#{row.opportunity_Owner}" /></td>
 							</tr>
 							<tr>
 								<td>Opportunity Description:<h:inputTextarea
-										value="#{dealInfo.opportunity_Description}" /></td>
+										value="#{row.opportunity_Description}" /></td>
 								<td>Additional Contacts:<h:inputText
-										value="#{dealInfo.additional_Contacts}" /></td>
-								<td>Box :<h:inputText value="#{dealInfo.box_Link}" /></td>
+										value="#{row.additional_Contacts}" /></td>
+								<td>Box :<h:inputText value="#{row.box_Link}" /></td>
 						</tr>
 
 
 							<tr>
-								<td>IMT: <h:selectOneMenu value="#{dealInfo.imt_Id}" required="true"
+								<td>IMT: <h:selectOneMenu value="#{row.imt_Id}" required="true"
 										requiredMessage="Please Select">
 										<f:selectItems value="#{deal.IMTList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
-								<td>Sector: <h:selectOneMenu value="#{dealInfo.sector_Id}" required="true"
+								<td>Sector: <h:selectOneMenu value="#{row.sector_Id}" required="true"
 										requiredMessage="Please Select">
 										<f:selectItems value="#{deal.sectorList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
-								<td>Led By: <h:selectOneMenu value="#{dealInfo.gbs_gts_Led}" required="true"
+								<td>Led By: <h:selectOneMenu value="#{row.gbs_gts_Led}" required="true"
 										requiredMessage="Please Select">
 										<f:selectItems value="#{deal.ledByList}" immediate="true" />
 									</h:selectOneMenu>
@@ -57,11 +58,11 @@
 								</tr>
 								<tr>
 								<td>SSM Stage:<h:inputText
-										value="#{dealInfo.ssm_Stage}" /></td>
+										value="#{row.ssm_Stage}" /></td>
 								<td>SC TCV:<h:inputText
-										value="#{dealInfo.tcv}" /></td>
+										value="#{row.tcv}" /></td>
 								<td>Sales Connect No:<h:inputText
-										value="#{dealInfo.sales_Connect_No}" /></td>
+										value="#{row.sales_Connect_No}" /></td>
 							</tr>
 						</table>
 						<hr />
@@ -72,16 +73,48 @@
 				</h:dataTable>
 				<ui:include src="A1Form.xhtml" />
 				<ui:include src="dealInfo.xhtml" />
-				<h:commandButton id="searchButton" value="SAVE CHANGES"
-					class="btn-default">
-
+				<h:commandButton id="saveButton" value="SAVE CHANGES" class="btn-default" 
+				action="#{deal.updateDeal}">
 				</h:commandButton>
 			</h:form>
 			</p:scrollPanel>
 		</ui:define>
 
 	</ui:composition>
-
+<script>
+					//<![CDATA[
+					function validate(){
+						//var status = $("#insertFlag").val();
+						var customer_Name = $("#customer_Name").val();
+						var opportunity_Name = $("#opportunity_Name").val();
+						var opportunity_Description = $("#opportunity_Description").val();
+						//var a1Status = $("#a1Form:j_idt61:0:a1Status").val();
+						//alert("a1Status:"+a1Status);
+						var status = false;
+						if (customer_Name == '') {
+							
+			    		   	 $("#err_customer_Name").html("Cannot be Null");
+			    		   } 
+						if (opportunity_Name == '') {
+							
+			    		   	 $("#err_opportunity_Name").html("Cannot be Null");
+			    		   } 
+						if (opportunity_Description == '') {
+							
+			    		   	 $("#err_opportunity_Description").html("Cannot be Null");
+			    		   } 
+						 /*  if (a1Status == '') {
+							
+								 $("#err_a1_Status").html("Cannot be Null");
+			    		   }  */ 
+						 if(customer_Name != '' && opportunity_Name != '' && opportunity_Description != '' ){
+							 status = true;
+						 }
+						 return status;
+						 
+			    }
+					//]]>
+			</script>	
 
 
 </h:body>

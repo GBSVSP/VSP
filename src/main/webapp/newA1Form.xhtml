@@ -4,53 +4,63 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:body>
-
-			
-						<table border="0" width="70%">
+	
+						<table border="0" width="60%" class="panelGrid">
 							<tr>
-								<td colspan="4" align="left"><b>A1 Ref No:
-										#{deal.reference_No} </b></td>
-							</tr>
-
+								<td colspan="4" align="left"><b>A1 REF NO: <h:outputText name="a1RefNo" value=" ${deal.a1RefNo}"></h:outputText></b>
+								
+								<h:commandButton update="A1Message" disabled="#{not deal.a1statusFlag }" rendered="${not deal.hasA1Exist}" id="a1Button" value="CREATE A1"	class="btn-default" actionListener="#{deal.a1ButtonClick}" onclick="return validate()">
+								    
+								</h:commandButton>
+									<h:commandButton update="A1Message"  rendered="${deal.hasA1Exist}" id="a1AddButton" value="+ NEW A1 FORM"	class="btn-default" actionListener="#{deal.a1ButtonClick}" onclick="return validate()">
+								    
+								</h:commandButton>
+						   &nbsp;&nbsp;<h:outputText  style="color:red;font-size: 7pt;" id="error"></h:outputText>
+								</td>
+								</tr>
+								</table>
+								<h:dataTable  value="#{deal.a1Forms}" var="row">
+								<h:column>
+								<table width="60%" class="panelGrid">
+							<tr><td colspan="4" align="left"><b>A1 STATUS:</b>
+									</td></tr>
 							<tr>
-								<td colspan="4" align="left"><b>A1 Status:</b>
-									<hr /></td></tr>
-							<tr>
-								<td>A1 Status: <h:selectOneMenu required="true"
-										requiredMessage="Please Select">
+								<td>A1 Status: <h:selectOneMenu id="a1Status" name="a1Status" disabled="#{deal.a1statusFlag }" value="#{a1Form.a1_Status}" required="true" requiredMessage="Cannot be null">
+									<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
 										<f:selectItems value="#{deal.a1StatusList}" immediate="true" />
+											<f:validateRequired />
 									</h:selectOneMenu>
 								</td>
-								<td>A1 Manager:<h:inputText  />
+								<td>A1 Manager:<h:inputText disabled="#{deal.a1statusFlag }" value="#{a1Form.a1_Manager}" />
 								</td>
-								<td>A1 Complete:<h:inputText  />
+								<td>A1 Complete:<h:inputText  disabled="#{deal.a1statusFlag }" value="#{a1Form.a1_Complete}"/>
 								</td>
-								<td>Next Step: <h:selectOneMenu required="true"
-										requiredMessage="Please Select">
+								<td>Next Step: <h:selectOneMenu disabled="#{deal.a1statusFlag }" value="#{a1Form.a1_NextStep}">
+											<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
 										<f:selectItems value="#{deal.nextStepList}" immediate="true" />
 									</h:selectOneMenu>
 								</td></tr>
 								<tr>
-								<td colspan="10" align="left"><b>A1 Evaluation:</b>
-									<hr /></td></tr>
+								<td colspan="10" align="left"><b>A1 EVALUATION:</b>
+									</td></tr>
 							<tr>
-								<td>Should we sell: <h:selectOneMenu required="true"
-										requiredMessage="Please Select">
+								<td>Should we sell: <h:selectOneMenu disabled="#{deal.a1statusFlag }" value="#{a1Form.a1_ShouldSell}">
+											<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
 										<f:selectItems value="#{deal.shouldweSellList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
 								
-								<td>A1 Can we sell?: <h:selectOneMenu required="true"
-										requiredMessage="Please Select">
+								<td>A1 Can we sell?: <h:selectOneMenu disabled="#{deal.a1statusFlag }" value="#{a1Form.a1_CanSell}">
+											<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
 										<f:selectItems value="#{deal.canweSellList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
-								<td>A1 Evaluation: <h:selectOneMenu required="true"
-										requiredMessage="Please Select">
+								<td>A1 Evaluation: <h:selectOneMenu disabled="#{deal.a1statusFlag }" value="#{a1Form.a1_Evaluation}">
+											<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
 										<f:selectItems value="#{deal.a1EvaluationList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
-								<td>A1 Pursuit profile win chance:<h:inputText value="#{dealInfo.tcv}" />
+								<td>A1 Pursuit profile win chance:<h:inputText disabled="#{deal.a1statusFlag }" value="#{a1Form.a1_Pursuit}" />
 								</td>
 								</tr>
 								<tr>
@@ -58,6 +68,8 @@
 								<tr>
 								<td colspan="10" align="left">Historical A1 Info:</td></tr>
 						</table>
+						</h:column>
+					</h:dataTable>
 				
 </h:body>
 

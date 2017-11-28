@@ -4,28 +4,46 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui" 
 	xmlns:ui="http://java.sun.com/jsf/facelets">
+<head>
+   
+  </head>
 <h:body>
-	<ui:composition template="commonLayout.xhtml">
+<ui:composition template="commonLayout.xhtml">
 		<ui:define name="content">
-		<p:scrollPanel mode="native" style="position: absolute; height: 100%;">
-			<h:form>
-			<br></br><br></br>
-						<table border="0" width="60%">
+		<p:scrollPanel mode="native" style="position: absolute; height: 88%;">
+			<h:form prependId="false">
+			<br></br><br></br><br></br>
+						<table border="0" width="58%">
 							<tr>
-								<td colspan="4" align="left"><b>Reference Number:
+								<td colspan="4" align="left"><b>REFERENCE NUMBER:
 										#{deal.reference_No}</b></td>
 							</tr>
 
 							<tr>
-								<td>Client Name: <h:inputText value="#{dealInfo.customer_Name}"></h:inputText></td>
-								<td align="left">Opportunity Name: <h:inputText
-										value="#{dealInfo.opportunity_Name}" /></td>
+								<td>Client Name * : &nbsp;&nbsp;<h:outputText  style="color:red;font-size: 7pt;" id="err_customer_Name">
+								</h:outputText><h:message  globalOnly="true" showSummary="false" showDetail="true" for="customer_Name" style="color:red;">
+								</h:message> <h:inputText id="customer_Name" value="#{dealInfo.customer_Name}" required="true" requiredMessage="Cannot be null">
+							
+							<f:validateRequired />
+							</h:inputText></td>
+								<td align="left">Opportunity Name * : &nbsp;&nbsp;<h:outputText  style="color:red;font-size: 7pt;" id="err_opportunity_Name">
+								</h:outputText>	<h:message  globalOnly="true" showSummary="false" showDetail="true" for="opportunity_Name" style="color:red;"></h:message><h:inputText
+										id="opportunity_Name" value="#{dealInfo.opportunity_Name}" required="true" requiredMessage="Cannot be null">
+								
+										<f:validateRequired />
+										</h:inputText>
+										</td>
 								<td align="left">Opportunity Owner: <h:inputText
 										value="#{dealInfo.opportunity_Owner}" /></td>
 							</tr>
 							<tr>
-								<td>Opportunity Description:<h:inputTextarea
-										value="#{dealInfo.opportunity_Description}" /></td>
+								<td>Opportunity Description * : &nbsp;&nbsp;<h:outputText  style="color:red;font-size: 7pt;" id="err_opportunity_Description">
+								</h:outputText><h:message id="od" globalOnly="true" showSummary="false" showDetail="true"  for="opportunity_Description" style="color:red;"></h:message><h:inputTextarea
+										id="opportunity_Description" value="#{dealInfo.opportunity_Description}"  required="true" requiredMessage="Cannot be null">
+						
+										</h:inputTextarea>
+											
+										</td>
 								<td>Additional Contacts:<h:inputText
 										value="#{dealInfo.additional_Contacts}" /></td>
 								<td>Box :<h:inputText value="#{dealInfo.box_Link}" /></td>
@@ -33,18 +51,18 @@
 
 
 							<tr>
-								<td>IMT: <h:selectOneMenu value="#{dealInfo.imt_Id}" required="true"
-										requiredMessage="Please Select">
+								<td>IMT: <h:selectOneMenu value="#{dealInfo.imt_Id}" >
+										<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
 										<f:selectItems value="#{deal.IMTList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
-								<td>Sector: <h:selectOneMenu value="#{dealInfo.sector_Id}" required="true"
-										requiredMessage="Please Select">
+								<td>Sector: <h:selectOneMenu value="#{dealInfo.sector_Id}" >
+										<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>	
 										<f:selectItems value="#{deal.sectorList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
-								<td>Led By: <h:selectOneMenu value="#{dealInfo.gbs_gts_Led}" required="true"
-										requiredMessage="Please Select">
+								<td>Led By: <h:selectOneMenu value="#{dealInfo.gbs_gts_Led}" >
+										<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
 										<f:selectItems value="#{deal.ledByList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
@@ -58,15 +76,51 @@
 										value="#{dealInfo.sales_Connect_No}" /></td>
 							</tr>
 						</table>
+						
 						<hr />
-				<h:panelGrid rendered="#{deal.insertFlag gt 0 }">
+						
+				<h:inputHidden id="insertFlag" value="#{deal.insertFlag }"></h:inputHidden>
 				<ui:include src="newA1Form.xhtml" />
-				</h:panelGrid>
+				
+			
 				<ui:include src="newDealInfo.xhtml" />
-				<h:commandButton id="saveButton" value="SAVE CHANGES" action="#{deal.insertDeal}"
-					class="btn-default">
-
-				</h:commandButton>
+				<h:commandButton id="saveButton"  value="SAVE CHANGES" onclick="return validate()"  action="#{deal.isDealExist}"
+					class="btn-default" />
+		
+					<script>
+					//<![CDATA[
+					function validate(){
+						//var status = $("#insertFlag").val();
+						var customer_Name = $("#customer_Name").val();
+						var opportunity_Name = $("#opportunity_Name").val();
+						var opportunity_Description = $("#opportunity_Description").val();
+						//var a1Status = $("#a1Form:j_idt61:0:a1Status").val();
+						//alert("a1Status:"+a1Status);
+						var status = false;
+						if (customer_Name == '') {
+							
+			    		   	 $("#err_customer_Name").html("Cannot be Null");
+			    		   } 
+						if (opportunity_Name == '') {
+							
+			    		   	 $("#err_opportunity_Name").html("Cannot be Null");
+			    		   } 
+						if (opportunity_Description == '') {
+							
+			    		   	 $("#err_opportunity_Description").html("Cannot be Null");
+			    		   } 
+						 /*  if (a1Status == '') {
+							
+								 $("#err_a1_Status").html("Cannot be Null");
+			    		   }  */ 
+						 if(customer_Name != '' && opportunity_Name != '' && opportunity_Description != '' ){
+							 status = true;
+						 }
+						 return status;
+						 
+			    }
+					//]]>
+			</script>	
 			</h:form>
 			</p:scrollPanel>
 		</ui:define>

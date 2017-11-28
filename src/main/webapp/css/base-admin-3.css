@@ -17,7 +17,7 @@ upgrading in the future easier. ***
  */
 
 p {
-  font: 13px/1.7em 'Open Sans';
+  font: 6px/1.7em 'Open Sans';
 }
 input,
 button,
@@ -408,7 +408,7 @@ h6 {
   padding: 6px;
   margin-bottom: 0px;
   color: #505050;
-  font-size: 11px;
+  font-size: 5px;
   text-align: center;
   background: none;
   filter: none;
@@ -830,7 +830,7 @@ h6 {
 .item-row {
   display: table;
   width: 100%;
-  padding-bottom: 3.5em;
+  padding-bottom:2.5em;
   margin-bottom: 3.5em;
   border-bottom: 1px dotted #BBB;
 }
