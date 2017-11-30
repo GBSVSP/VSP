@@ -1,0 +1,49 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" 
+				xmlns:h="http://java.sun.com/jsf/html"
+	            xmlns:p="http://primefaces.org/ui" 
+	            xmlns:f="http://xmlns.jcp.org/jsf/core"
+	            xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:body>
+	<script src="js/jquery-2.0.3.js"></script>
+  	<script src="js/jquery-ui.js"></script>
+  	<script src="js/bootstrap.js"></script>
+	<h:form prependId="false">
+	<br></br><br></br>
+          <table style="align:center;top:150px;width:100%" border="0">
+ <tr><td align="center"  colspan="7"><b>DEAL MANAGEMENT</b></td></tr>   
+          <tr>
+              <td colspan="7" align="center"> 
+               <h:selectOneRadio  id="searchType" value="#{deal.searchType}">
+       <f:selectItem  itemValue="VSP_OPP_NO" itemLabel="Reference Number"/>
+    <f:selectItem  itemValue="CLIENT" itemLabel="Client"/>
+       <f:selectItem  itemValue="DEAL" itemLabel="Deal"/>
+       <f:selectItem  itemValue="SALES_CONNECT_NO" itemLabel="Sales Connect No"/>
+       <f:ajax event="change" listener="#{deal.typeChanged}" />
+       
+       </h:selectOneRadio>
+        
+            </td></tr>
+            <tr>
+           <!--  <td><h:inputText value="#{deal.searchValue}"/></td> -->
+            <td   align="center"  colspan="7">  
+            <p:autoComplete id="dealList" value="#{deal.searchValue}" completeMethod="#{deal.getDeal}" />         
+
+	<h:commandButton action="#{deal.searchDeal}"
+			id="searchButton" value="Search" class="btn-default" render="dealResult" ></h:commandButton></td></tr> 
+			<tr><td colspan="2"><h:outputText value="No records found" rendered="#{deal.show}"/></td></tr>
+            </table>
+
+
+    
+
+<script>
+$("#searchType").click(function () {
+	$("#dealList_input").val("");
+}); 
+
+</script>
+</h:form>
+</h:body>
+
+</html>
