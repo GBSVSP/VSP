@@ -1,43 +1,31 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" 
 				xmlns:h="http://java.sun.com/jsf/html"
 	            xmlns:p="http://primefaces.org/ui" 
-	            xmlns:f="http://xmlns.jcp.org/jsf/core">
+	            xmlns:f="http://xmlns.jcp.org/jsf/core"
+	            xmlns:ui="http://java.sun.com/jsf/facelets">
 
 <h:body>
 	<script src="js/jquery-2.0.3.js"></script>
   	<script src="js/jquery-ui.js"></script>
   	<script src="js/bootstrap.js"></script>
-<h:form prependId="false"><br></br><br></br><br></br>
-          <table style="align:center;top:150px;">
- <tr><td align="center"><b>DEAL MANAGEMENT</b></td></tr>   
-          <tr>
-              <td colspan="7"> 
-               <h:selectOneRadio  id="searchType" value="#{deal.searchType}">
-       <f:selectItem  itemValue="VSP_OPP_NO" itemLabel="VSP Opp No"/>
-    <f:selectItem  itemValue="CLIENT" itemLabel="Client"/>
-       <f:selectItem  itemValue="DEAL" itemLabel="Deal"/>
-       <f:selectItem  itemValue="SALES_CONNECT_NO" itemLabel="Sales Connect No"/>
-       <f:ajax event="change" listener="#{deal.typeChanged}" />
-       
-       </h:selectOneRadio>
-        
-            </td></tr>
-            <tr>
-           <!--  <td><h:inputText value="#{deal.searchValue}"/></td> -->
-            <td>  <p:autoComplete id="dealList" value="#{deal.searchValue}" completeMethod="#{deal.getDeal}" />         
-</td>
-            <td><h:commandButton action="#{deal.searchDeal}"
-			id="searchButton" value="Search" class="btn-default" render="dealResult" ></h:commandButton></td></tr> 
-			<tr><td colspan="2"><h:outputText value="No records found" rendered="#{deal.show}"/></td></tr>
-            </table>
-            	 
-						   <h:dataTable id="dealResult"  var="row" value="#{deal.dealList}" styleClass = "dealTable"
+
+
+	<ui:composition template="commonLayout.xhtml">
+
+		<ui:define name="content">
+			<p:scrollPanel mode="native" style="position: absolute; height: 88%;width:100%"> 
+
+<ui:include src="search.xhtml" />
+  <h:form prependId="false">  
+  <table border="0" style="width :60%;"><tr><td style="padding: 3px; text-align: right;"> <h:commandButton action="#{deal.newDeal}"
+			class="btn-default" value=" ADD NEW DEAL "/>	 </td></tr></table>
+	 
+	<center>		<h:dataTable id="dealResult"  var="row" value="#{deal.dealList}" 
                     headerClass = "dealTableHeader" rendered="#{not empty deal.dealList}">   
     
   
     <h:column>
-    <f:facet name = "header" style="align:left">Showing #{deal.count} results for: #{deal.searchValue} <h:commandButton action="#{deal.newDeal}"
-			class="btn-default" value="NEW DEAL FORM"/></f:facet>
+    <f:facet name = "header" style="align:left">Showing #{deal.count} results for: #{deal.searchValue} </f:facet>
     <table border="0">
     <tr><td colspan="7" align="left">VSP Number: #{row.reference_No}   </td></tr>
     <tr><td align="left">#{row.opportunity_Description}</td></tr>
@@ -47,19 +35,18 @@
 	
 			</h:commandButton></td></tr>
     </table>
-    <hr/>      
+    
     </h:column>
-       
+       <hr/>
     </h:dataTable>
+      </center>
+        </h:form>
+      </p:scrollPanel>
+  
+
+    </ui:define>
       
-    </h:form>
-
-<script>
-$("#searchType").click(function () {
-	$("#dealList_input").val("");
-}); 
-
-</script>
+    </ui:composition>
 
 </h:body>
 

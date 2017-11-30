@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 
 /**
  * <p>
@@ -16,11 +17,11 @@ import javax.faces.bean.SessionScoped;
  * @Date 13/Nov/2017
  */
 @ManagedBean(name="dealInfo")
-@SessionScoped
+@ViewScoped
 public class DealInfo implements Serializable{
 
 private static final long serialVersionUID = 5688413565870287494L;
-private static int reference_No ;
+private  int reference_No ;
 private int sector_Id ;
 private String sector_Name ;
 private int industry_Id ;
@@ -56,7 +57,8 @@ public DealInfo() {
 	
 }
 public void setReference_No(int reference_No) {
-	DealInfo.reference_No = reference_No;
+
+	this.reference_No = reference_No;
 }
 
 public int getSector_Id() {

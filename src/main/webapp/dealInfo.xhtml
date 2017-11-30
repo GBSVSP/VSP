@@ -17,8 +17,7 @@
 									<hr /></td></tr>
 							<tr>
 																
-								<td>SCIMT: <h:selectOneMenu value="#{row.imt_Name}" required="true"
-										requiredMessage="Please Select">
+								<td>SCIMT: <h:selectOneMenu value="#{row.sc_Imt_Id}">
 										<f:selectItems value="#{deal.IMTList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
@@ -32,8 +31,7 @@
 								<td>IPFF Number:<h:inputText value="#{row.ippf_Number}" /></td>
 									<td>Other Linked Opp No:<h:inputText value="#{row.other_Linked_Opp_No}" />
 								</td>
-								<td>Potential TCV($m):<h:selectOneMenu value="#{row.potential_TCV}" required="true"
-										requiredMessage="Please Select">
+								<td>Potential TCV($m):<h:selectOneMenu value="#{row.potential_TCV}" >
 										<f:selectItems value="#{deal.potentialTCVList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>

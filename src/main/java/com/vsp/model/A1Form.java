@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
@@ -19,9 +20,10 @@ import javax.faces.event.AjaxBehaviorEvent;
  * @Date 24/Nov/2017
  */
 @ManagedBean(name="a1Form")
-@SessionScoped
+@ViewScoped
 public class A1Form implements Serializable {
 	private static final long serialVersionUID = 1094801825228386363L;
+	private int referenceNo;
 	private String a1_Status;
 	private String a1_Manager;
 	private String a1_Complete;
@@ -33,6 +35,12 @@ public class A1Form implements Serializable {
 	private String a1_RefNo;
 	
 	
+	public int getReferenceNo() {
+		return referenceNo;
+	}
+	public void setReferenceNo(int referenceNo) {
+		this.referenceNo = referenceNo;
+	}
 	public String getA1_RefNo() {
 		return a1_RefNo;
 	}

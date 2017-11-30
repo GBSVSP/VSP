@@ -11,9 +11,9 @@
 <ui:composition template="commonLayout.xhtml">
 		<ui:define name="content">
 		<p:scrollPanel mode="native" style="position: absolute; height: 88%;">
-			<h:form prependId="false">
-			<br></br><br></br><br></br>
-						<table border="0" width="58%">
+			<h:form prependId="false">							
+			<ui:include src="search.xhtml" />
+						<table border="0" width="58%" >
 							<tr>
 								<td colspan="4" align="left"><b>REFERENCE NUMBER:
 										#{deal.reference_No}</b></td>
@@ -57,7 +57,7 @@
 									</h:selectOneMenu>
 								</td>
 								<td>Sector: <h:selectOneMenu value="#{dealInfo.sector_Id}" >
-										<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>	
+									<!-- 	<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>	 -->
 										<f:selectItems value="#{deal.sectorList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>

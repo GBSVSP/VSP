@@ -8,19 +8,22 @@
 	<ui:composition template="commonLayout.xhtml">
 		<ui:define name="content">
 		<p:scrollPanel mode="native" style="position: absolute; height: 88%;">
-			<h:form>
+		<ui:include src="search.xhtml" />
+		<h:form prependId="false">
 				<h:dataTable id="dealResult" var="row" value="#{deal.dealList}" headerClass="dealTableHeader">
-
+				 <h:column>    				
+				      <f:facet name = "header"></f:facet>    				
+				    <h:commandButton action="#{deal.newDeal}"
+			class="btn-default" value=" + NEW DEAL"/>
+				   </h:column>
 					<h:column>
 
-
-						<br></br>
-						<br></br>
-						<br></br>
-						<table border="0" width="60%">
+					<table border="0" width="60%">
 							<tr>
 								<td colspan="4" align="left"><b>Reference Number:
 										#{row.reference_No}</b></td>
+										<td><h:commandButton action="#{deal.newDeal}"
+			class="btn-default" value=" + NEW DEAL"/></td>
 							</tr>
 
 							<tr>
@@ -40,18 +43,16 @@
 
 
 							<tr>
-								<td>IMT: <h:selectOneMenu value="#{row.imt_Id}" required="true"
-										requiredMessage="Please Select">
+								<td>IMT: <h:selectOneMenu value="#{row.imt_Id}">
+										<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
 										<f:selectItems value="#{deal.IMTList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
-								<td>Sector: <h:selectOneMenu value="#{row.sector_Id}" required="true"
-										requiredMessage="Please Select">
+								<td>Sector: <h:selectOneMenu value="#{row.sector_Id}">
 										<f:selectItems value="#{deal.sectorList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
-								<td>Led By: <h:selectOneMenu value="#{row.gbs_gts_Led}" required="true"
-										requiredMessage="Please Select">
+								<td>Led By: <h:selectOneMenu value="#{row.gbs_gts_Led}" >
 										<f:selectItems value="#{deal.ledByList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
@@ -74,7 +75,7 @@
 				<ui:include src="A1Form.xhtml" />
 				<ui:include src="dealInfo.xhtml" />
 				<h:commandButton id="saveButton" value="SAVE CHANGES" class="btn-default" 
-				action="#{deal.updateDeal}">
+				action="#{deal.isDealExist}">
 				</h:commandButton>
 			</h:form>
 			</p:scrollPanel>

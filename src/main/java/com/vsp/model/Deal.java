@@ -11,7 +11,9 @@ import java.util.Map;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
@@ -20,6 +22,7 @@ import com.vsp.dao.DealDAO;
 import com.vsp.dao.FormDAO;
 import com.vsp.util.Constants;
 import com.vsp.util.QueryBuilder;
+import com.vsp.util.SessionUtils;
 
 /**
  * <p>
@@ -32,67 +35,52 @@ import com.vsp.util.QueryBuilder;
  * @Date 13/Nov/2017
  */
 @ManagedBean
-@SessionScoped
+@ViewScoped
 public class Deal implements Serializable {
 	private static final long serialVersionUID = 1094801825228386363L;
-	private String searchType = Constants.DEFAULT_SEARCH_TYPE;
-	private static ArrayList<DealInfo> dealList = null;
+	private static String searchType = Constants.DEFAULT_SEARCH_TYPE;
+	private static  List<DealInfo> dealList;
 
 	private static HashMap<Integer, String> optionMap;
-	private String searchValue;
+	private static String searchValue;
 
 	private static String sql = null;
-	private int reference_No;
+	private static int reference_No;
 	private int insertFlag = 0;
 	private String whereClause = null;
 	private boolean show = false;
-	private boolean hasA1Exist = false;
-	private int count;
+	private boolean a1DBStatus = false;
+	private static int count;
 	private int a1Count;
 	private DealInfo dealInfo;
-
+	private boolean a1ButtonClick;
+	private static String a1StatusMessage = null;
 	
-	private List<A1Form> a1FormList;
-	private boolean a1statusFlag = true;
-	public String a1RefNo;
+	private static List<A1Form> a1FormList;
+	private static boolean a1statusFlag ;
+	public static String a1RefNo;
 	
-	public boolean isA1statusFlag() {
+	public boolean getA1statusFlag() {
 		return a1statusFlag;
-	}
-	public void setA1statusFlag(boolean a1statusFlag) {
-		this.a1statusFlag = a1statusFlag;
 	}
 	public String getA1RefNo() {
 		return a1RefNo;
 	}
-	public void setA1RefNo(String a1RefNo) {
-		this.a1RefNo = a1RefNo;
+	
+	public  String getA1StatusMessage() {
+		return a1StatusMessage;
 	}
+	
 	public Deal() throws Exception {
-		a1FormList = new ArrayList();
+		//a1FormList = new ArrayList();
 
-		a1FormList.add(new A1Form());
+		//a1FormList.add(new A1Form());
 		
 	}
-	 public void setA1Forms(List<A1Form> p_A1Form)
-	    {
-		 a1FormList = p_A1Form;
-	    }
+	public  List<A1Form> getA1FormList() {
+	return a1FormList;
+	}
 
-	    public List<A1Form> getA1Forms()
-	    {
-	        return a1FormList;
-	    }
-
-	    public void onButtonRemoveA1FormClick(final A1Form p_A1Form)
-	    {
-	    	a1FormList.remove(p_A1Form);
-	    }
-
-	    public void onButtonAddA1FormClick(AjaxBehaviorEvent p_oEvent)
-	    {
-	    	a1FormList.add(new A1Form());
-	    }
 	@ManagedProperty(value = "#{dealInfo}")
 	private DealInfo dealInfoObj  = new DealInfo();
 
@@ -155,21 +143,24 @@ public class Deal implements Serializable {
 		this.searchValue = searchValue;
 	}
 
-	public ArrayList<DealInfo> getDealList() {
+	public List<DealInfo> getDealList() {
 
 		return dealList;
 	}
 
+	
 	// searching deals
-	public void searchDeal() throws Exception {
+	public String searchDeal() throws Exception {
 		show = false;
-		sql = QueryBuilder.SEARCH_DEAL + "" + whereClause;
+		sql = QueryBuilder.SEARCH_DEAL + "" + whereClause +"" +QueryBuilder.SEARCH_DEAL_ORDER_BY;
 		dealList = DealDAO.getDealList(sql, searchValue);
+		
 		if (dealList.isEmpty()) {
 			show = true;
 		} else {
 			count = dealList.size();
 		}
+		return "dealSearch";
 	}
 
 	public List<String> getDeal(String value) throws Exception {
@@ -225,40 +216,51 @@ public class Deal implements Serializable {
 	}
 
 	// Invoked from VIEW DEAL DETAILS button
-	public String openDeal(int referenceNo) {
-
-		System.out.println("referenceNo>" + referenceNo);
-		dealInfo = new DealInfo();
-		for (int i = 0; i < dealList.size(); i++) {
-			dealInfo = dealList.get(i);
-			if (!(dealInfo.getReference_No() == referenceNo)) {
-				dealList.remove(i);
-			}
-			/*else {
-				dealInfoObj = dealList.get(i);
-			}*/
+	public String openDeal(int referenceNo) throws Exception {
+		System.out.println("In Deal: Entering openDeal()...");
+		dealList.clear();
+		reference_No = referenceNo;
+		sql = QueryBuilder.GET_DEAL;
+		dealList.add(DealDAO.getDealInfo(sql, referenceNo));
+		a1DBStatus = hasA1Exist(referenceNo);
+		if(a1DBStatus == true) {
+			a1statusFlag = true;
+			sql = QueryBuilder.GET_A1_FORMS;
+			a1FormList = DealDAO.getA1List (sql,referenceNo);
+			a1RefNo = a1FormList.get(0).getA1_RefNo();
 		}
-		//a1Forms = DealDAO.getA1List (referenceNo);
-		System.out.println("size:" + dealList.size());
+		else {
+			
+			a1FormList = new ArrayList<A1Form> ();
+			a1FormList.add(new A1Form());
+			a1statusFlag = false;
+			
+		}
+		System.out.println("status::" + dealList.get(0).getSc_Imt_Id());
+		System.out.println("In Deal: Exiting openDeal()...");
 		return "dealForm";
-
+	
 	}
 
 	// Invoked from NEW DEAL FORM button
 	public String newDeal() throws Exception {
 		System.out.println("inside newDeal");
+		searchValue = null;
+		searchType = Constants.DEFAULT_SEARCH_TYPE;
 		if (dealList != null) {
 		
 			dealList.clear();
 		
 		}
-		if(!(a1FormList.isEmpty())) {
+		if(a1FormList!=null) {
 			a1FormList.clear();
 		}
+		a1FormList = new ArrayList<A1Form> ();
 		a1FormList.add(new A1Form());
 		a1RefNo = null;
 		generateReferenceNo();
-		a1statusFlag = getHasA1Exist();
+		a1statusFlag = false;
+		
 		return "newDeal";
 
 	}
@@ -269,12 +271,19 @@ public class Deal implements Serializable {
 		sql = QueryBuilder.SELECT_MAX_VSP_REF_NO;
 		int currentRefNo = DealDAO.getReferenceNumber(sql);
 		System.out.println("currentRefNo:"+currentRefNo);
+		if(currentRefNo > 0) {
 		if (Integer.parseInt(Integer.toString(currentRefNo).substring(0, 4)) == year) {
 			currentRefNo++;
 			reference_No = currentRefNo;
 		} else {
 			reference_No = Integer.parseInt(String.valueOf(year) + Constants.VSP_REF_NO_START);
 		}
+		dealInfoObj.setReference_No(reference_No);
+		}
+		else {
+			reference_No = Integer.parseInt(String.valueOf(year) + Constants.VSP_REF_NO_START);
+		}
+		a1statusFlag = true; 
 		dealInfoObj.setReference_No(reference_No);
 		System.out.println("New reference_No:"+reference_No);
 		
@@ -451,9 +460,12 @@ public class Deal implements Serializable {
 
 			String dealSQL = QueryBuilder.INSERT_DEAL;
 			String a1SQL = QueryBuilder.INSERT_A1_WORKSHOP;
-
-			insertFlag = DealDAO.insertDeal(dealSQL, a1SQL, dealInfoObj, a1FormObj, a1statusFlag);
-
+			if(a1ButtonClick == true) {
+			insertFlag = DealDAO.insertDeal_A1(dealSQL, a1SQL, dealInfoObj, a1FormObj, a1statusFlag);
+			}
+			else {
+				insertFlag = DealDAO.insertDealOnly(dealSQL, a1SQL, dealInfoObj);
+			}
 			if (insertFlag > 0) {
 				System.out.println("Deal insert successful.");
 			} else {
@@ -478,27 +490,25 @@ public class Deal implements Serializable {
 
 		System.out.println("In Deal: Entering updateDeal()...");
 		String a1SQL = null;
+		int updateFlag = 0;
 		try {
 			
 			whereClause = Constants.VSP_REF_NO + "and" +  Constants.A1_REF_NO;
 			String dealSQL = QueryBuilder.UPDATE_DEAL + " " + Constants.VSP_REF_NO;
-			if (a1statusFlag == false) {
-				a1FormObj.setA1_RefNo(a1RefNo);
+			System.out.println("manager name:"+a1FormObj.getA1_Manager());
 				if (isA1Exist() == true) {
-					a1statusFlag = true ;
 					a1SQL = QueryBuilder.UPDATE_A1_WORKSHOP + " " +whereClause;
+					updateFlag = DealDAO.updateDeal(dealSQL,a1SQL,dealInfoObj, a1FormObj);
+					a1statusFlag = true;
 				}
 				else {
-					a1statusFlag = false ;
+					a1statusFlag = a1ButtonClick ;
+						
 					a1SQL = QueryBuilder.INSERT_A1_WORKSHOP;
-				}
+					updateFlag = DealDAO.updateDeal_A1Insert(dealSQL,a1SQL,dealInfoObj,a1FormObj,a1statusFlag);
+					}
 		
-			}
-			
-			
-			//int updateFlag = DealDAO.updateDeal(sql, dealList.get(0));
-			System.out.println("::SQL:"+dealSQL);
-			int updateFlag = DealDAO.updateDeal(dealSQL,a1SQL,dealInfoObj, a1FormObj,a1statusFlag);
+
 			if (updateFlag > 0) {
 				System.out.println("Deal update successful.");
 			} else {
@@ -521,24 +531,37 @@ public class Deal implements Serializable {
 	 * @throws Exception
 	 */
 	public void isDealExist() throws Exception {
-		System.out.println("In Deal: Entering insertDeal()...");
+		System.out.println("In Deal: Entering isDealExist()...");
 		try {
 
 			whereClause = Constants.VSP_REF_NO;
 			String sql = QueryBuilder.COUNT_DEAL + " " + whereClause;
-			if(dealInfoObj.getReference_No() > 0) {
-			boolean existDealFlag = DealDAO.isDealExist(sql, dealInfoObj.getReference_No());
-           
-			if(existDealFlag == false) {
-				//Insert new deal
-				insertDeal();
-			}else {
-				//update existing deal
-				updateDeal();
+			if(dealList!=null) {
+				if(dealList.size() > 0) {
+				dealInfoObj = dealList.get(0);
+				}
 			}
+			if(a1FormList!=null) {
+				if(a1FormList.size() > 0) {
+				a1FormObj = a1FormList.get(0);
+				}
+			}
+			System.out.println("reference no:"+reference_No+"customer name:"+dealInfoObj.getCustomer_Name());	
+			if(reference_No > 0) {
+				dealInfoObj.setReference_No(reference_No);
+					boolean existDealFlag = DealDAO.isDealExist(sql,reference_No);
+		           
+					if(existDealFlag == false) {
+						//Insert new deal
+						
+						insertDeal();
+					}else {
+						//update existing deal
+						updateDeal();
+					}
 			}
 			
-			
+					
 		} catch (Exception e) {
 			System.out.println("Error in isDealExist():" + e);
 			e.printStackTrace();
@@ -557,21 +580,51 @@ public class Deal implements Serializable {
 	 * @throws Exception
 	 */
 	public boolean isA1Exist() throws Exception {
-		boolean existDealFlag = false;
+		 boolean a1ExistFlag = false;
 		try {
 
 			whereClause = Constants.VSP_REF_NO +" and " + Constants.A1_REF_NO;
 			String sql = QueryBuilder.COUNT_A1 + " " + whereClause;
 
-			existDealFlag = DealDAO.isA1Exist(sql, dealInfoObj.getReference_No(),a1FormObj.getA1_RefNo());
-           
+			int count =  DealDAO.isA1Exist(sql, dealInfoObj.getReference_No(),a1FormObj.getA1_RefNo());
+			if (count > 0) {
+				a1ExistFlag =true;
+			}
+			else {
+				a1ExistFlag = false;
+			}
+           System.out.println("a1ExitFlag:"+a1ExistFlag+dealInfoObj.getReference_No()+a1FormObj.getA1_RefNo());
 			
 			
 		} catch (Exception e) {
 			System.out.println("Error in isA1Exist():" + e);
 			e.printStackTrace();
 		}
-		return existDealFlag;
+		return a1ExistFlag;
+	}
+	/**
+	 * Method to validate A1 form status
+	 * 
+	 * @param value
+	 * @return void
+	 * @throws Exception
+	 */
+	public int validateA1Status() throws Exception {
+		
+		try {
+
+			whereClause = Constants.VSP_REF_NO +" and " + Constants.A1_REF_NO + "and " +Constants.A1_STATUS ;
+			String sql = QueryBuilder.COUNT_A1 + " " + whereClause;
+
+			int count = DealDAO.isA1Exist(sql,  dealInfoObj.getReference_No(),a1FormObj.getA1_RefNo());
+            System.out.println("count:"+count);
+			
+			
+		} catch (Exception e) {
+			System.out.println("Error in validateA1Status():" + e);
+			e.printStackTrace();
+		}
+		return count;
 	}
 	/**
 	 * Method to check A1 status of a deal
@@ -580,43 +633,86 @@ public class Deal implements Serializable {
 	 * @return void
 	 * @throws Exception
 	 */
-	public boolean getHasA1Exist() throws Exception {
-		hasA1Exist = false;
+	public boolean hasA1Exist(int referenceNo) throws Exception {
+		boolean status = false;
 		a1Count = 0;
 		try {
 
 			whereClause = Constants.VSP_REF_NO ;
 			String sql = QueryBuilder.COUNT_A1 + " " + whereClause;
-
-			a1Count = DealDAO.hasA1Exist(sql, dealInfoObj.getReference_No());
-           
-			if (count > 0) {
-				hasA1Exist = true;
-				a1RefNo = Constants.A1_REF_NO_BASE+ (count+1);
-				
-			}
-			else {
-				a1RefNo = Constants.A1_REF_NO_START;
-			}
+		
+			a1Count = DealDAO.hasA1Exist(sql, referenceNo);
+           if(a1Count> 0 ) {
+        	  status = true; 
+           }
+           else {
+        	   status = false; 
+           }
+			
+			System.out.println("count:"+a1Count+":"+status);
 			
 		} catch (Exception e) {
 			System.out.println("Error in hasA1Exist():" + e);
 			e.printStackTrace();
 		}
-		return hasA1Exist;
+		return status;
 	}
 	/**
-	 * Method to handle NEW A1 button click event
+	 * Method to handle ADD A1 button click event
 	 * 
 	 * @param value
 	 * @return void
 	 * @throws Exception
 	 */
-	public void a1ButtonClick(ActionEvent e) {
-		a1statusFlag = false;
-		System.out.println("a1RefNo:"+a1RefNo);
-		a1FormObj.setA1_RefNo(a1RefNo);
-		System.out.println("A1 button clicked .....");
+	public void addA1Form(ActionEvent e) throws Exception {
+		a1ButtonClick = true;
+		generateA1RefNo(false,0);
+		System.out.println("New A1 Ref No:"+a1RefNo);
 	
 	}
+	/**
+	 * Method to handle NEW A1 FORM button click event
+	 * 
+	 * @param value
+	 * @return void
+	 * @throws Exception
+	 */
+	public void addNewA1Form(ActionEvent e) throws Exception {
+		a1ButtonClick = true;
+		int count = validateA1Status();
+		
+		if(count > 0) {
+			a1StatusMessage = null;
+			generateA1RefNo(true,count);
+			
+		}
+		else {
+			a1StatusMessage = Constants.A1_STATUS_MSG;
+		}
+		
+		System.out.println("New A1 Ref No:"+a1RefNo);
+	
+	}
+	public void generateA1RefNo (boolean a1Status,int count) {
+		
+		if (a1Status == true) {
+			
+			a1RefNo = Constants.A1_REF_NO_BASE+ String.format("%02d", count+1);
+			
+		}
+		else {
+			a1RefNo = Constants.A1_REF_NO_START;
+			System.out.println("a1ButtonClick:"+a1ButtonClick);
+			if(a1ButtonClick == true) {
+			a1statusFlag = true;
+			}
+			else {
+				a1statusFlag = true;
+			}
+			
+		}
+		a1FormObj.setA1_RefNo(a1RefNo);
+		
+}
+	
 }
