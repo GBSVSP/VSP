@@ -7,62 +7,58 @@
 <h:body>
 	<ui:composition template="commonLayout.xhtml">
 		<ui:define name="content">
-		<p:scrollPanel mode="native" style="position: absolute; height: 88%;">
+		<p:scrollPanel mode="native" style="position: absolute; height: 88%; width:100%;">
 		<ui:include src="search.xhtml" />
 		<h:form prependId="false">
 				<h:dataTable id="dealResult" var="row" value="#{deal.dealList}" headerClass="dealTableHeader">
-				 <h:column>    				
-				      <f:facet name = "header"></f:facet>    				
-				    <h:commandButton action="#{deal.newDeal}"
-			class="btn-default" value=" + NEW DEAL"/>
-				   </h:column>
+			
 					<h:column>
 
-					<table border="0" width="60%">
+					<table border="0" width="55%">
 							<tr>
-								<td colspan="4" align="left"><b>Reference Number:
+								<td colspan="4" align="left"><b>REFERENCE NUMBER:
 										#{row.reference_No}</b></td>
 										<td><h:commandButton action="#{deal.newDeal}"
 			class="btn-default" value=" + NEW DEAL"/></td>
 							</tr>
 
 							<tr>
-								<td>Client Name: <h:inputText value="#{row.customer_Name}"></h:inputText></td>
-								<td align="left">Opportunity Name: <h:inputText
+								<td style="font-size:12px;width:60px">Client Name: <h:inputText value="#{row.customer_Name}"></h:inputText></td>
+								<td style="font-size:12px;width:60px" align="left">Opportunity Name: <h:inputText
 										value="#{row.opportunity_Name}" /></td>
-								<td align="left">Opportunity Owner: <h:inputText
+								<td style="font-size:12px;width:60px" align="left">Opportunity Owner: <h:inputText
 										value="#{row.opportunity_Owner}" /></td>
 							</tr>
 							<tr>
-								<td>Opportunity Description:<h:inputTextarea
+								<td style="font-size:12px;width:60px">Opportunity Description:<h:inputTextarea
 										value="#{row.opportunity_Description}" /></td>
-								<td>Additional Contacts:<h:inputText
+								<td style="font-size:12px;width:60px">Additional Contacts:<h:inputText
 										value="#{row.additional_Contacts}" /></td>
-								<td>Box :<h:inputText value="#{row.box_Link}" /></td>
+								<td style="font-size:12px;width:60px">Box :<h:inputText value="#{row.box_Link}" /></td>
 						</tr>
 
 
 							<tr>
-								<td>IMT: <h:selectOneMenu value="#{row.imt_Id}">
+								<td style="font-size:12px;width:60px">IMT: <h:selectOneMenu value="#{row.imt_Id}">
 										<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
 										<f:selectItems value="#{deal.IMTList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
-								<td>Sector: <h:selectOneMenu value="#{row.sector_Id}">
+								<td style="font-size:12px;width:60px">Sector: <h:selectOneMenu value="#{row.sector_Id}">
 										<f:selectItems value="#{deal.sectorList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
-								<td>Led By: <h:selectOneMenu value="#{row.gbs_gts_Led}" >
+								<td style="font-size:12px;width:60px">Led By: <h:selectOneMenu value="#{row.gbs_gts_Led}" >
 										<f:selectItems value="#{deal.ledByList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
 								</tr>
 								<tr>
-								<td>SSM Stage:<h:inputText
+								<td style="font-size:12px;width:60px">SSM Stage:<h:inputText
 										value="#{row.ssm_Stage}" /></td>
-								<td>SC TCV:<h:inputText
+								<td style="font-size:12px;width:60px">SC TCV:<h:inputText
 										value="#{row.tcv}" /></td>
-								<td>Sales Connect No:<h:inputText
+								<td style="font-size:12px;width:60px">Sales Connect No:<h:inputText
 										value="#{row.sales_Connect_No}" /></td>
 							</tr>
 						</table>

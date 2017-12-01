@@ -552,11 +552,8 @@ public class DealDAO {
 
 		System.out.println("In DealDAO: Entering isA1Exist()...");
 		PreparedStatement ps = null;
-		boolean existDealFlag = false;
-		int count = 0;
-		System.out.println("A1 Ref. No.: " + a1RefNo);
-
-		try {
+			int count = 0;
+				try {
 			ps = con.prepareStatement(sql);
 			ps.setInt(1, ref_No);
 			ps.setString(2, a1RefNo);
@@ -644,5 +641,26 @@ public class DealDAO {
 		}
 		System.out.println("a1FormList size:"+a1FormList.size());
 		return a1FormList;
+	}
+	public static ArrayList<String> getA1History(String sql,int referenceNo) throws Exception {
+
+		PreparedStatement ps = null;
+		ArrayList<String> a1HistoryList = new ArrayList<String>();
+			try {
+
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, referenceNo);
+
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				a1HistoryList.add(rs.getString(1));
+			}
+
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+
+		}
+		return a1HistoryList;
 	}
 }

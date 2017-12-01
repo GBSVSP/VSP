@@ -22,7 +22,7 @@
 								</table>
 								
 									<h:panelGroup id="dataTableGroup">
-								<h:dataTable  value="#{deal.a1FormList}" var="row">
+								<h:dataTable  value="#{deal.a1FormList}" var="row" rows="1">
 								<h:column>
 								<table width="60%" class="panelGrid">
 							<tr><td colspan="4" align="left"><b>A1 STATUS:#{row.a1_Status}</b>
@@ -67,9 +67,21 @@
 								</td>
 								</tr>
 								<tr>
-								<td colspan="10" align="left"><hr /></td></tr>
-								<tr>
-								<td colspan="10" align="left">Historical A1 Info:</td></tr>
+								
+								<td align="right">
+								Active:<h:commandButton  value="#{deal.activeA1RefNo}" rendered="#{not empty deal.activeA1RefNo}" class="btn-default"  actionListener="#{deal.historyListener}"/>
+								Historical A1 Info:</td><td colspan="4">
+								<table>
+								 <tr>
+						    <ui:repeat value="#{deal.a1History}" var="row">
+						  	            <ui:repeat value="#{row}" var="column">
+						                <td>
+						                <h:commandButton  value="#{column}"	class="btn-default"  actionListener="#{deal.historyListener}"/>
+							              </td>
+						            </ui:repeat>
+						    	 </ui:repeat></tr>
+							</table>
+								</td></tr>
 						</table>
 						</h:column>
 					</h:dataTable>

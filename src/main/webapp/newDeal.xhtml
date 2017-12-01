@@ -10,69 +10,69 @@
 <h:body>
 <ui:composition template="commonLayout.xhtml">
 		<ui:define name="content">
-		<p:scrollPanel mode="native" style="position: absolute; height: 88%;">
+		<p:scrollPanel mode="native" style="position: absolute; height: 88%;width:100%;">
 			<h:form prependId="false">							
 			<ui:include src="search.xhtml" />
-						<table border="0" width="58%" >
+						<table border="0" width="55%" >
 							<tr>
 								<td colspan="4" align="left"><b>REFERENCE NUMBER:
 										#{deal.reference_No}</b></td>
 							</tr>
 
 							<tr>
-								<td>Client Name * : &nbsp;&nbsp;<h:outputText  style="color:red;font-size: 7pt;" id="err_customer_Name">
+								<td style="font-size:12px;width:60px">Client Name * : &nbsp;&nbsp;<h:outputText  style="color:red;font-size: 7pt;" id="err_customer_Name">
 								</h:outputText><h:message  globalOnly="true" showSummary="false" showDetail="true" for="customer_Name" style="color:red;">
 								</h:message> <h:inputText id="customer_Name" value="#{dealInfo.customer_Name}" required="true" requiredMessage="Cannot be null">
 							
 							<f:validateRequired />
 							</h:inputText></td>
-								<td align="left">Opportunity Name * : &nbsp;&nbsp;<h:outputText  style="color:red;font-size: 7pt;" id="err_opportunity_Name">
+								<td style="font-size:12px;width:60px" align="left">Opportunity Name * : &nbsp;&nbsp;<h:outputText  style="color:red;font-size: 7pt;" id="err_opportunity_Name">
 								</h:outputText>	<h:message  globalOnly="true" showSummary="false" showDetail="true" for="opportunity_Name" style="color:red;"></h:message><h:inputText
 										id="opportunity_Name" value="#{dealInfo.opportunity_Name}" required="true" requiredMessage="Cannot be null">
 								
 										<f:validateRequired />
 										</h:inputText>
 										</td>
-								<td align="left">Opportunity Owner: <h:inputText
+								<td style="font-size:12px;width:60px" align="left">Opportunity Owner: <h:inputText
 										value="#{dealInfo.opportunity_Owner}" /></td>
 							</tr>
 							<tr>
-								<td>Opportunity Description * : &nbsp;&nbsp;<h:outputText  style="color:red;font-size: 7pt;" id="err_opportunity_Description">
+								<td style="font-size:12px;width:60px">Opportunity Description * : &nbsp;&nbsp;<h:outputText  style="color:red;font-size: 7pt;" id="err_opportunity_Description">
 								</h:outputText><h:message id="od" globalOnly="true" showSummary="false" showDetail="true"  for="opportunity_Description" style="color:red;"></h:message><h:inputTextarea
 										id="opportunity_Description" value="#{dealInfo.opportunity_Description}"  required="true" requiredMessage="Cannot be null">
 						
 										</h:inputTextarea>
 											
 										</td>
-								<td>Additional Contacts:<h:inputText
+								<td style="font-size:12px;width:60px">Additional Contacts:<h:inputText
 										value="#{dealInfo.additional_Contacts}" /></td>
-								<td>Box :<h:inputText value="#{dealInfo.box_Link}" /></td>
+								<td style="font-size:12px;width:60px">Box :<h:inputText value="#{dealInfo.box_Link}" /></td>
 						</tr>
 
 
 							<tr>
-								<td>IMT: <h:selectOneMenu value="#{dealInfo.imt_Id}" >
+								<td style="font-size:12px;width:60px">IMT: <h:selectOneMenu value="#{dealInfo.imt_Id}" >
 										<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
 										<f:selectItems value="#{deal.IMTList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
-								<td>Sector: <h:selectOneMenu value="#{dealInfo.sector_Id}" >
+								<td style="font-size:12px;width:60px">Sector: <h:selectOneMenu value="#{dealInfo.sector_Id}" >
 									<!-- 	<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>	 -->
 										<f:selectItems value="#{deal.sectorList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
-								<td>Led By: <h:selectOneMenu value="#{dealInfo.gbs_gts_Led}" >
+								<td style="font-size:12px;width:60px">Led By: <h:selectOneMenu value="#{dealInfo.gbs_gts_Led}" >
 										<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
 										<f:selectItems value="#{deal.ledByList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
 								</tr>
 								<tr>
-								<td>SSM Stage:<h:inputText
+								<td style="font-size:12px;width:60px">SSM Stage:<h:inputText
 										value="#{dealInfo.ssm_Stage}" /></td>
-								<td>SC TCV:<h:inputText
+								<td style="font-size:12px;width:60px">SC TCV:<h:inputText
 										value="#{dealInfo.tcv}" /></td>
-								<td>Sales Connect No:<h:inputText
+								<td >Sales Connect No:<h:inputText
 										value="#{dealInfo.sales_Connect_No}" /></td>
 							</tr>
 						</table>

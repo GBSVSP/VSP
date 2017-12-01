@@ -10,10 +10,8 @@ import java.util.Map;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
@@ -22,7 +20,6 @@ import com.vsp.dao.DealDAO;
 import com.vsp.dao.FormDAO;
 import com.vsp.util.Constants;
 import com.vsp.util.QueryBuilder;
-import com.vsp.util.SessionUtils;
 
 /**
  * <p>
@@ -40,26 +37,28 @@ public class Deal implements Serializable {
 	private static final long serialVersionUID = 1094801825228386363L;
 	private static String searchType = Constants.DEFAULT_SEARCH_TYPE;
 	private static  List<DealInfo> dealList;
-
+	private static ArrayList<String> a1History;
 	private static HashMap<Integer, String> optionMap;
 	private static String searchValue;
 
-	private static String sql = null;
 	private static int reference_No;
 	private int insertFlag = 0;
-	private String whereClause = null;
+	private static String whereClause = null;
 	private boolean show = false;
 	private boolean a1DBStatus = false;
-	private static int count;
 	private int a1Count;
-	private DealInfo dealInfo;
 	private boolean a1ButtonClick;
 	private static String a1StatusMessage = null;
 	
 	private static List<A1Form> a1FormList;
 	private static boolean a1statusFlag ;
 	public static String a1RefNo;
+	public static String activeA1RefNo;
 	
+	
+	public String getActiveA1RefNo() {
+		return activeA1RefNo;
+	}
 	public boolean getA1statusFlag() {
 		return a1statusFlag;
 	}
@@ -71,6 +70,9 @@ public class Deal implements Serializable {
 		return a1StatusMessage;
 	}
 	
+	public static void setA1History(ArrayList<String> a1History) {
+		Deal.a1History = a1History;
+	}
 	public Deal() throws Exception {
 		//a1FormList = new ArrayList();
 
@@ -110,15 +112,6 @@ public class Deal implements Serializable {
 	public void setReference_No(int reference_No) {
 		this.reference_No = reference_No;
 	}
-
-	public int getCount() {
-		return count;
-	}
-
-	public void setCount(int count) {
-		this.count = count;
-	}
-
 	public boolean isShow() {
 		return show;
 	}
@@ -152,14 +145,25 @@ public class Deal implements Serializable {
 	// searching deals
 	public String searchDeal() throws Exception {
 		show = false;
-		sql = QueryBuilder.SEARCH_DEAL + "" + whereClause +"" +QueryBuilder.SEARCH_DEAL_ORDER_BY;
+		
+		if (searchType.equals(Constants.VSP_OPP_NO)) {
+			whereClause = Constants.VSP_OPP_NO_SQL;
+		}
+		if (searchType.equals(Constants.CLIENT)) {			
+			whereClause = Constants.CLIENT_SQL;		
+			}
+		if (searchType.equals(Constants.DEAL)) {			
+			whereClause = Constants.CLIENT_SQL;	
+			}
+		if (searchType.equals(Constants.SALES_CONNECT_NO)) {
+			whereClause = Constants.SALES_CONNECT_NO_SQL;
+		}
+		String sql = QueryBuilder.SEARCH_DEAL + "" + whereClause +"" +QueryBuilder.SEARCH_DEAL_ORDER_BY;
 		dealList = DealDAO.getDealList(sql, searchValue);
 		
 		if (dealList.isEmpty()) {
 			show = true;
-		} else {
-			count = dealList.size();
-		}
+		} 
 		return "dealSearch";
 	}
 
@@ -168,7 +172,7 @@ public class Deal implements Serializable {
 		List<String> tempList = new ArrayList<String>();
 
 		try {
-
+			String sql = null;
 			if (searchType.equals(Constants.VSP_OPP_NO)) {
 				sql = QueryBuilder.SELECT_VSP_REF_NO;
 				whereClause = Constants.VSP_OPP_NO_SQL;
@@ -219,8 +223,9 @@ public class Deal implements Serializable {
 	public String openDeal(int referenceNo) throws Exception {
 		System.out.println("In Deal: Entering openDeal()...");
 		dealList.clear();
+		activeA1RefNo = null;
 		reference_No = referenceNo;
-		sql = QueryBuilder.GET_DEAL;
+		String sql = QueryBuilder.GET_DEAL;
 		dealList.add(DealDAO.getDealInfo(sql, referenceNo));
 		a1DBStatus = hasA1Exist(referenceNo);
 		if(a1DBStatus == true) {
@@ -228,6 +233,7 @@ public class Deal implements Serializable {
 			sql = QueryBuilder.GET_A1_FORMS;
 			a1FormList = DealDAO.getA1List (sql,referenceNo);
 			a1RefNo = a1FormList.get(0).getA1_RefNo();
+			activeA1RefNo = a1FormList.get(0).getA1_RefNo();
 		}
 		else {
 			
@@ -268,7 +274,7 @@ public class Deal implements Serializable {
 	public void  generateReferenceNo() {
 		Calendar now = Calendar.getInstance();
 		int year = now.get(Calendar.YEAR);
-		sql = QueryBuilder.SELECT_MAX_VSP_REF_NO;
+		String sql = QueryBuilder.SELECT_MAX_VSP_REF_NO;
 		int currentRefNo = DealDAO.getReferenceNumber(sql);
 		System.out.println("currentRefNo:"+currentRefNo);
 		if(currentRefNo > 0) {
@@ -291,7 +297,7 @@ public class Deal implements Serializable {
 	// Populating Led By drop down
 	public ArrayList<SelectItem> getLedByList() {
 		whereClause = Constants.LED_BY_CONDITION;
-		sql = QueryBuilder.SELECT_OPTION + "" + whereClause;
+		String sql = QueryBuilder.SELECT_OPTION + "" + whereClause;
 		ArrayList<SelectItem> optionList = new ArrayList<SelectItem>();
 		try {
 			optionMap = FormDAO.getOptionList(sql);
@@ -307,7 +313,7 @@ public class Deal implements Serializable {
 	// Populating Potential TCV drop down
 	public ArrayList<SelectItem> getPotentialTCVList() {
 		whereClause = Constants.PPOTENTIAL_TCV_CONDITION;
-		sql = QueryBuilder.SELECT_OPTION + "" + whereClause;
+		String sql = QueryBuilder.SELECT_OPTION + "" + whereClause;
 		ArrayList<SelectItem> optionList = new ArrayList<SelectItem>();
 		try {
 			optionMap = FormDAO.getOptionList(sql);
@@ -323,7 +329,7 @@ public class Deal implements Serializable {
 	// Populating A1 Status drop down
 	public ArrayList<SelectItem> getA1StatusList() {
 		whereClause = Constants.A1STATUS_CONDITION;
-		sql = QueryBuilder.SELECT_OPTION + "" + whereClause;
+		String sql = QueryBuilder.SELECT_OPTION + "" + whereClause;
 		ArrayList<SelectItem> optionList = new ArrayList<SelectItem>();
 		try {
 			optionMap = FormDAO.getOptionList(sql);
@@ -339,7 +345,7 @@ public class Deal implements Serializable {
 	// Populating Next Step drop down
 	public ArrayList<SelectItem> getNextStepList() {
 		whereClause = Constants.NEXT_STEP_CONDITION;
-		sql = QueryBuilder.SELECT_OPTION + "" + whereClause;
+		String sql = QueryBuilder.SELECT_OPTION + "" + whereClause;
 		ArrayList<SelectItem> optionList = new ArrayList<SelectItem>();
 		try {
 			optionMap = FormDAO.getOptionList(sql);
@@ -355,7 +361,7 @@ public class Deal implements Serializable {
 	// Populating Should we sell drop down
 	public ArrayList<SelectItem> getShouldweSellList() {
 		whereClause = Constants.SHOULD_WE_SELL_CONDITION;
-		sql = QueryBuilder.SELECT_OPTION + "" + whereClause;
+		String sql = QueryBuilder.SELECT_OPTION + "" + whereClause;
 		ArrayList<SelectItem> optionList = new ArrayList<SelectItem>();
 		try {
 			optionMap = FormDAO.getOptionList(sql);
@@ -371,7 +377,7 @@ public class Deal implements Serializable {
 	// Populating can we sell drop down
 	public ArrayList<SelectItem> getCanweSellList() {
 		whereClause = Constants.CAN_WE_SELL_CONDITION;
-		sql = QueryBuilder.SELECT_OPTION + "" + whereClause;
+		String sql = QueryBuilder.SELECT_OPTION + "" + whereClause;
 
 		ArrayList<SelectItem> optionList = new ArrayList<SelectItem>();
 		try {
@@ -388,7 +394,7 @@ public class Deal implements Serializable {
 	// Populating Evaluation drop down
 	public ArrayList<SelectItem> getA1EvaluationList() {
 		whereClause = Constants.A1EVALUATION_CONDITION;
-		sql = QueryBuilder.SELECT_OPTION + "" + whereClause;
+		String sql = QueryBuilder.SELECT_OPTION + "" + whereClause;
 		ArrayList<SelectItem> optionList = new ArrayList<SelectItem>();
 		try {
 			optionMap = FormDAO.getOptionList(sql);
@@ -403,7 +409,7 @@ public class Deal implements Serializable {
 
 	// Populating IMT drop down
 	public List<SelectItem> getIMTList() {
-		sql = QueryBuilder.SELECT_IMT;
+		String sql = QueryBuilder.SELECT_IMT;
 		ArrayList<SelectItem> optionList = new ArrayList<SelectItem>();
 		try {
 			optionMap = FormDAO.getOptionList(sql);
@@ -418,7 +424,7 @@ public class Deal implements Serializable {
 
 	// Populating SCIMT drop down
 	public List<SelectItem> getSCIMTList() {
-		sql = QueryBuilder.SELECT_IMT;
+		String sql = QueryBuilder.SELECT_IMT;
 		ArrayList<SelectItem> optionList = new ArrayList<SelectItem>();
 		try {
 			optionMap = FormDAO.getOptionList(sql);
@@ -433,7 +439,7 @@ public class Deal implements Serializable {
 
 	// Populating Sector drop down
 	public ArrayList<SelectItem> getSectorList() {
-		sql = QueryBuilder.SELECT_SECTOR;
+		String sql = QueryBuilder.SELECT_SECTOR;
 		ArrayList<SelectItem> optionList = new ArrayList<SelectItem>();
 		try {
 			optionMap = FormDAO.getOptionList(sql);
@@ -492,10 +498,12 @@ public class Deal implements Serializable {
 		String a1SQL = null;
 		int updateFlag = 0;
 		try {
-			
+			a1StatusMessage = null;
 			whereClause = Constants.VSP_REF_NO + "and" +  Constants.A1_REF_NO;
 			String dealSQL = QueryBuilder.UPDATE_DEAL + " " + Constants.VSP_REF_NO;
-			System.out.println("manager name:"+a1FormObj.getA1_Manager());
+			a1FormObj.setA1_RefNo(a1RefNo);
+			
+			System.out.println("getReferenceNo:"+a1FormObj.getReferenceNo()+":"+a1RefNo);
 				if (isA1Exist() == true) {
 					a1SQL = QueryBuilder.UPDATE_A1_WORKSHOP + " " +whereClause;
 					updateFlag = DealDAO.updateDeal(dealSQL,a1SQL,dealInfoObj, a1FormObj);
@@ -609,22 +617,21 @@ public class Deal implements Serializable {
 	 * @return void
 	 * @throws Exception
 	 */
-	public int validateA1Status() throws Exception {
-		
+	public int validateA1Status(int reference_No,String a1_RefNo) throws Exception {
+		int a1Count = 0;
 		try {
 
 			whereClause = Constants.VSP_REF_NO +" and " + Constants.A1_REF_NO + "and " +Constants.A1_STATUS ;
 			String sql = QueryBuilder.COUNT_A1 + " " + whereClause;
 
-			int count = DealDAO.isA1Exist(sql,  dealInfoObj.getReference_No(),a1FormObj.getA1_RefNo());
-            System.out.println("count:"+count);
-			
+			a1Count = DealDAO.isA1Exist(sql,  reference_No, a1_RefNo);
+            			
 			
 		} catch (Exception e) {
 			System.out.println("Error in validateA1Status():" + e);
 			e.printStackTrace();
 		}
-		return count;
+		return a1Count;
 	}
 	/**
 	 * Method to check A1 status of a deal
@@ -679,20 +686,32 @@ public class Deal implements Serializable {
 	 */
 	public void addNewA1Form(ActionEvent e) throws Exception {
 		a1ButtonClick = true;
-		int count = validateA1Status();
 		
-		if(count > 0) {
+		System.out.println("A1 Ref No:"+a1RefNo);
+		System.out.println("Ref No:"+reference_No);
+		int a1Count = validateA1Status(reference_No,a1RefNo);
+		System.out.println("a1Count:"+a1Count);
+		if(a1Count > 0) {
 			a1StatusMessage = null;
-			generateA1RefNo(true,count);
+			a1FormList = new ArrayList<A1Form> ();
+			a1FormList.add(new A1Form());
+			generateA1RefNo(true,a1Count);
 			
 		}
 		else {
 			a1StatusMessage = Constants.A1_STATUS_MSG;
 		}
 		
-		System.out.println("New A1 Ref No:"+a1RefNo);
+	
 	
 	}
+	/**
+	 * Method to generate new A1 reference number
+	 * 
+	 * @param value
+	 * @return void
+	 * @throws Exception
+	 */
 	public void generateA1RefNo (boolean a1Status,int count) {
 		
 		if (a1Status == true) {
@@ -711,8 +730,54 @@ public class Deal implements Serializable {
 			}
 			
 		}
-		a1FormObj.setA1_RefNo(a1RefNo);
+		System.out.println("Inside generateA1RefNo:"+a1RefNo);
+	
 		
 }
-	
+	/**
+	 * Method to get A1 history
+	 * 
+	 * @param value
+	 * @return void
+	 * @throws Exception
+	 */
+	public ArrayList<String> getA1History(){
+		try {
+
+			whereClause = Constants.A1_STATUS ;
+			String sql = QueryBuilder.A1_HISTORY + " " + whereClause;
+			System.out.println("reference_No:"+reference_No);
+			a1History = DealDAO.getA1History(sql,reference_No);
+            			
+			
+		} catch (Exception e) {
+			System.out.println("Error in validateA1Status():" + e);
+			e.printStackTrace();
+		}
+		return a1History;
+	}
+	/**
+	 * Method to handle A1 history button listener
+	 * 
+	 * @param value
+	 * @return void
+	 * @throws Exception
+	 */
+	public void historyListener(ActionEvent e) throws Exception {
+		String buttonValue = (String)e.getComponent().getAttributes().get("value");
+		System.out.println("buttonValue:"+buttonValue);
+		if(a1FormList!=null) {
+		for(A1Form a1form:a1FormList)
+		{
+			if(a1form.getA1_RefNo().equals(buttonValue)) {
+				int index = a1FormList.indexOf(a1form);
+				System.out.println("index:"+index);
+				a1FormList.remove(a1form);
+				a1FormList.add(0,a1form);
+				a1RefNo = a1form.getA1_RefNo();
+		}
+			}
+		}
+			
+	}
 }
