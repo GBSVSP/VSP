@@ -1,36 +1,56 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"   
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      >
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:head>
-     
+
 </h:head>
 <body>
-<h:form>
-    <div class="navbar navbar-fixed-top" style="position:fixed;width:100%;">
-        <div class="navbar-inner" >
-            <div class="container-fluid">
-          <table border="0">
-          <tr><td style="width:200px">
-                <b><h:outputText value="VSP MANAGEMENT TOOL" /></b></td></tr>
-               <tr><td style="width:200px"><h:outputText value="GBS Value Selling Platform" /></td>
-                <td style="width:400px">  <h:outputText value="Hi,  #{sessionScope.userName}"/></td>
-                <td style="font-size:9px;width:160px"><b>  <h:outputText value="DEAL MANAGEMENT"/></b></td>
-                <td style="font-size:9px;width:120px"> <b> <h:outputText value="REPORTS"/></b></td>
-                <td style="font-size:9px;width:120px"> <b> <h:outputText value="PARTICIPANTS"/></b></td>
-                 <td style="font-size:9px;width:130px"> <b> <h:outputText value="USER MANAGEMENT"/></b></td>
-                </tr>
-               
-             </table>
-                 </div>
-           
-        </div>
-    </div>
-    </h:form>
+	<h:form>
+		<div class="navbar navbar-fixed-top"
+			style="position: fixed; width: 100%;">
+			<div class="navbar-inner">
+				<div class="container-fluid">
+					<br></br>
+					<table border="0">
+						<tr>
+							<td style="width: 400px"><b><h:outputText
+										value="VSP MANAGEMENT TOOL" /></b></td>
+						</tr>
+						<tr>
+							<td style="width: 400px; padding-bottom: 20px"><h:outputText
+									value="GBS Value Selling Platform" /></td>
 
-   
+							<td style="width: 200px; padding-bottom: 20px"><h:outputLink
+									style="text-decoration:none;color:black;font-size:14px"
+									value="admin.xhtml">DEAL MANAGEMENT</h:outputLink></td>
+
+							<td style="width: 100px; padding-bottom: 20px"><h:outputLink
+									style="text-decoration:none;color:black;font-size:14px"
+									value="reports.xhtml">REPORTS</h:outputLink></td>
+
+
+							<td style="width: 150px; padding-bottom: 20px"><h:outputLink
+									style="text-decoration:none;color:black;font-size:14px"
+									value="participantMaster.xhtml">PARTICIPANTS</h:outputLink></td>
+
+							<td style="width: 180px; padding-bottom: 20px"><h:outputLink
+									style="text-decoration:none;color:black;font-size:14px"
+									value="userInfo.xhtml">USER MANAGEMENT</h:outputLink></td>
+
+							<td style="width: 200px; padding-bottom: 20px"><h:outputText
+									style="font-weight:bold;" value="Hi,  #{sessionScope.userName}" /></td>
+						</tr>
+
+					</table>
+				</div>
+
+			</div>
+		</div>
+	</h:form>
+
+
 
 </body>
 
