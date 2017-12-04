@@ -68,4 +68,25 @@ public static String GET_A1_FORMS = "select REFERENCE_NO,A1_REF_NO,A1_STATUS_ID,
 //get A1 history
 public static String A1_HISTORY = "select A1_REF_NO from A1_WORKSHOP_INFO where REFERENCE_NO=? and  ";
 
+/** User Mgmt Form  queries **/
+
+//User Role 
+public static String SELECT_USER_ROLE ="Select ROLE_ID, ROLE_NAME from USER_ROLE where"; 
+
+//Users Info
+public static String SELECT_USER_INFO ="Select USER_ID, LAST_NAME, FIRST_NAME, EMAIL, ROLE_ID, ACTIVE, IMT_ID from USERS WHERE";
+
+//User Info insert
+public static String INSERT_USER_INFO ="Insert into USERS (LAST_NAME, FIRST_NAME, EMAIL, ROLE_ID, ACTIVE, CREATED_BY, IMT_ID, IS_DELETE) "
+		+ "values (?, ?, ?, ?, ?, ?, ?, ?)";
+
+//User Info update
+public static String UPDATE_USER_INFO = "Update USERS set LAST_NAME =?, FIRST_NAME =?, EMAIL =?, ROLE_ID =?, ACTIVE =?, MODIFIED_BY =?, IMT_ID=? where";
+
+//check existing deal
+public static String COUNT_USER ="Select count(USER_ID) from USERS where";
+
+//User Info delete
+public static String DELETE_USER_INFO = "Update USERS set IS_DELETE= ? , MODIFIED_BY =? where ";
+
 }
