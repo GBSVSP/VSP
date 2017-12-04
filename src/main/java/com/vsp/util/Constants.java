@@ -42,5 +42,15 @@ public static final String LOGIN_INVALID = "login_invalid";
 public static final String LOGIN_ACCESS_DENIED = "login_access_denied";
 public static final String A1_STATUS_MSG = "Please Complete Current Active A1 Form";
 
-
+//user form constants
+public static final String USER_ALREADY_EXIST = "user_exist";
+public static final String USER_ADDED_SUCCESS = "user_create_success";
+public static final String USER_UPDATE_SUCCESS = "user_update_success";
+public static final String USER_DELETE_SUCESS = "user_delete_success";
+public static final String DATABASE_ERROR = "database_error";
+public static final String ACTIVE_CONDITION="ACTIVE='Y'";
+public static final String IS_ACTIVE_CONDITION="IS_ACTIVE='Y'";
+public static final String DELETE_CONDITION="IS_DELETE='N'";
+public static final String USER_ID="USER_ID=?";
+public static final String EMAIL_ADDRESS="EMAIL=?";
 }
