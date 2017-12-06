@@ -12,9 +12,12 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
+
+import org.primefaces.event.SelectEvent;
 
 import com.vsp.dao.DealDAO;
 import com.vsp.dao.FormDAO;
@@ -36,7 +39,7 @@ import com.vsp.util.QueryBuilder;
 public class Deal implements Serializable {
 	private static final long serialVersionUID = 1094801825228386363L;
 	private static String searchType = Constants.DEFAULT_SEARCH_TYPE;
-	private static  List<DealInfo> dealList;
+	private static  List<DealInfo> dealList = new ArrayList<DealInfo>();
 	private static ArrayList<String> a1History;
 	private static HashMap<Integer, String> optionMap;
 	private static String searchValue;
@@ -147,19 +150,17 @@ public class Deal implements Serializable {
 		show = false;
 		
 		if (searchType.equals(Constants.VSP_OPP_NO)) {
-			whereClause = Constants.VSP_OPP_NO_SQL;
+			whereClause = Constants.REFERENCE_NO_LIKE;
 		}
 		if (searchType.equals(Constants.CLIENT)) {			
-			whereClause = Constants.CLIENT_SQL;		
+			whereClause = Constants.CLIENT_LIKE;		
 			}
-		if (searchType.equals(Constants.DEAL)) {			
-			whereClause = Constants.CLIENT_SQL;	
-			}
+		
 		if (searchType.equals(Constants.SALES_CONNECT_NO)) {
-			whereClause = Constants.SALES_CONNECT_NO_SQL;
+			whereClause = Constants.SALES_CONNECT_NO_LIKE;
 		}
 		String sql = QueryBuilder.SEARCH_DEAL + "" + whereClause +"" +QueryBuilder.SEARCH_DEAL_ORDER_BY;
-		dealList = DealDAO.getDealList(sql, searchValue);
+		dealList = DealDAO.getDealList(sql, searchValue+"%");
 		
 		if (dealList.isEmpty()) {
 			show = true;
@@ -173,21 +174,18 @@ public class Deal implements Serializable {
 
 		try {
 			String sql = null;
-			if (searchType.equals(Constants.VSP_OPP_NO)) {
+			/*if (searchType.equals(Constants.VSP_OPP_NO)) {
 				sql = QueryBuilder.SELECT_VSP_REF_NO;
-				whereClause = Constants.VSP_OPP_NO_SQL;
+				whereClause = Constants.REFERENCE_NO_SQL;
 
-			}
+			}*/
 			if (searchType.equals(Constants.CLIENT)) {
 				sql = QueryBuilder.SELECT_CUSTOMER_NAME;
 				whereClause = Constants.CLIENT_SQL;
 			}
-			if (searchType.equals(Constants.DEAL)) {
-				sql = QueryBuilder.SELECT_DEAL_ID;
-				whereClause = Constants.CLIENT_SQL;
-			}
+		
 			if (searchType.equals(Constants.SALES_CONNECT_NO)) {
-				sql = QueryBuilder.SELECT_SALES_CONNECT_OPP_NO;
+				sql = QueryBuilder.SELECT_SALES_CONNECT_NO;
 				whereClause = Constants.SALES_CONNECT_NO_SQL;
 			}
 
@@ -216,9 +214,41 @@ public class Deal implements Serializable {
 		searchType = (String) component.findComponent("searchType").getAttributes().get("value");
 
 		System.out.println("type:" + searchType);
+		
 
 	}
-
+	//on change event of search value - auto complete
+	public void valueChanged(SelectEvent event) throws Exception {
+		System.out.println("In Deal: Entering valueChanged()...");
+		String selectedValue = (String) event.getObject();
+		System.out.println("selectedValue:" + selectedValue);
+		System.out.println("searchType:" + searchType);
+	
+		if (searchType.equals(Constants.CLIENT)) {			
+			whereClause = Constants.CLIENT_SQL;		
+			}
+		
+		if (searchType.equals(Constants.SALES_CONNECT_NO)) {
+			whereClause = Constants.SALES_CONNECT_NO_SQL;
+		}
+		String sql = QueryBuilder.SEARCH_DEAL + "" + whereClause +"" +QueryBuilder.SEARCH_DEAL_ORDER_BY;
+		dealList = DealDAO.getDealList(sql, selectedValue);
+		System.out.println("size::" + dealList.size());
+		if (dealList.isEmpty()) {
+			show = true;
+			
+		} 
+		FacesContext.getCurrentInstance().getExternalContext().redirect("dealSearch.xhtml");
+	    FacesContext.getCurrentInstance().responseComplete();
+	
+		
+	}
+// deal management hyperlink clicked
+	public String openDealManagement() {
+		System.out.println("In Header: Entering openDealManagement()...");
+		dealList.clear();
+		return "dealSearch";
+	}
 	// Invoked from VIEW DEAL DETAILS button
 	public String openDeal(int referenceNo) throws Exception {
 		System.out.println("In Deal: Entering openDeal()...");

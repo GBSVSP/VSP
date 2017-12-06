@@ -85,8 +85,9 @@
 			
 				<ui:include src="newDealInfo.xhtml" />
 				<h:commandButton id="saveButton"  value="SAVE CHANGES" onclick="return validate()"  action="#{deal.isDealExist}"
-					class="btn-default" />
-		
+					class="btn-default" />&nbsp;&nbsp;
+		<h:commandButton id="resetButton"  value="RESET" class="btn-default" />&nbsp;&nbsp;
+					<h:commandButton id="cancelButton"  value="CANCEL" class="btn-default" />
 					<script>
 					//<![CDATA[
 					function validate(){
@@ -119,6 +120,39 @@
 						 return status;
 						 
 			    }
+					$(window).on("beforeunload", function() {
+			            return "Are you sure? You didn't save the deal !";
+			        });
+			        
+					$("#resetButton").click(function () {
+						dialog.alert({
+							 
+			                title: "A demo of Alert",
+			 
+			                message: "This is a demo of simple alert with a message!",
+			 
+			                button: "Close",
+			 
+			                animation: "fade",
+			 
+			                callback: function(value){
+			 
+			                                console.log(value);
+			 
+			                }
+			 
+			});
+			 
+			return false;
+					}); 
+
+					$("#cancelButton").click(function () {
+						
+					}); 
+				    $.alert({
+				        title: 'Alert!',
+				        content: 'Simple alert!',
+				    });
 					//]]>
 			</script>	
 			</h:form>

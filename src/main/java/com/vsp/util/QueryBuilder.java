@@ -26,9 +26,8 @@ public static String GET_DEAL = "Select REFERENCE_NO,SECTOR_ID,SECTOR_NAME,INDUS
 public static String SEARCH_DEAL_ORDER_BY = "order by REFERENCE_NO desc";
 
 public static String SELECT_VSP_REF_NO = "Select distinct REFERENCE_NO from DEAL_INFO_VIEW";
-public static String SELECT_DEAL_ID = "Select distinct DEAL_ID from DEAL_INFO_VIEW";
 public static String SELECT_CUSTOMER_NAME = "Select distinct CUSTOMER_NAME from DEAL_INFO_VIEW";
-public static String SELECT_SALES_CONNECT_OPP_NO = "Select distinct SALES_CONNECT_OPP_NO from DEAL_INFO_VIEW";
+public static String SELECT_SALES_CONNECT_NO = "Select distinct SALES_CONNECT_NO from DEAL_INFO_VIEW";
 public static String SELECT_OPTION = "Select VALUE_ID,TAGGED_TO from VSP_OPTION_MASTER where ";
 public static String SELECT_IMT = "Select IMT_ID, IMT_NAME from IOT_IMT_VIEW where IOT_NAME='Europe'";
 public static String SELECT_SECTOR = "Select SECTOR_ID, SECTOR_NAME from SECTOR";
