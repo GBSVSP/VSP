@@ -23,26 +23,21 @@
 							<tr>
 								<td style="font-size:12px;width:60px">Client Name * : &nbsp;&nbsp;<h:outputText  style="color:red;font-size: 7pt;" id="err_customer_Name">
 								</h:outputText><h:message  globalOnly="true" showSummary="false" showDetail="true" for="customer_Name" style="color:red;">
-								</h:message> <h:inputText id="customer_Name" value="#{dealInfo.customer_Name}" >
-							
-							<f:validateRequired />
-							</h:inputText></td>
+								</h:message> <h:inputText id="customer_Name" value="#{dealInfo.customer_Name}" />
+						</td>
 								<td style="font-size:12px;width:60px" align="left">Opportunity Name * : &nbsp;&nbsp;<h:outputText  style="color:red;font-size: 7pt;" id="err_opportunity_Name">
-								</h:outputText>	<h:message  globalOnly="true" showSummary="false" showDetail="true" for="opportunity_Name" style="color:red;"></h:message><h:inputText
-										id="opportunity_Name" value="#{dealInfo.opportunity_Name}" >
+								</h:outputText>	<h:message  globalOnly="true" showSummary="false" showDetail="true" for="opportunity_Name" style="color:red;"></h:message>
+								<h:inputText id="opportunity_Name" value="#{dealInfo.opportunity_Name}" />
 								
-										<f:validateRequired />
-										</h:inputText>
 										</td>
 								<td style="font-size:12px;width:60px" align="left">Opportunity Owner: <h:inputText
 										value="#{dealInfo.opportunity_Owner}" /></td>
 							</tr>
 							<tr>
 								<td style="font-size:12px;width:60px">Opportunity Description * : &nbsp;&nbsp;<h:outputText  style="color:red;font-size: 7pt;" id="err_opportunity_Description">
-								</h:outputText><h:message id="od" globalOnly="true" showSummary="false" showDetail="true"  for="opportunity_Description" style="color:red;"></h:message><h:inputTextarea
-										id="opportunity_Description" value="#{dealInfo.opportunity_Description}" >
+								</h:outputText><h:message id="od" globalOnly="true" showSummary="false" showDetail="true"  for="opportunity_Description" style="color:red;"></h:message>
+								<h:inputTextarea id="opportunity_Description" value="#{dealInfo.opportunity_Description}" />
 						
-										</h:inputTextarea>
 											
 										</td>
 								<td style="font-size:12px;width:60px">Additional Contacts:<h:inputText
