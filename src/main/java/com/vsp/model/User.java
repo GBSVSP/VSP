@@ -10,10 +10,10 @@ import java.util.ResourceBundle;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
+import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
-
 import com.vsp.dao.UserMgmtDAO;
 import com.vsp.util.Constants;
 import com.vsp.util.QueryBuilder;
@@ -29,61 +29,83 @@ import com.vsp.util.QueryBuilder;
  * @Date 29/Nov/2017
  */
 @ManagedBean(name = "user")
-@SessionScoped
+//@SessionScoped
+@ViewScoped
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 5199551491746665622L;
 
 	// Specify the property file name for resource bundle
 	public final static ResourceBundle bundle = ResourceBundle.getBundle("com.vsp.util.vspMessages");
-
+	private Map<String, Object> sessionMap;
+	
 	private static ArrayList<UserInfo> userInfoList;
 
 	private int totalSize = 0;
-
 	private boolean toggleButton = false;
-
-	private boolean checkboxAllFlag;
-
+	private boolean checkboxAllFlag =false;
 	private UserInfo userInfo;
-
 	private String whereClause = null;
+	private String orderBy = null;
 	private static String sql = null;
 	private static HashMap<Integer, String> optionMap;
-
-	private boolean selected;
-
+	public String toggleBtnChgValue = Constants.NEW_USER_BUTTON;
+	
+    
 	// Populating Role drop down
 	public ArrayList<SelectItem> getRoleList() {
+		FacesContext context  = FacesContext.getCurrentInstance();
+		sessionMap = context.getExternalContext().getSessionMap();
+		ArrayList<SelectItem> roleList = new ArrayList<SelectItem>();
+		
+		if(sessionMap.containsKey("roleListInSession")) {
+			roleList = (ArrayList<SelectItem>) sessionMap.get("roleListInSession");
+			
+		}else {	
 		whereClause = Constants.IS_ACTIVE_CONDITION;
 		sql = QueryBuilder.SELECT_USER_ROLE + " " + whereClause;
-		ArrayList<SelectItem> roleList = new ArrayList<SelectItem>();
+		
 		try {
 			optionMap = UserMgmtDAO.getRoleList(sql);
 			for (Map.Entry<Integer, String> entry : optionMap.entrySet()) {
 				roleList.add(new SelectItem(entry.getKey(), entry.getValue()));
 			}
+			sessionMap.put("roleListInSession", roleList);
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
+		}
 		}
 		return roleList;
 	}
 
 	// Populating IMT drop down
-	public ArrayList<SelectItem> getIMTList() {
-		sql = QueryBuilder.SELECT_IMT;
+	public ArrayList<SelectItem> getImtList() {
+		FacesContext context  = FacesContext.getCurrentInstance();
+		sessionMap = context.getExternalContext().getSessionMap();
 		ArrayList<SelectItem> imtList = new ArrayList<SelectItem>();
-		try {
+		
+		if(sessionMap.containsKey("imtListInSession")) {
+			imtList = (ArrayList<SelectItem>) sessionMap.get("imtListInSession");
+		}else {	
+		   sql = QueryBuilder.SELECT_IMT;
+	
+	 	   try {
 			optionMap = UserMgmtDAO.getOptionList(sql);
 			for (Map.Entry<Integer, String> entry : optionMap.entrySet()) {
 				imtList.add(new SelectItem(entry.getKey(), entry.getValue()));
 			}
-		} catch (Exception ex) {
+			
+			sessionMap.put("imtListInSession", imtList);
+			
+		  } catch (Exception ex) {
 			System.out.println(ex.getMessage());
+		  }
+		
 		}
 		return imtList;
 	}
 
+	
 	/**
 	 * Method to add a new row
 	 * 
@@ -91,17 +113,27 @@ public class User implements Serializable {
 	 * @return void
 	 * @throws Exception
 	 */
-	public void addNewRow() {
+	public void addNewRow() throws Exception {
 
 		System.out.println("In User: Entering addNewRow()...");
+		
+		if(getToggleBtnChgValue().equals(Constants.SAVE_USER_BUTTON)) {
+			for(UserInfo userInfo: userInfoList) {
+				userInfo.setCheckboxClickedFlag(false);
+			}
+			userInfo = new UserInfo();
+			userInfo.setCheckboxClickedFlag(true);
+			userInfoList.add(userInfo);
+			System.out.println("size of userInfoList in addNewRow: " + userInfoList.size());
 
-		userInfo = new UserInfo();
-		userInfo.setCheckboxClickedFlag(true);
-		userInfoList.add(userInfo);
-		System.out.println("size of userInfoList in addNewRow: " + userInfoList.size());
+			setToggleButton(true);
+			
+		}else if(getToggleBtnChgValue().equals(Constants.NEW_USER_BUTTON)){
+			//save clicked
+			insertUser();
+			setToggleButton(false);
+		}
 
-		setCheckboxAllFlag(false);
-		setToggleButton(true);
 		System.out.println("In User: Exiting addNewRow()...");
 	}
 
@@ -114,29 +146,20 @@ public class User implements Serializable {
 
 	public ArrayList<UserInfo> getAllUserList() throws Exception {
 		System.out.println("In User: Entering getAllUserList()...");
-		// Select USER_ID, LAST_NAME, FIRST_NAME, EMAIL, ROLE_ID, ACTIVE from USERS
-		// where IS_DELETE ='N'
 		try {
 			System.out.println("toggleButton :" + toggleButton);
 
-			if (isToggleButton() == false) {
+			//if (isToggleButton() == false) {
+			if(!getToggleBtnChgValue().equals(Constants.SAVE_USER_BUTTON)){
+				orderBy = "order by "+ Constants.USER_NAME;
 				whereClause = Constants.DELETE_CONDITION;
-				sql = QueryBuilder.SELECT_USER_INFO + " " + whereClause;
+				sql = QueryBuilder.SELECT_USER_INFO + " " + whereClause +" "+orderBy;
 
 				userInfoList = UserMgmtDAO.getAllUserList(sql);
+				totalSize = userInfoList.size();
 				setToggleButton(false);
 				System.out.println("Size of userInfoList : " + userInfoList.size());
 			}
-
-			if (isSelected() == true) {
-				for (UserInfo userInfo : userInfoList) {
-					userInfo.setCheckboxClickedFlag(true);
-				}
-
-			} /*
-				 * else { for(UserInfo userInfo : userInfoList) {
-				 * userInfo.setCheckboxClickedFlag(false); } }
-				 */
 
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
@@ -145,30 +168,7 @@ public class User implements Serializable {
 		return userInfoList;
 	}
 
-	/**
-	 * Method to add a new user to db2 table
-	 * 
-	 * @param value
-	 * @return void
-	 * @throws Exception
-	 */
-	public void valueChangeMethod(ValueChangeEvent e) {
-		System.out.println("In User: Entering valueChangeMethod()...");
-
-		String isChecked = e.getNewValue().toString();
-		System.out.println("isChecked :" + isChecked);
-
-		if (isChecked.equalsIgnoreCase("true")) {
-			setSelected(true);
-		} else {
-			setSelected(false);
-		}
-
-		// setCheckboxAllFlag(false);
-		// setToggleButton(false);
-		System.out.println("In User: Exiting valueChangeMethod()...");
-	}
-
+	
 	/**
 	 * Method to add a new user to db2 table
 	 * 
@@ -179,7 +179,6 @@ public class User implements Serializable {
 	public void insertUser() throws Exception {
 
 		System.out.println("In User: Entering insertUser()... ");
-		setToggleButton(false);
 
 		for (UserInfo userInfoTemp : userInfoList) {
 			if (userInfoTemp.isCheckboxClickedFlag() == true) {
@@ -203,13 +202,12 @@ public class User implements Serializable {
 
 				if (insertFlag > 0) {
 					System.out.println("User insert successful.");
-					FacesContext.getCurrentInstance().addMessage("User:validationMsg",
-							new FacesMessage(FacesMessage.SEVERITY_INFO, bundle.getString(Constants.USER_ADDED_SUCCESS),
-									bundle.getString(Constants.USER_ADDED_SUCCESS)));
-
+					FacesContext.getCurrentInstance().addMessage("validationMsg",
+							new FacesMessage(FacesMessage.SEVERITY_INFO, userInfo.getUser_Name() +" "+ bundle.getString(Constants.USER_ADDED_SUCCESS),
+									userInfo.getUser_Name()+" "+ bundle.getString(Constants.USER_ADDED_SUCCESS)));
 				} else {
 					System.out.println("User insert unsuccessful.");
-					FacesContext.getCurrentInstance().addMessage("User:validationMsg",
+					FacesContext.getCurrentInstance().addMessage("validationMsg",
 							new FacesMessage(FacesMessage.SEVERITY_ERROR, bundle.getString(Constants.DATABASE_ERROR),
 									bundle.getString(Constants.DATABASE_ERROR)));
 				}
@@ -221,12 +219,10 @@ public class User implements Serializable {
 
 		} else {
 			// error msg on UI
-			FacesContext.getCurrentInstance().addMessage("User:validationMsg",
+			FacesContext.getCurrentInstance().addMessage("validationMsg",
 					new FacesMessage(FacesMessage.SEVERITY_ERROR,
 							userInfo.getEmail() + " " + bundle.getString(Constants.USER_ALREADY_EXIST),
 							userInfo.getEmail() + " " + bundle.getString(Constants.USER_ALREADY_EXIST)));
-			// setToggleButton(false);
-			// page="userinfo";
 		}
 
 		System.out.println("In User: Exiting insertUser()...");
@@ -284,13 +280,13 @@ public class User implements Serializable {
 
 			if (updateFlag > 0) {
 				System.out.println("User update successful.");
-				FacesContext.getCurrentInstance().addMessage("User:validationMsg",
+				FacesContext.getCurrentInstance().addMessage("validationMsg",
 						new FacesMessage(FacesMessage.SEVERITY_INFO,
 								updateList.size() + " " + bundle.getString(Constants.USER_UPDATE_SUCCESS),
 								updateList.size() + " " + bundle.getString(Constants.USER_UPDATE_SUCCESS)));
 			} else {
 				System.out.println("User update unsuccessful.");
-				FacesContext.getCurrentInstance().addMessage("User:validationMsg",
+				FacesContext.getCurrentInstance().addMessage("validationMsg",
 						new FacesMessage(FacesMessage.SEVERITY_ERROR, bundle.getString(Constants.DATABASE_ERROR),
 								bundle.getString(Constants.DATABASE_ERROR)));
 			}
@@ -329,13 +325,13 @@ public class User implements Serializable {
 
 			if (deleteFlag > 0) {
 				System.out.println("User delete successful.");
-				FacesContext.getCurrentInstance().addMessage("User:validationMsg",
+				FacesContext.getCurrentInstance().addMessage("validationMsg",
 						new FacesMessage(FacesMessage.SEVERITY_INFO,
 								deleteList.size() + " " + bundle.getString(Constants.USER_DELETE_SUCESS),
 								deleteList.size() + " " + bundle.getString(Constants.USER_DELETE_SUCESS)));
 			} else {
 				System.out.println("User delete unsuccessful.");
-				FacesContext.getCurrentInstance().addMessage("User:validationMsg",
+				FacesContext.getCurrentInstance().addMessage("validationMsg",
 						new FacesMessage(FacesMessage.SEVERITY_ERROR, bundle.getString(Constants.DATABASE_ERROR),
 								bundle.getString(Constants.DATABASE_ERROR)));
 			}
@@ -347,7 +343,62 @@ public class User implements Serializable {
 
 		System.out.println("In User: Exiting deleteUser()...");
 	}
+	
 
+	/**
+	 * Method called on cancel action
+	 * 
+	 * @param value
+	 * @return void
+	 * @throws Exception
+	 */
+	public String cancelSave(){
+		System.out.println("Entering cancelSave()...");
+		//FacesContext context  = FacesContext.getCurrentInstance();
+		//context.getExternalContext().getSessionMap().remove("user");
+		return "userInfo";
+	}
+	
+	/**
+	 * Method called on cancel action listener
+	 * 
+	 * @param value
+	 * @return void
+	 * @throws Exception
+	 */
+	public void cancelAction(ActionEvent event){
+		//Get submit button id
+		System.out.println("In cancelAction..");
+		String buttonId = event.getComponent().getId();
+        System.out.println("buttonId clicked: " +buttonId);
+	}
+	
+	/**
+	 * Method to toggleBtnAction
+	 * 
+	 * @param value
+	 * @return void
+	 * @throws Exception
+	 */
+	public void toggleBtnAction(ActionEvent event){
+		//Get toggle button id
+		System.out.println("In toggleBtnAction.. ");
+		String buttonId = event.getComponent().getId();
+		System.out.println("buttonId clicked:" +buttonId);
+		
+		if(toggleBtnChgValue.equals(Constants.NEW_USER_BUTTON)) {
+			setToggleBtnChgValue("Save User");
+			setCheckboxAllFlag(true);
+			System.out.println("CheckboxAllFlag: "+isCheckboxAllFlag());
+		}else if(toggleBtnChgValue.equals(Constants.SAVE_USER_BUTTON)){
+			setToggleBtnChgValue("+ New User");
+			System.out.println("CheckboxAllFlag: "+isCheckboxAllFlag());
+			setCheckboxAllFlag(false);
+		}
+        System.out.println("TogglebuttonId clicked: "+ getToggleBtnChgValue());
+	}
+
+	
 	public int getTotalSize() {
 		return totalSize;
 	}
@@ -380,12 +431,12 @@ public class User implements Serializable {
 		this.userInfo = userInfo;
 	}
 
-	public boolean isSelected() {
-		return selected;
+	public String getToggleBtnChgValue() {
+		return toggleBtnChgValue;
 	}
 
-	public void setSelected(boolean selected) {
-		this.selected = selected;
+	public void setToggleBtnChgValue(String toggleBtnChgValue) {
+		this.toggleBtnChgValue = toggleBtnChgValue;
 	}
 
 }

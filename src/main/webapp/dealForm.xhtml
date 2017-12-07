@@ -9,7 +9,7 @@
 		<ui:define name="content">
 		<p:scrollPanel mode="native" style="position: absolute; height: 88%; width:100%;">
 		<ui:include src="search.xhtml" />
-		<h:form prependId="false">
+			<h:form prependId="false">	
 				<h:dataTable id="dealResult" var="row" value="#{deal.dealList}" headerClass="dealTableHeader">
 			
 					<h:column>
@@ -70,17 +70,14 @@
 				</h:dataTable>
 				<ui:include src="A1Form.xhtml" />
 				<ui:include src="dealInfo.xhtml" />
-				<h:commandButton id="saveButton" value="SAVE CHANGES" class="btn-default" 
-				action="#{deal.isDealExist}">
-				</h:commandButton>
-			</h:form>
-			</p:scrollPanel>
-		</ui:define>
-
-	</ui:composition>
-<script>
+				<h:commandButton id="saveButton" value="SAVE CHANGES" class="btn-default" onclick="return validate()" action="#{deal.isDealExist}">
+				</h:commandButton>&nbsp;&nbsp;
+				<h:commandButton id="cancelButton"  value="CANCEL" class="btn-default" action="#{deal.cancelDeal}"/>
+			
+			<script>
 					//<![CDATA[
 					function validate(){
+						
 						//var status = $("#insertFlag").val();
 						var customer_Name = $("#customer_Name").val();
 						var opportunity_Name = $("#opportunity_Name").val();
@@ -90,19 +87,19 @@
 						var status = false;
 						if (customer_Name == '') {
 							
-			    		   	 $("#err_customer_Name").html("Cannot be Null");
+			    		   	 $("#err_customer_Name").html("Cannot be Blank");
 			    		   } 
 						if (opportunity_Name == '') {
 							
-			    		   	 $("#err_opportunity_Name").html("Cannot be Null");
+			    		   	 $("#err_opportunity_Name").html("Cannot be Blank");
 			    		   } 
 						if (opportunity_Description == '') {
 							
-			    		   	 $("#err_opportunity_Description").html("Cannot be Null");
+			    		   	 $("#err_opportunity_Description").html("Cannot be Blank");
 			    		   } 
 						 /*  if (a1Status == '') {
 							
-								 $("#err_a1_Status").html("Cannot be Null");
+								 $("#err_a1_Status").html("Cannot be Blank");
 			    		   }  */ 
 						 if(customer_Name != '' && opportunity_Name != '' && opportunity_Description != '' ){
 							 status = true;
@@ -110,9 +107,26 @@
 						 return status;
 						 
 			    }
-					//]]>
-			</script>	
+					/* $(window).on("beforeunload", function() {
+			            return "Are you sure? You didn't save the deal !";
+			        });
+			        */
 
+					$("#cancelButton").click(function () {
+						var status;
+				
+						status = confirm("You will lose un-saved data. Are you sure? ");
+						
+						return status;
+					}); 
+				    
+					//]]>
+			</script>
+</h:form>
+			</p:scrollPanel>
+		</ui:define>
+
+	</ui:composition>
 
 </h:body>
 

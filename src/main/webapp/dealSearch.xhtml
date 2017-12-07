@@ -17,15 +17,19 @@
 
 <ui:include src="search.xhtml" />
   <h:form prependId="false">  
-  <table border="0" style="width :60%;"><tr><td style="padding: 3px; text-align: right;"> <h:commandButton action="#{deal.newDeal}"
-			class="btn-default" value=" ADD NEW DEAL "/>	 </td></tr></table>
+  <table border="0" style="width :60%;"><tr>
+  <td style="padding: 3px; text-align: right;"> <h:outputText value="#{deal.searchMsg}"/>
+<h:commandButton action="#{deal.newDeal}"
+			class="btn-default" value=" ADD NEW DEAL "/>	 </td></tr>
+			
+			</table>
 	 
-	<center>		<h:dataTable id="dealResult"  var="row" value="#{deal.dealList}" 
-                    headerClass = "dealTableHeader" rendered="#{not empty deal.dealList}">   
+	<center>		<h:dataTable id="dealResult"  var="row" value="#{deal.searchList}" 
+                    headerClass = "dealTableHeader" rendered="#{not empty deal.searchList}">   
     
   
     <h:column>
-    <f:facet name = "header" style="align:left">Showing #{deal.dealList.size()} results for: #{deal.searchValue} </f:facet>
+    <f:facet name = "header" style="align:left">Showing #{deal.searchList.size()} results for: #{deal.searchValue} </f:facet>
     <table border="0">
     <tr><td colspan="7" align="left">VSP Number: #{row.reference_No}   </td></tr>
     <tr><td align="left">#{row.opportunity_Description}</td></tr>

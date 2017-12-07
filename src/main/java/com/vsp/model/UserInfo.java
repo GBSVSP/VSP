@@ -4,9 +4,6 @@ import java.io.Serializable;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.component.UIComponent;
-import javax.faces.event.ActionEvent;
-import javax.faces.event.AjaxBehaviorEvent;
 
 /**
  * <p>
@@ -24,15 +21,14 @@ public class UserInfo implements Serializable {
 	private static final long serialVersionUID = -7193581484504873684L;
 	private int user_Id;
 	private int serialNo;
-	private String last_Name;
-	private String first_Name;
+	private String user_Name;
 	private String email;
 	private String role_Id;
+	private String imt_Id;
 	private boolean active;
 	private String created_By;
 	private String modified_By;
 	private boolean is_Delete;
-	private String imt_Id;
 	private boolean checkboxClickedFlag;
 	
 	public int getUser_Id() {
@@ -41,17 +37,17 @@ public class UserInfo implements Serializable {
 	public void setUser_Id(int user_Id) {
 		this.user_Id = user_Id;
 	}
-	public String getLast_Name() {
-		return last_Name;
+	public int getSerialNo() {
+		return serialNo;
 	}
-	public void setLast_Name(String last_Name) {
-		this.last_Name = last_Name;
+	public void setSerialNo(int serialNo) {
+		this.serialNo = serialNo;
 	}
-	public String getFirst_Name() {
-		return first_Name;
+	public String getUser_Name() {
+		return user_Name;
 	}
-	public void setFirst_Name(String first_Name) {
-		this.first_Name = first_Name;
+	public void setUser_Name(String user_Name) {
+		this.user_Name = user_Name;
 	}
 	public String getEmail() {
 		return email;
@@ -100,12 +96,6 @@ public class UserInfo implements Serializable {
 	}
 	public void setCheckboxClickedFlag(boolean checkboxClickedFlag) {
 		this.checkboxClickedFlag = checkboxClickedFlag;
-	}
-	public int getSerialNo() {
-		return serialNo;
-	}
-	public void setSerialNo(int serialNo) {
-		this.serialNo = serialNo;
 	}
 
 

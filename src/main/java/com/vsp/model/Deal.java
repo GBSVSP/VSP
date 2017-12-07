@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -37,9 +38,12 @@ import com.vsp.util.QueryBuilder;
 @ManagedBean
 @ViewScoped
 public class Deal implements Serializable {
+	//Specify the property file name 
+	public final static ResourceBundle bundle = ResourceBundle.getBundle("com.vsp.util.vspMessages");
 	private static final long serialVersionUID = 1094801825228386363L;
 	private static String searchType = Constants.DEFAULT_SEARCH_TYPE;
 	private static  List<DealInfo> dealList = new ArrayList<DealInfo>();
+	private static  List<DealInfo> searchList = new ArrayList<DealInfo>();
 	private static ArrayList<String> a1History;
 	private static HashMap<Integer, String> optionMap;
 	private static String searchValue;
@@ -52,6 +56,7 @@ public class Deal implements Serializable {
 	private int a1Count;
 	private boolean a1ButtonClick;
 	private static String a1StatusMessage = null;
+	private static String searchMsg = null;
 	
 	private static List<A1Form> a1FormList;
 	private static boolean a1statusFlag ;
@@ -59,6 +64,9 @@ public class Deal implements Serializable {
 	public static String activeA1RefNo;
 	
 	
+	public  String getSearchMsg() {
+		return searchMsg;
+	}
 	public String getActiveA1RefNo() {
 		return activeA1RefNo;
 	}
@@ -143,7 +151,10 @@ public class Deal implements Serializable {
 
 		return dealList;
 	}
+	public List<DealInfo> getSearchList() {
 
+		return searchList;
+	}
 	
 	// searching deals
 	public String searchDeal() throws Exception {
@@ -160,11 +171,14 @@ public class Deal implements Serializable {
 			whereClause = Constants.SALES_CONNECT_NO_LIKE;
 		}
 		String sql = QueryBuilder.SEARCH_DEAL + "" + whereClause +"" +QueryBuilder.SEARCH_DEAL_ORDER_BY;
-		dealList = DealDAO.getDealList(sql, searchValue+"%");
+		searchList = DealDAO.getDealList(sql, searchValue+"%");
 		
-		if (dealList.isEmpty()) {
-			show = true;
+		if (searchList.isEmpty()) {
+			searchMsg = bundle.getString(Constants.SEARCH_MESSAGE);
 		} 
+		else {
+			searchMsg = null; 
+		}
 		return "dealSearch";
 	}
 
@@ -232,12 +246,15 @@ public class Deal implements Serializable {
 			whereClause = Constants.SALES_CONNECT_NO_SQL;
 		}
 		String sql = QueryBuilder.SEARCH_DEAL + "" + whereClause +"" +QueryBuilder.SEARCH_DEAL_ORDER_BY;
-		dealList = DealDAO.getDealList(sql, selectedValue);
-		System.out.println("size::" + dealList.size());
-		if (dealList.isEmpty()) {
-			show = true;
+		searchList = DealDAO.getDealList(sql, selectedValue);
+		System.out.println("size::" + searchList.size());
+		if (searchList.isEmpty()) {
+			searchMsg = bundle.getString(Constants.SEARCH_MESSAGE);
 			
 		} 
+		else {
+			searchMsg = null;
+		}
 		FacesContext.getCurrentInstance().getExternalContext().redirect("dealSearch.xhtml");
 	    FacesContext.getCurrentInstance().responseComplete();
 	
@@ -247,6 +264,7 @@ public class Deal implements Serializable {
 	public String openDealManagement() {
 		System.out.println("In Header: Entering openDealManagement()...");
 		dealList.clear();
+		searchList.clear();
 		return "dealSearch";
 	}
 	// Invoked from VIEW DEAL DETAILS button
@@ -256,7 +274,12 @@ public class Deal implements Serializable {
 		activeA1RefNo = null;
 		reference_No = referenceNo;
 		String sql = QueryBuilder.GET_DEAL;
-		dealList.add(DealDAO.getDealInfo(sql, referenceNo));
+		//dealList.add(DealDAO.getDealInfo(sql, referenceNo));
+		for(DealInfo currentDeal: searchList) {
+			if(currentDeal.getReference_No() == referenceNo ) {
+				dealList.add(currentDeal);
+			}
+		}
 		a1DBStatus = hasA1Exist(referenceNo);
 		if(a1DBStatus == true) {
 			a1statusFlag = true;
@@ -264,6 +287,10 @@ public class Deal implements Serializable {
 			a1FormList = DealDAO.getA1List (sql,referenceNo);
 			a1RefNo = a1FormList.get(0).getA1_RefNo();
 			activeA1RefNo = a1FormList.get(0).getA1_RefNo();
+			whereClause = Constants.A1_STATUS ;
+			sql = QueryBuilder.A1_HISTORY + " " + whereClause;
+			//System.out.println("reference_No:"+reference_No);
+			a1History = DealDAO.getA1History(sql,reference_No);
 		}
 		else {
 			
@@ -281,7 +308,7 @@ public class Deal implements Serializable {
 	// Invoked from NEW DEAL FORM button
 	public String newDeal() throws Exception {
 		System.out.println("inside newDeal");
-		searchValue = null;
+		//searchValue = null;
 		searchType = Constants.DEFAULT_SEARCH_TYPE;
 		if (dealList != null) {
 		
@@ -560,7 +587,11 @@ public class Deal implements Serializable {
 
 		System.out.println("In Deal: Exiting updateDeal()...");
 	}
-
+	//cancel deal
+	public String cancelDeal() {
+		System.out.println("In Deal: Entering cancelDeal()...");
+		return "dealSearch";
+	}
 	/**
 	 * Method to check an existing deal in DEAL_INFO table
 	 * 
@@ -772,18 +803,7 @@ public class Deal implements Serializable {
 	 * @throws Exception
 	 */
 	public ArrayList<String> getA1History(){
-		try {
-
-			whereClause = Constants.A1_STATUS ;
-			String sql = QueryBuilder.A1_HISTORY + " " + whereClause;
-			System.out.println("reference_No:"+reference_No);
-			a1History = DealDAO.getA1History(sql,reference_No);
-            			
-			
-		} catch (Exception e) {
-			System.out.println("Error in validateA1Status():" + e);
-			e.printStackTrace();
-		}
+		
 		return a1History;
 	}
 	/**

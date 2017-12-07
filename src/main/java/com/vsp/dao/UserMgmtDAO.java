@@ -34,32 +34,32 @@ public class UserMgmtDAO {
 	 * @throws Exception
 	 */
 	public static ArrayList<UserInfo> getAllUserList(String sql) throws Exception {
-		System.out.println("In UserMgmtDAO : Entering getAllUserList...");
+		//System.out.println("In UserMgmtDAO : Entering getAllUserList...");
 		PreparedStatement ps = null;
+		ResultSet rs =null;
 		ArrayList<UserInfo> userInfoList = new ArrayList<UserInfo>();
 		int count = 1;
 		try {
 
 			ps = con.prepareStatement(sql);
 
-			ResultSet rs = ps.executeQuery();
+			rs = ps.executeQuery();
 
 			while (rs.next()) {
 				UserInfo userInfo = new UserInfo();
 				userInfo.setUser_Id(rs.getInt(1));
 				userInfo.setSerialNo(count);
-				userInfo.setLast_Name(rs.getString(2));
-				userInfo.setFirst_Name(rs.getString(3));
-				userInfo.setEmail(rs.getString(4));
-				userInfo.setRole_Id(rs.getString(5));
+				userInfo.setUser_Name(rs.getString(2));
+				userInfo.setEmail(rs.getString(3));
+				userInfo.setRole_Id(rs.getString(4));
 
-				if (rs.getString(6).equalsIgnoreCase("Y")) {
+				if (rs.getString(5).equalsIgnoreCase("Y")) {
 					userInfo.setActive(true);
 				} else {
 					userInfo.setActive(false);
 				}
 
-				userInfo.setImt_Id(rs.getString(7));
+				userInfo.setImt_Id(rs.getString(6));
 				userInfoList.add(userInfo);
 
 				count = count + 1;
@@ -70,8 +70,9 @@ public class UserMgmtDAO {
 
 		}finally {
 			ps.close();
+			rs.close();
 		}
-		System.out.println("In UserMgmtDAO : Exiting getAllUserList...");
+		//System.out.println("In UserMgmtDAO : Exiting getAllUserList...");
 		return userInfoList;
 	}
 
@@ -84,15 +85,15 @@ public class UserMgmtDAO {
 	 */
 
 	public static HashMap<Integer, String> getRoleList(String sql) throws Exception {
-		System.out.println("In UserMgmtDAO : Entering getRoleList...");
 		PreparedStatement ps = null;
+		ResultSet rs = null;
 		HashMap<Integer, String> userRoleByMap = new HashMap<Integer, String>();
 
 		try {
 
 			ps = con.prepareStatement(sql);
 
-			ResultSet rs = ps.executeQuery();
+			rs = ps.executeQuery();
 
 			while (rs.next()) {
 				userRoleByMap.put(rs.getInt(1), rs.getString(2));
@@ -101,9 +102,11 @@ public class UserMgmtDAO {
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 
+		}finally {
+			ps.close();
+			rs.close();
 		}
 
-		System.out.println("In UserMgmtDAO : Exiting getRoleList...");
 		return userRoleByMap;
 
 	}
@@ -111,13 +114,14 @@ public class UserMgmtDAO {
 	public static HashMap<Integer, String> getOptionList(String sql) throws Exception {
 
 		PreparedStatement ps = null;
+		ResultSet rs = null;
 		HashMap<Integer, String> optionMap = new HashMap<Integer, String>();
 
 		try {
 
 			ps = con.prepareStatement(sql);
 
-			ResultSet rs = ps.executeQuery();
+			rs = ps.executeQuery();
 
 			while (rs.next()) {
 				optionMap.put(rs.getInt(1), rs.getString(2));
@@ -126,6 +130,9 @@ public class UserMgmtDAO {
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 
+		}finally{
+			ps.close();
+			rs.close();
 		}
 		return optionMap;
 	}
@@ -140,7 +147,7 @@ public class UserMgmtDAO {
 	 */
 	public static int insertUser(String sql, UserInfo userInfo) throws Exception {
 
-		System.out.println("In UserMgmtDAO: Entering insertUser()...");
+		//System.out.println("In UserMgmtDAO: Entering insertUser()...");
 		PreparedStatement ps = null;
 		int insertFlag = 0;
 		System.out.println("User Email : " + userInfo.getEmail());
@@ -148,18 +155,17 @@ public class UserMgmtDAO {
 		try {
 			// con.setAutoCommit(false);
 			ps = con.prepareStatement(sql);
-			ps.setString(1, userInfo.getLast_Name());
-			ps.setString(2, userInfo.getFirst_Name());
-			ps.setString(3, userInfo.getEmail());
-			ps.setString(4, userInfo.getRole_Id());
+			ps.setString(1, userInfo.getUser_Name());
+			ps.setString(2, userInfo.getEmail());
+			ps.setString(3, userInfo.getRole_Id());
 			if (userInfo.isActive() == true) {
-				ps.setString(5, "Y");
+				ps.setString(4, "Y");
 			} else {
-				ps.setString(5, "N");
+				ps.setString(4, "N");
 			}
-			ps.setString(6, SessionUtils.getUserName());
-			ps.setString(7, userInfo.getImt_Id());
-			ps.setString(8, "N");
+			ps.setString(5, SessionUtils.getUserName());
+			ps.setString(6, userInfo.getImt_Id());
+			ps.setString(7, "N");
 
 			insertFlag = ps.executeUpdate();
 			System.out.println("User insert status:" + insertFlag);
@@ -171,7 +177,7 @@ public class UserMgmtDAO {
 			ps.close();
 		}
 
-		System.out.println("In UserMgmtDAO: Exiting insertDeal()...");
+		//System.out.println("In UserMgmtDAO: Exiting insertDeal()...");
 		return insertFlag;
 	}
 
@@ -185,7 +191,7 @@ public class UserMgmtDAO {
 	 */
 	public static int updateUser(String sql, List<UserInfo> updateList) throws Exception {
 
-		System.out.println("In UserMgmtDAO: Entering updateUser()...");
+		//System.out.println("In UserMgmtDAO: Entering updateUser()...");
 		PreparedStatement ps = null;
 		int[] updateCountFlag = new int[0];
 		System.out.println("User update list size: " + updateList.size());
@@ -194,22 +200,21 @@ public class UserMgmtDAO {
 			ps = con.prepareStatement(sql);
 			for (UserInfo userInfo : updateList) {
 				// Set clause
-				ps.setString(1, userInfo.getLast_Name());
-				ps.setString(2, userInfo.getFirst_Name());
-				ps.setString(3, userInfo.getEmail());
-				ps.setString(4, userInfo.getRole_Id());
+				//ps.setString(1, userInfo.getUser_Name());
+				//ps.setString(2, userInfo.getEmail());
+				ps.setString(1, userInfo.getRole_Id());
 
 				if (userInfo.isActive() == true) {
-					ps.setString(5, "Y");
+					ps.setString(2, "Y");
 				} else {
-					ps.setString(5, "N");
+					ps.setString(2, "N");
 				}
 
-				ps.setString(6, SessionUtils.getUserName());
-				ps.setString(7, userInfo.getImt_Id());
+				ps.setString(3, SessionUtils.getUserName());
+				ps.setString(4, userInfo.getImt_Id());
 
 				// where clause
-				ps.setInt(8, userInfo.getUser_Id());
+				ps.setInt(5, userInfo.getUser_Id());
 				ps.addBatch();
 
 			}
@@ -225,7 +230,7 @@ public class UserMgmtDAO {
 			ps.close();
 		}
 
-		System.out.println("In UserMgmtDAO: Exiting updateUser()...");
+		//System.out.println("In UserMgmtDAO: Exiting updateUser()...");
 		return updateCountFlag.length;
 	}
 
@@ -239,8 +244,9 @@ public class UserMgmtDAO {
 	 */
 	public static boolean checkUserExist(String sql, String email) throws Exception {
 
-		System.out.println("In UserMgmtDAO: Entering checkUserExist()...");
+		//System.out.println("In UserMgmtDAO: Entering checkUserExist()...");
 		PreparedStatement ps = null;
+		ResultSet rs = null;
 		boolean existUserFlag = false;
 		int count = 0;
 		System.out.println("User email: " + email);
@@ -249,7 +255,7 @@ public class UserMgmtDAO {
 			ps = con.prepareStatement(sql);
 			ps.setString(1, email);
 
-			ResultSet rs = ps.executeQuery();
+			rs = ps.executeQuery();
 
 			while (rs.next()) {
 				count = rs.getInt(1);
@@ -260,14 +266,15 @@ public class UserMgmtDAO {
 			} else {
 				existUserFlag = false;
 			}
-
+			System.out.println("existUserFlag: " + existUserFlag);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}finally {
 			ps.close();
+			rs.close();
 		}
 
-		System.out.println("In UserMgmtDAO: Exiting checkUserExist()...");
+		//System.out.println("In UserMgmtDAO: Exiting checkUserExist()...");
 		return existUserFlag;
 	}
 
@@ -280,7 +287,7 @@ public class UserMgmtDAO {
 	 */
 	public static int deleteUser(String sql, List<UserInfo> deleteList) throws Exception {
 
-		System.out.println("In UserMgmtDAO: Entering deleteUser()...");
+		//System.out.println("In UserMgmtDAO: Entering deleteUser()...");
 		PreparedStatement ps = null;
 		int[] deleteCountFlag = new int[0];
 
@@ -311,7 +318,7 @@ public class UserMgmtDAO {
 			ps.close();
 		}
 
-		System.out.println("In UserMgmtDAO: Exiting deleteUser()...");
+		//System.out.println("In UserMgmtDAO: Exiting deleteUser()...");
 		return deleteCountFlag.length;
 	}
 

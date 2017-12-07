@@ -38,7 +38,7 @@ public static final String VSP_REF_NO_START="0001";
 public static final String VSP_REF_NO = "REFERENCE_NO=?";
 public static final String A1_REF_NO = "A1_REF_NO=?";
 public static final String A1_STATUS = "A1_STATUS_ID in ('Complete','Cancelled')";
-
+public static final String SEARCH_MESSAGE = "search_message";
 //message constants
 public static final String LOGIN_INVALID = "login_invalid";
 public static final String LOGIN_ACCESS_DENIED = "login_access_denied";
@@ -55,4 +55,7 @@ public static final String IS_ACTIVE_CONDITION="IS_ACTIVE='Y'";
 public static final String DELETE_CONDITION="IS_DELETE='N'";
 public static final String USER_ID="USER_ID=?";
 public static final String EMAIL_ADDRESS="EMAIL=?";
+public static final String USER_NAME="USER_NAME";
+public static final String NEW_USER_BUTTON="+ New User";
+public static final String SAVE_USER_BUTTON="Save User";
 }

@@ -33,15 +33,15 @@
 
 	<h:commandButton action="#{deal.searchDeal}"
 			id="searchButton" value="Search" class="btn-default" render="dealResult" ></h:commandButton></td></tr> 
-			<tr><td colspan="2" align="center" ><h:outputText value="No records found" rendered="#{empty deal.dealList}"/></td></tr>
+			
             </table>  
 
 <script>
-$(document).ready(function() {
+/* $(document).ready(function() {
 	$("#dealList_input").val("");
 	$("input[name=searchType][value='CLIENT']").prop("checked",true);
 	  
-});
+}); */
 
 
 $("#searchType").click(function () {

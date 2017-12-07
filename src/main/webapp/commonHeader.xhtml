@@ -15,14 +15,14 @@
 					<br></br>
 					<table border="0">
 						<tr>
-							<td style="width: 400px"><b><h:outputText
+							<td style="width: 330px"><b><h:outputText
 										value="VSP MANAGEMENT TOOL" /></b></td>
 						</tr>
 						<tr>
-							<td style="width: 400px; padding-bottom: 20px"><h:outputText
+							<td style="width: 33 0px; padding-bottom: 20px"><h:outputText
 									value="GBS Value Selling Platform" /></td>
 
-							<td style="width: 200px; padding-bottom: 20px">
+							<td style="width: 150px; padding-bottom: 20px">
 							<h:commandLink action="#{deal.openDealManagement}" value="DEAL MANAGEMENT"></h:commandLink></td>
 
 							<td style="width: 100px; padding-bottom: 20px"><h:outputLink
@@ -30,14 +30,13 @@
 									value="reports.xhtml">REPORTS</h:outputLink></td>
 
 
-							<td style="width: 150px; padding-bottom: 20px"><h:outputLink
+							<td style="width: 100px; padding-bottom: 20px"><h:outputLink
 								
 									value="participantMaster.xhtml">PARTICIPANTS</h:outputLink></td>
 
-							<td style="width: 180px; padding-bottom: 20px"><h:outputLink
+								<td style="width: 150px; padding-bottom: 20px"> <h:outputLink
+									value="userInfo.xhtml" rendered="#{sessionScope.roleId == 1}">USER MANAGEMENT</h:outputLink></td>
 									
-									value="userInfo.xhtml">USER MANAGEMENT</h:outputLink></td>
-
 							<td style="width: 200px; padding-bottom: 20px"><h:outputText
 									 value="Hi,  #{sessionScope.userName}" /></td>
 						</tr>

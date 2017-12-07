@@ -3,7 +3,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:ui="http://java.sun.com/jsf/facelets">
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 
 <h:head>
 
@@ -15,121 +16,82 @@
 	<link href="css/font-awesome.css" rel="stylesheet"></link>
 	<link href="css/font-awesome.min.css" rel="stylesheet"></link>
 	<link href="css/style.css" rel="stylesheet"></link>
+	
 </h:head>
 
 <h:body>
 	<script src="js/jquery-2.0.3.js"></script>
 	<script src="js/jquery-ui.js"></script>
 	<script src="js/bootstrap.js"></script>
-
-	<script type="text/javascript">
-		function showDeleteDialogMsg() {
-
-			//showCheckboxMessage(); 
-			if (!confirm("Are you sure you want to delete the selected record(s)?"))
-				return false;
-			else
-				return true;
-		}
-
-		function showUpdateDialogMsg() {
-			if (!confirm("Are you sure you want to update the selected record(s)?"))
-				return false;
-			else
-				return true;
-		}
-	</script>
-
+	<script src="js/vsp.js"></script>
+    
 	<ui:include src="commonHeader.xhtml" />
 
-	<h:form id="userForm">
+	<h:form prependId="false">
 		<br></br>
 		<br></br>
+
 		<div align="center">
 			<h:panelGrid columns="1">
-				<h:message for="validationMsg" id="validationMsg" style="color:red"></h:message>
-				<h:messages style="color:red"></h:messages>
+				<h:messages for="validationMsg" id="validationMsg" style="color:red"></h:messages>
+
 			</h:panelGrid>
 
-
-			<table border="0" width="80%">
+			<h:panelGrid width="80%">
+			<table border="0" width="100%">
 				<tr bgcolor="grey">
-					<td style="color: black; padding-left: 10px"><b>USER ADMIN</b></td>
-					<td align="right" style="padding-top: 10px; padding-right: 10px">
-						<p:inputText id="userSearch"
-							placeholder="Search by Name,Email, IMT" size="20" />
-					</td>
+					<td style="color: black; padding-left: 10px"><h4>USER ADMIN</h4></td>
 				</tr>
 			</table>
-
-
-			<h:panelGrid width="80%">
 				<p:scrollPanel mode="native"
-					style="width:1110px;height:320px;overflow:auto">
+					style="width:1100px;height:320px;overflow:auto">
+					
 					<h:dataTable id="userResult" var="userData"
 						value="#{user.allUserList}" styleClass="table table-striped">
 						<h:column>
-							<f:facet name="header">
-								<h:selectBooleanCheckbox id="checkboxAllFlag"
-									onchange="submit()" value="#{user.checkboxAllFlag}"
-									valueChangeListener="#{user.valueChangeMethod}" />
-							</f:facet>
+							<f:facet name="header"></f:facet>
 
 							<h:selectBooleanCheckbox id="checkboxClickedFlag"
-								value="#{userData.checkboxClickedFlag}" />
-					</h:column>
+								label="checkboxInd" value="#{userData.checkboxClickedFlag}" disabled="#{user.checkboxAllFlag}">
+							</h:selectBooleanCheckbox>
 
-
-						<h:column>
-							<f:facet name="header"># </f:facet>
-							<h:outputText id="serialNo" value="#{userData.serialNo}"></h:outputText>
 						</h:column>
 
 						<h:column>
-							<f:facet name="header">Firstname</f:facet>
-							<h:outputText value="#{userData.first_Name}"></h:outputText>
+							<h:inputHidden id="serialNo" value="#{userData.serialNo}"></h:inputHidden>
+						</h:column>
 
-							<h:inputText id="firstname" value="#{userData.first_Name}"
-								style="width:100px"
-								rendered="#{user.toggleButton and userData.checkboxClickedFlag}"
-								required="true" requiredMessage="FirstName cannot be empty">
-								<f:validateRequired />
+						<h:column>
+							<f:facet name="header">User (Firstname Lastname)</f:facet>
+
+							<h:outputText value="#{userData.user_Name}"></h:outputText>
+
+							<h:inputText id="username" value="#{userData.user_Name}" style="width:120px"
+								rendered="#{user.toggleButton and userData.checkboxClickedFlag}" a:autofocus="true">
 							</h:inputText>
+							<br></br>
+							<h:outputText style="color:red;font-size:8pt;" id="error_username"></h:outputText>
 						</h:column>
-
-						<h:column>
-							<f:facet name="header">Lastname</f:facet>
-							<h:outputText value="#{userData.last_Name}"></h:outputText>
-
-							<h:inputText id="lastname" value="#{userData.last_Name}"
-								style="width:100px"
-								rendered="#{user.toggleButton and userData.checkboxClickedFlag}"
-								required="true" requiredMessage="LastName cannot be empty">
-								<f:validateRequired />
-							</h:inputText>
-						</h:column>
-
 
 						<h:column>
 							<f:facet name="header">Email </f:facet>
 							<h:outputText value="#{userData.email}"></h:outputText>
-							<h:inputText id="email" value="#{userData.email}"
-								style="width:140px"
-								rendered="#{user.toggleButton and userData.checkboxClickedFlag}"
-								required="true" requiredMessage="Email cannot be empty">
-								<f:validateRequired />
+							
+							<h:inputText id="email" value="#{userData.email}" style="width:140px"
+								rendered="#{user.toggleButton and userData.checkboxClickedFlag}">
 							</h:inputText>
+							<br></br>
+							<h:outputText style="color:red;font-size: 7pt;" id="error_email"></h:outputText>
 						</h:column>
 						<h:column>
 							<f:facet name="header">IMT </f:facet>
 
-							<h:selectOneMenu id="imt_Id" value="#{userData.imt_Id}"
-								required="true" requiredMessage="IMT cannot be null">
-								<f:selectItem itemLabel="Please Choose" itemValue="#{null}"
-									noSelectionOption="true" />
-								<f:selectItems value="#{user.IMTList}" />
-								<f:validateRequired />
+							<h:selectOneMenu id="imt_Id" value="#{userData.imt_Id}" style="width:150px">
+								<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true" />
+								<f:selectItems value="#{user.imtList}" />
 							</h:selectOneMenu>
+							<br></br>
+							<h:outputText style="color:red;font-size: 7pt;" id="error_imt_Id"></h:outputText>
 						</h:column>
 
 						<h:column width="50">
@@ -142,13 +104,13 @@
 
 						<h:column>
 							<f:facet name="header">Role </f:facet>
-							<h:selectOneMenu id="role_Id" value="#{userData.role_Id}"
-								required="true" requiredMessage="Role cannot be null">
+							<h:selectOneMenu id="role_Id" value="#{userData.role_Id}" style="width:150px">
 								<f:selectItem itemLabel="Please Choose" itemValue="#{null}"
 									noSelectionOption="true" />
 								<f:selectItems value="#{user.roleList}" />
-								<f:validateRequired />
 							</h:selectOneMenu>
+							<br></br>
+							<h:outputText style="color:red;font-size: 7pt;" id="error_role_Id"></h:outputText>
 						</h:column>
 
 					</h:dataTable>
@@ -156,35 +118,31 @@
 				<hr></hr>
 			</h:panelGrid>
 
-			<h:panelGrid columns="6" width="80%">
-				<h:commandButton id="newUserButton" value="+ New User"
-					class="btn-default" style="float:center" action="#{user.addNewRow}"
-					rendered="#{not user.toggleButton}"></h:commandButton>
-
+			<h:inputHidden id="totalCheckedSize" value="#{user.totalSize}"></h:inputHidden>
+						
+			<h:panelGrid columns="2" width="80%">
 				<h:panelGroup>
-					<h:commandButton id="saveButton" value="Save User"
-						class="btn-default" style="float:left" action="#{user.insertUser}"
-						rendered="#{user.toggleButton}"></h:commandButton>
-
-
-					<h:commandButton id="resetButton" value="Reset" class="btn-default"
-						style="float:left" rendered="#{user.toggleButton}"></h:commandButton>
+					<h:commandButton id="newUserButton" value="#{user.toggleBtnChgValue}" class="btn-default" 
+					style="float:left" action="#{user.addNewRow}" actionListener="#{user.toggleBtnAction}">
+					</h:commandButton>
 
 					<h:commandButton id="cancelButton" value="Cancel"
 						class="btn-default" style="float:left"
-						rendered="#{user.toggleButton}"></h:commandButton>
-				</h:panelGroup>
+						rendered="#{user.toggleButton}" action="#{user.cancelSave}"
+						onclick="return showCancelDialogMsg()">
+					</h:commandButton>
 
+				</h:panelGroup>
 				<h:panelGroup>
 					<h:commandButton id="updateButton" value="Update User"
 						class="btn-default" style="float:right"
 						rendered="#{not user.toggleButton}" action="#{user.updateUser}"
-						onclick="return showUpdateDialogMsg()"></h:commandButton>
+						onclick="return checkSelectedCheckBox('update')"></h:commandButton>
 
 					<h:commandButton id="deleteButton" value="Delete User"
 						class="btn-default" style="float:right"
 						rendered="#{not user.toggleButton}" action="#{user.deleteUser}"
-						onclick="return showDeleteDialogMsg()"></h:commandButton>
+						onclick="return checkSelectedCheckBox('delete')"></h:commandButton>
 				</h:panelGroup>
 			</h:panelGrid>
 		</div>
@@ -193,7 +151,116 @@
 	</h:form>
 
 	<ui:include src="commonFooter.xhtml" />
+	<script src="js/vsp.js"></script>
+	 <script>
+    //<![CDATA[	
+   
+    $("#newUserButton").click(function(){
+    	
+		var buttonclicked = $("#newUserButton").val();
+		//alert("Button clicked: " + buttonclicked);
+		var status = false;
+		var count = 0;
 
+		if (buttonclicked == 'Save User') {
+			//alert("In loop Save User");
+			var table = $("#userResult tbody");
+
+			table.find('tr').each(function(index) {
+								var $tds = $(this).find('td');
+								//Check if serialNo is 0 then it is a new row
+								var serialNo = $tds.eq(1).find("input:hidden").val();
+
+								if (serialNo == 0) {
+									//alert("serialNo is 0");
+
+									var checkbox_sel_val = $tds.eq(0);
+									var checkbox = checkbox_sel_val.find("input:checked").val();
+									var username = $tds.eq(2).find("input:text").val();
+									var email = $tds.eq(3).find("input:text").val();
+									var imt_sel_val = $tds.eq(4);
+									var imt_Id = imt_sel_val.find("option:selected").val();
+									var role_sel_val = $tds.eq(6);
+									var role_Id = role_sel_val.find("option:selected").val();
+
+									//alert("Row: "+ index+ "\n checkbox: "+ checkbox+ "\n serialNo :"+ serialNo
+									//	+ "\n username: "+ username+ "\n email: "+ email+ "\n role_Id: "+ role_Id
+									 //   + "\n imt_Id: "+ imt_Id);
+
+									var error_username = $tds.eq(2).find("span");
+									error_username.html("");
+									if (username == ''|| username == 'undefined') {
+										//$("#err_username").html("Username cannot be blank");
+										error_username.html("Username cannot be blank");
+										count++;
+									} else {
+										if (!isValidUserName(username)) {
+											//$('#err_username').html("Invalid username format");
+											error_username.html("Invalid username format");
+											count++;
+										}
+									}
+
+									var error_email = $tds.eq(3).find("span");
+									error_email.html("");
+									if (email == ''|| email == 'undefined') {
+										//$("#err_email").html("Email cannot be blank");
+										error_email.html("Email cannot be blank");
+										count++;
+									} else {
+										if (!isValidEmailAddress(email)) {
+											//$('#err_email').html("Invalid email format");
+											error_email.html("Invalid email format");
+											count++;
+										}
+									}
+
+									var error_imt_Id = $tds.eq(4).find("span");
+									error_imt_Id.html("");
+									if (imt_Id == ''|| imt_Id == 'Please Choose') {
+										//$("#err_imt_Id").html("Please select IMT");
+										error_imt_Id.html("Please select IMT");
+										count++;
+									}
+
+									var error_role_Id = $tds.eq(6).find("span");
+									error_role_Id.html("");
+									if (role_Id == ''|| role_Id == 'Please Choose') {
+										//$("#err_role_Id").html("Please select Role");
+										error_role_Id.html("Please select Role");
+										count++;
+									}
+
+								}
+
+							});
+
+		}
+
+		if (count > 0) {
+			status = false;
+		} else {
+			status = true;
+		}
+
+		//alert("status: " +status);
+		return status;
+	});
+    
+	function isValidEmailAddress(emailAddress) {
+		var pattern = new RegExp(
+				"^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$");
+		return pattern.test(emailAddress);
+	}
+
+	function isValidUserName(userName) {
+		var pattern = new RegExp("[a-zA-Z]+\\s+[a-zA-Z]+$");
+		return pattern.test(userName);
+	}
+    
+    	
+	//]]>
+	</script>
 </h:body>
 
 </html>

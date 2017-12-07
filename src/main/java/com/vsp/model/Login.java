@@ -35,6 +35,7 @@ public class Login implements Serializable {
 	
 	private String password;
 	private String userName;
+	private int roleId;
 	
 	public String getPassword() {
 		return password;
@@ -70,15 +71,19 @@ public class Login implements Serializable {
 				} else {
 					 System.out.println("Login Successfull. Thanks.");
 					 int roleId = LoginDAO.validate(userName, password);
+					 System.out.println("RoleID of session user: "+roleId);
 					 if (roleId > 0) {
 						 SessionUtils.setUserName(userName);
-					 if(roleId==1) {
+						 SessionUtils.setRoleId(String.valueOf(roleId));
+						 setRoleId(roleId);
+					/* if(roleId==1) {
 						page= "admin";
 					 }
 					 else if(roleId==2) {
 						 page= "user";
 					 }
-					 
+					 */
+						 page ="admin";
 					 }
 					 else {
 
@@ -106,5 +111,13 @@ public class Login implements Serializable {
  } catch (IOException e) {
  e.printStackTrace();
  }
+	}
+
+	public int getRoleId() {
+		return roleId;
+	}
+
+	public void setRoleId(int roleId) {
+		this.roleId = roleId;
 	}
 }

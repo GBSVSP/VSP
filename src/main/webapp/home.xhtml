@@ -42,6 +42,11 @@
     </h:form>
 
 <script>
+ $(document).ready(function() {
+	$("#dealList_input").val("");
+	$("input[name=searchType][value='CLIENT']").prop("checked",true);
+	  
+});
 $("#searchType").click(function () {
 	$("#dealList_input").val("");
 }); 

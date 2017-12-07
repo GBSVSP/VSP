@@ -11,8 +11,9 @@
 <ui:composition template="commonLayout.xhtml">
 		<ui:define name="content">
 		<p:scrollPanel mode="native" style="position: absolute; height: 88%;width:100%;">
-			<h:form prependId="false">							
+									
 			<ui:include src="search.xhtml" />
+			<h:form prependId="false">	
 						<table border="0" width="55%" >
 							<tr>
 								<td colspan="4" align="left"><b>REFERENCE NUMBER:
@@ -22,13 +23,13 @@
 							<tr>
 								<td style="font-size:12px;width:60px">Client Name * : &nbsp;&nbsp;<h:outputText  style="color:red;font-size: 7pt;" id="err_customer_Name">
 								</h:outputText><h:message  globalOnly="true" showSummary="false" showDetail="true" for="customer_Name" style="color:red;">
-								</h:message> <h:inputText id="customer_Name" value="#{dealInfo.customer_Name}" required="true" requiredMessage="Cannot be null">
+								</h:message> <h:inputText id="customer_Name" value="#{dealInfo.customer_Name}" >
 							
 							<f:validateRequired />
 							</h:inputText></td>
 								<td style="font-size:12px;width:60px" align="left">Opportunity Name * : &nbsp;&nbsp;<h:outputText  style="color:red;font-size: 7pt;" id="err_opportunity_Name">
 								</h:outputText>	<h:message  globalOnly="true" showSummary="false" showDetail="true" for="opportunity_Name" style="color:red;"></h:message><h:inputText
-										id="opportunity_Name" value="#{dealInfo.opportunity_Name}" required="true" requiredMessage="Cannot be null">
+										id="opportunity_Name" value="#{dealInfo.opportunity_Name}" >
 								
 										<f:validateRequired />
 										</h:inputText>
@@ -39,7 +40,7 @@
 							<tr>
 								<td style="font-size:12px;width:60px">Opportunity Description * : &nbsp;&nbsp;<h:outputText  style="color:red;font-size: 7pt;" id="err_opportunity_Description">
 								</h:outputText><h:message id="od" globalOnly="true" showSummary="false" showDetail="true"  for="opportunity_Description" style="color:red;"></h:message><h:inputTextarea
-										id="opportunity_Description" value="#{dealInfo.opportunity_Description}"  required="true" requiredMessage="Cannot be null">
+										id="opportunity_Description" value="#{dealInfo.opportunity_Description}" >
 						
 										</h:inputTextarea>
 											
@@ -86,11 +87,12 @@
 				<ui:include src="newDealInfo.xhtml" />
 				<h:commandButton id="saveButton"  value="SAVE CHANGES" onclick="return validate()"  action="#{deal.isDealExist}"
 					class="btn-default" />&nbsp;&nbsp;
-		<h:commandButton id="resetButton"  value="RESET" class="btn-default" />&nbsp;&nbsp;
-					<h:commandButton id="cancelButton"  value="CANCEL" class="btn-default" />
+	
+					<h:commandButton id="cancelButton"  value="CANCEL" class="btn-default" action="#{deal.cancelDeal}"/>
 					<script>
 					//<![CDATA[
 					function validate(){
+			
 						//var status = $("#insertFlag").val();
 						var customer_Name = $("#customer_Name").val();
 						var opportunity_Name = $("#opportunity_Name").val();
@@ -100,19 +102,19 @@
 						var status = false;
 						if (customer_Name == '') {
 							
-			    		   	 $("#err_customer_Name").html("Cannot be Null");
+			    		   	 $("#err_customer_Name").html("Cannot be Blank");
 			    		   } 
 						if (opportunity_Name == '') {
 							
-			    		   	 $("#err_opportunity_Name").html("Cannot be Null");
+			    		   	 $("#err_opportunity_Name").html("Cannot be Blank");
 			    		   } 
 						if (opportunity_Description == '') {
 							
-			    		   	 $("#err_opportunity_Description").html("Cannot be Null");
+			    		   	 $("#err_opportunity_Description").html("Cannot be Blank");
 			    		   } 
 						 /*  if (a1Status == '') {
 							
-								 $("#err_a1_Status").html("Cannot be Null");
+								 $("#err_a1_Status").html("Cannot be Blank");
 			    		   }  */ 
 						 if(customer_Name != '' && opportunity_Name != '' && opportunity_Description != '' ){
 							 status = true;
@@ -120,39 +122,18 @@
 						 return status;
 						 
 			    }
-					$(window).on("beforeunload", function() {
+					/* $(window).on("beforeunload", function() {
 			            return "Are you sure? You didn't save the deal !";
 			        });
-			        
-					$("#resetButton").click(function () {
-						dialog.alert({
-							 
-			                title: "A demo of Alert",
-			 
-			                message: "This is a demo of simple alert with a message!",
-			 
-			                button: "Close",
-			 
-			                animation: "fade",
-			 
-			                callback: function(value){
-			 
-			                                console.log(value);
-			 
-			                }
-			 
-			});
-			 
-			return false;
-					}); 
+			        */
 
 					$("#cancelButton").click(function () {
+						var status;
+						status = confirm("You will lose un-saved data. Are you sure? ");
 						
+						return status;
 					}); 
-				    $.alert({
-				        title: 'Alert!',
-				        content: 'Simple alert!',
-				    });
+				    
 					//]]>
 			</script>	
 			</h:form>

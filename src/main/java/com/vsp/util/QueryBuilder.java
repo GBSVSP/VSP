@@ -73,14 +73,14 @@ public static String A1_HISTORY = "select A1_REF_NO from A1_WORKSHOP_INFO where 
 public static String SELECT_USER_ROLE ="Select ROLE_ID, ROLE_NAME from USER_ROLE where"; 
 
 //Users Info
-public static String SELECT_USER_INFO ="Select USER_ID, LAST_NAME, FIRST_NAME, EMAIL, ROLE_ID, ACTIVE, IMT_ID from USERS WHERE";
+public static String SELECT_USER_INFO ="Select USER_ID, USER_NAME, EMAIL, ROLE_ID, ACTIVE, IMT_ID from USERS where";
 
 //User Info insert
-public static String INSERT_USER_INFO ="Insert into USERS (LAST_NAME, FIRST_NAME, EMAIL, ROLE_ID, ACTIVE, CREATED_BY, IMT_ID, IS_DELETE) "
-		+ "values (?, ?, ?, ?, ?, ?, ?, ?)";
+public static String INSERT_USER_INFO ="Insert into USERS (USER_NAME, EMAIL, ROLE_ID, ACTIVE, CREATED_BY, IMT_ID, IS_DELETE) "
+		+ "values (?, ?, ?, ?, ?, ?, ?)";
 
 //User Info update
-public static String UPDATE_USER_INFO = "Update USERS set LAST_NAME =?, FIRST_NAME =?, EMAIL =?, ROLE_ID =?, ACTIVE =?, MODIFIED_BY =?, IMT_ID=? where";
+public static String UPDATE_USER_INFO = "Update USERS set ROLE_ID =?, ACTIVE =?, MODIFIED_BY =?, IMT_ID=? where";
 
 //check existing deal
 public static String COUNT_USER ="Select count(USER_ID) from USERS where";
