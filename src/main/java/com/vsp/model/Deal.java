@@ -44,12 +44,13 @@ public class Deal implements Serializable {
 	private static String searchType = Constants.DEFAULT_SEARCH_TYPE;
 	private static  List<DealInfo> dealList = new ArrayList<DealInfo>();
 	private static  List<DealInfo> searchList = new ArrayList<DealInfo>();
+	private static List<A1Form> a1FormList = new ArrayList<A1Form>();
 	private static ArrayList<String> a1History;
 	private static HashMap<Integer, String> optionMap;
 	private static String searchValue;
 
 	private static int reference_No;
-	private int insertFlag = 0;
+
 	private static String whereClause = null;
 	private boolean show = false;
 	private boolean a1DBStatus = false;
@@ -58,7 +59,7 @@ public class Deal implements Serializable {
 	private static String a1StatusMessage = null;
 	private static String searchMsg = null;
 	
-	private static List<A1Form> a1FormList;
+
 	private static boolean a1statusFlag ;
 	public static String a1RefNo;
 	public static String activeA1RefNo;
@@ -112,17 +113,6 @@ public class Deal implements Serializable {
 		return reference_No;
 	}
 
-	public int getInsertFlag() {
-		return insertFlag;
-	}
-
-	public void setInsertFlag(int insertFlag) {
-		this.insertFlag = insertFlag;
-	}
-
-	public void setReference_No(int reference_No) {
-		this.reference_No = reference_No;
-	}
 	public boolean isShow() {
 		return show;
 	}
@@ -265,6 +255,7 @@ public class Deal implements Serializable {
 		System.out.println("In Header: Entering openDealManagement()...");
 		dealList.clear();
 		searchList.clear();
+		searchValue = null;
 		return "dealSearch";
 	}
 	// Invoked from VIEW DEAL DETAILS button
@@ -299,7 +290,7 @@ public class Deal implements Serializable {
 			a1statusFlag = false;
 			
 		}
-		System.out.println("status::" + dealList.get(0).getSc_Imt_Id());
+	
 		System.out.println("In Deal: Exiting openDeal()...");
 		return "dealForm";
 	
@@ -516,23 +507,28 @@ public class Deal implements Serializable {
 	 * @return void
 	 * @throws Exception
 	 */
-	public void insertDeal() throws Exception {
+	public int insertDeal() throws Exception {
 		System.out.println("In Deal: Entering insertDeal()...");
 		System.out.println("name..."+dealInfoObj.getCustomer_Name());
+		
+		int insertFlag = 0;
 		try {
 
 			String dealSQL = QueryBuilder.INSERT_DEAL;
 			String a1SQL = QueryBuilder.INSERT_A1_WORKSHOP;
 			if(a1ButtonClick == true) {
+				a1FormObj = a1FormList.get(0);
+				a1FormObj.setA1_RefNo(a1RefNo);
 			insertFlag = DealDAO.insertDeal_A1(dealSQL, a1SQL, dealInfoObj, a1FormObj, a1statusFlag);
 			}
 			else {
 				insertFlag = DealDAO.insertDealOnly(dealSQL, a1SQL, dealInfoObj);
 			}
 			if (insertFlag > 0) {
+				activeA1RefNo = a1FormObj.getA1_RefNo();
 				System.out.println("Deal insert successful.");
 			} else {
-				System.out.println("Deal insert unsuccessful.");
+				System.out.println("Deal insert failed.");
 			}
 
 		} catch (Exception e) {
@@ -540,6 +536,7 @@ public class Deal implements Serializable {
 			e.printStackTrace();
 		}
 		System.out.println("In Deal: Exiting insertDeal()...");
+		return insertFlag;
 	}
 
 	/**
@@ -599,8 +596,9 @@ public class Deal implements Serializable {
 	 * @return void
 	 * @throws Exception
 	 */
-	public void isDealExist() throws Exception {
+	public String isDealExist() throws Exception {
 		System.out.println("In Deal: Entering isDealExist()...");
+		String page = null;
 		try {
 
 			whereClause = Constants.VSP_REF_NO;
@@ -615,7 +613,7 @@ public class Deal implements Serializable {
 				a1FormObj = a1FormList.get(0);
 				}
 			}
-			System.out.println("reference no:"+reference_No+"customer name:"+dealInfoObj.getCustomer_Name());	
+			
 			if(reference_No > 0) {
 				dealInfoObj.setReference_No(reference_No);
 					boolean existDealFlag = DealDAO.isDealExist(sql,reference_No);
@@ -623,7 +621,28 @@ public class Deal implements Serializable {
 					if(existDealFlag == false) {
 						//Insert new deal
 						
-						insertDeal();
+						int insertStatus = insertDeal();
+						 insertStatus = 1;
+						if(insertStatus > 0) {
+						
+							dealList.clear();
+							a1FormList.clear();
+							dealList.add(dealInfoObj);
+							System.out.println("a1statusFlag:"+a1statusFlag);
+							if(a1statusFlag == true) {
+								System.out.println("A1 status:"+a1FormObj.getA1_Status());
+								a1FormList.add(a1FormObj);
+							}
+							else {
+								
+								a1FormList.add(new A1Form());
+								a1statusFlag = false;
+							}
+							
+							page = "dealForm";
+						
+						}
+						System.out.println("Page name after insert:"+page);
 					}else {
 						//update existing deal
 						updateDeal();
@@ -636,9 +655,8 @@ public class Deal implements Serializable {
 			e.printStackTrace();
 		}
 		
-		//dealList.add(dealInfoObj);
-		//a1FormList.add(a1FormObj);
-		//return "dealForm";
+	
+		return page;
 	}
 
 	/**

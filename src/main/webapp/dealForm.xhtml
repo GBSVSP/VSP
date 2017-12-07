@@ -107,10 +107,10 @@
 						 return status;
 						 
 			    }
-					/* $(window).on("beforeunload", function() {
-			            return "Are you sure? You didn't save the deal !";
+					 $(window).on("beforeunload", function() {
+			            return "You will lose un-saved data. Are you sure?";
 			        });
-			        */
+			        
 
 					$("#cancelButton").click(function () {
 						var status;

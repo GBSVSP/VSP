@@ -30,7 +30,7 @@
 	<h:form prependId="false">
 		<br></br>
 		<br></br>
-
+        
 		<div align="center">
 			<h:panelGrid columns="1">
 				<h:messages for="validationMsg" id="validationMsg" style="color:red"></h:messages>
@@ -75,13 +75,24 @@
 
 						<h:column>
 							<f:facet name="header">Email </f:facet>
-							<h:outputText value="#{userData.email}"></h:outputText>
+							
+							<h:outputText value="#{userData.email}" rendered="#{userData.serialNo != '0'}">
+							</h:outputText>
 							
 							<h:inputText id="email" value="#{userData.email}" style="width:140px"
 								rendered="#{user.toggleButton and userData.checkboxClickedFlag}">
+								 <f:ajax event="change" listener="#{user.onChangeAjaxListener}" 
+								  render="@form"/>
 							</h:inputText>
+							
 							<br></br>
-							<h:outputText style="color:red;font-size: 7pt;" id="error_email"></h:outputText>
+							<h:outputText style="color:red;font-size: 8pt;" id="ajax_email_new" 
+							value="#{msgbundle.user_already_exist}" 
+							rendered="#{user.jscript == 'addUserExistInfo' and userData.serialNo == '0'}"> 
+							</h:outputText>
+									
+							<h:outputText style="color:red;font-size: 8pt;" id="error_email"></h:outputText>
+							  
 						</h:column>
 						<h:column>
 							<f:facet name="header">IMT </f:facet>
@@ -91,7 +102,7 @@
 								<f:selectItems value="#{user.imtList}" />
 							</h:selectOneMenu>
 							<br></br>
-							<h:outputText style="color:red;font-size: 7pt;" id="error_imt_Id"></h:outputText>
+							<h:outputText style="color:red;font-size: 8pt;" id="error_imt_Id"></h:outputText>
 						</h:column>
 
 						<h:column width="50">
@@ -110,7 +121,7 @@
 								<f:selectItems value="#{user.roleList}" />
 							</h:selectOneMenu>
 							<br></br>
-							<h:outputText style="color:red;font-size: 7pt;" id="error_role_Id"></h:outputText>
+							<h:outputText style="color:red;font-size: 8pt;" id="error_role_Id"></h:outputText>
 						</h:column>
 
 					</h:dataTable>
@@ -119,6 +130,8 @@
 			</h:panelGrid>
 
 			<h:inputHidden id="totalCheckedSize" value="#{user.totalSize}"></h:inputHidden>
+			
+		
 						
 			<h:panelGrid columns="2" width="80%">
 				<h:panelGroup>
@@ -145,13 +158,19 @@
 						onclick="return checkSelectedCheckBox('delete')"></h:commandButton>
 				</h:panelGroup>
 			</h:panelGrid>
+			<h:panelGrid>
+			<h:outputScript rendered="#{user.jscript == 'deleteInfo'}">alert("#{user.msgAppend} #{msgbundle.user_delete_success}");</h:outputScript>
+			<h:outputScript rendered="#{user.jscript == 'updateInfo'}">alert("#{user.msgAppend} #{msgbundle.user_update_success}");</h:outputScript>
+			<h:outputScript rendered="#{user.jscript == 'addNewInfo'}">alert("#{user.msgAppend} #{msgbundle.user_create_success}");</h:outputScript>
+			<h:outputScript rendered="#{user.jscript == 'addExistInfo'}">alert("#{user.msgAppend} #{msgbundle.user_exist}");</h:outputScript>
+			<h:outputScript rendered="#{user.jscript == 'error'}">alert("#{msgbundle.database_error}");</h:outputScript>
+			</h:panelGrid>
 		</div>
 
 
 	</h:form>
 
 	<ui:include src="commonFooter.xhtml" />
-	<script src="js/vsp.js"></script>
 	 <script>
     //<![CDATA[	
    

@@ -28,17 +28,17 @@
 							<tr><td colspan="4" align="left"><b>A1 STATUS:#{row.a1_Status}</b>
 									</td></tr>
 							<tr>
-								<td>A1 Status: <h:selectOneMenu id="a1Status" name="a1Status" disabled="#{not deal.a1statusFlag }" value="#{row.a1_Status}" required="true" requiredMessage="Cannot be null">
+								<td  style="font-size:12px;">A1 Status: <h:selectOneMenu id="a1Status" name="a1Status" disabled="#{not deal.a1statusFlag }" value="#{row.a1_Status}" >
 									<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
 										<f:selectItems value="#{deal.a1StatusList}" immediate="true" />
-											<f:validateRequired />
+											
 									</h:selectOneMenu>
 								</td>
-								<td>A1 Manager:<h:inputText disabled="#{not deal.a1statusFlag }" value="#{row.a1_Manager}" />
+								<td style="font-size:12px;">A1 Manager:<h:inputText disabled="#{not deal.a1statusFlag }" value="#{row.a1_Manager}" />
 								</td>
-								<td>A1 Complete:<h:inputText  disabled="#{not deal.a1statusFlag }" value="#{row.a1_Complete}"/>
+								<td style="font-size:12px;">A1 Complete:<h:inputText  disabled="#{not deal.a1statusFlag }" value="#{row.a1_Complete}"/>
 								</td>
-								<td>Next Step: <h:selectOneMenu disabled="#{not deal.a1statusFlag }" value="#{row.a1_NextStep}">
+								<td style="font-size:12px;">Next Step: <h:selectOneMenu disabled="#{not deal.a1statusFlag }" value="#{row.a1_NextStep}">
 											<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
 										<f:selectItems value="#{deal.nextStepList}" immediate="true" />
 									</h:selectOneMenu>
@@ -47,30 +47,30 @@
 								<td colspan="10" align="left"><b>A1 EVALUATION:</b>
 									</td></tr>
 							<tr>
-								<td>Should we sell: <h:selectOneMenu disabled="#{not deal.a1statusFlag }" value="#{row.a1_ShouldSell}">
+								<td style="font-size:12px;">Should we sell: <h:selectOneMenu disabled="#{not deal.a1statusFlag }" value="#{row.a1_ShouldSell}">
 											<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
 										<f:selectItems value="#{deal.shouldweSellList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
 								
-								<td>A1 Can we sell?: <h:selectOneMenu disabled="#{not deal.a1statusFlag }" value="#{row.a1_CanSell}">
+								<td style="font-size:12px;">A1 Can we sell?: <h:selectOneMenu disabled="#{not deal.a1statusFlag }" value="#{row.a1_CanSell}">
 											<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
 										<f:selectItems value="#{deal.canweSellList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
-								<td>A1 Evaluation: <h:selectOneMenu disabled="#{not deal.a1statusFlag }" value="#{row.a1_Evaluation}">
+								<td style="font-size:12px;">A1 Evaluation: <h:selectOneMenu disabled="#{not deal.a1statusFlag }" value="#{row.a1_Evaluation}">
 											<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
 										<f:selectItems value="#{deal.a1EvaluationList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
-								<td>A1 Pursuit profile win chance:<h:inputText disabled="#{not deal.a1statusFlag }" value="#{row.a1_Pursuit}" />
+								<td style="font-size:12px;">A1 Pursuit profile win chance:<h:inputText disabled="#{not deal.a1statusFlag }" value="#{row.a1_Pursuit}" />
 								</td>
 								</tr>
 								<tr>
 								
 								<td align="right">
-								Active:<h:commandButton  value="#{deal.activeA1RefNo}" rendered="#{not empty deal.activeA1RefNo}" class="btn-default"  actionListener="#{deal.historyListener}"/>
-								Historical A1 Info:</td><td colspan="4">
+								<h:outputText value="Active:" rendered="#{not empty deal.activeA1RefNo}"/><h:commandButton  value="#{deal.activeA1RefNo}" rendered="#{not empty deal.activeA1RefNo}" class="btn-default"  actionListener="#{deal.historyListener}"/>
+								<h:outputText value="Historical A1 Info:" rendered="#{not empty deal.activeA1RefNo}" /></td><td colspan="4">
 								<table>
 								 <tr>
 						    <ui:repeat value="#{deal.a1History}" var="row">

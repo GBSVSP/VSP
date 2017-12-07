@@ -74,8 +74,7 @@
 						</table>
 						
 						<hr />
-						
-				<h:inputHidden id="insertFlag" value="#{deal.insertFlag }"></h:inputHidden>
+			
 				<ui:include src="newA1Form.xhtml" />
 				
 			
@@ -117,10 +116,10 @@
 						 return status;
 						 
 			    }
-					/* $(window).on("beforeunload", function() {
-			            return "Are you sure? You didn't save the deal !";
+					 $(window).on("beforeunload", function() {
+			            return "You will lose un-saved data. Are you sure?";
 			        });
-			        */
+			        
 
 					$("#cancelButton").click(function () {
 						var status;
