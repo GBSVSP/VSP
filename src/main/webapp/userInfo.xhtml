@@ -17,14 +17,13 @@
 	<link href="css/font-awesome.min.css" rel="stylesheet"></link>
 	<link href="css/style.css" rel="stylesheet"></link>
 	
-</h:head>
-
-<h:body>
 	<script src="js/jquery-2.0.3.js"></script>
 	<script src="js/jquery-ui.js"></script>
 	<script src="js/bootstrap.js"></script>
 	<script src="js/vsp.js"></script>
-    
+</h:head>
+
+<h:body>
 	<ui:include src="commonHeader.xhtml" />
 
 	<h:form prependId="false">
@@ -62,70 +61,81 @@
 						</h:column>
 
 						<h:column>
-							<f:facet name="header">User (Firstname Lastname)</f:facet>
+							<f:facet name="header">User</f:facet>
 
 							<h:outputText value="#{userData.user_Name}" rendered="#{userData.serialNo != '0'}"></h:outputText>
-
+							
+						    <h:outputText style="color:red;font-size:8pt;" id="error_username"></h:outputText>
+						    <br></br>
 							<h:inputText id="username" value="#{userData.user_Name}" style="width:120px"
-								rendered="#{user.toggleButton and userData.checkboxClickedFlag}" a:autofocus="true">
+								rendered="#{user.toggleButton and userData.checkboxClickedFlag}" a:autofocus="true" a:placeholder="firstname lastname">
+								
 							</h:inputText>
-							<br></br>
-							<h:outputText style="color:red;font-size:8pt;" id="error_username"></h:outputText>
+							<h:outputText value="*" style="color:red; font-size: 10pt; width:2px" rendered="#{userData.serialNo == '0'}">
+							</h:outputText>
+					
 						</h:column>
 
 						<h:column>
 							<f:facet name="header">Email </f:facet>
 							
-							<h:outputText value="#{userData.email}" rendered="#{userData.serialNo != '0'}">
-							</h:outputText>
+							<h:outputText value="#{userData.email}" rendered="#{userData.serialNo != '0'}"></h:outputText>
 							
+						    <h:outputText style="color:red;font-size: 8pt;" id="error_email"></h:outputText>
+						     <br></br>
 							<h:inputText id="email" value="#{userData.email}" style="width:140px"
 								rendered="#{user.toggleButton and userData.checkboxClickedFlag}">
 							</h:inputText>
-							
-							<br></br>		
-							<h:outputText style="color:red;font-size: 8pt;" id="error_email"></h:outputText>
-							  
+							<h:outputText value="*" style="color:red; font-size:10pt; width:2px" rendered="#{userData.serialNo == '0'}">
+							</h:outputText> 
+							 
 						</h:column>
 						<h:column>
 							<f:facet name="header">IMT </f:facet>
-
+							
+							<h:outputText style="color:red;font-size: 8pt;" id="error_imt_Id"></h:outputText>
+							 <br></br>
 							<h:selectOneMenu id="imt_Id" value="#{userData.imt_Id}" style="width:150px">
 								<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true" />
 								<f:selectItems value="#{user.imtList}" />
 							</h:selectOneMenu>
-							<br></br>
-							<h:outputText style="color:red;font-size: 8pt;" id="error_imt_Id"></h:outputText>
+							<h:outputText value="*" style="color:red; font-size:8pt; width:2px" rendered="#{userData.serialNo == '0'}">
+							</h:outputText>
 						</h:column>
 
-						<h:column width="50">
+						<h:column>
 							<f:facet name="header">Active </f:facet>
-							<h:selectBooleanCheckbox id="active" value="#{userData.active}">
+							<h:selectBooleanCheckbox id="active" value="#{userData.active}" style="width:50px">
 							</h:selectBooleanCheckbox>
-
 						</h:column>
-
 
 						<h:column>
 							<f:facet name="header">Role </f:facet>
+							
+							<h:outputText style="color:red;font-size: 8pt;" id="error_role_Id"></h:outputText>
+							 <br></br>
 							<h:selectOneMenu id="role_Id" value="#{userData.role_Id}" style="width:150px">
 								<f:selectItem itemLabel="Please Choose" itemValue="#{null}"
 									noSelectionOption="true" />
 								<f:selectItems value="#{user.roleList}" />
 							</h:selectOneMenu>
-							<br></br>
-							<h:outputText style="color:red;font-size: 8pt;" id="error_role_Id"></h:outputText>
+							<h:outputText value="*" style="color:red; font-size:10pt; width:2px" rendered="#{userData.serialNo == '0'}">
+							</h:outputText>
 						</h:column>
 
 					</h:dataTable>
+					
 				</p:scrollPanel>
+				<h:panelGrid width="100%" style="text-align:right;">
+			      <h:outputText value="*All fields mandatory" style="color:red;font-size:9pt;" rendered="#{user.toggleButton}">
+				  </h:outputText>
 				<hr></hr>
 			</h:panelGrid>
-
+			
+			</h:panelGrid>			
+			
 			<h:inputHidden id="totalCheckedSize" value="#{user.totalSize}"></h:inputHidden>
 			
-		
-						
 			<h:panelGrid columns="2" width="80%">
 				<h:panelGroup>
 					<h:commandButton id="newUserButton" value="#{user.toggleBtnChgValue}" class="btn-default" 
@@ -133,8 +143,7 @@
 					</h:commandButton>
 
 					<h:commandButton id="cancelButton" value="Cancel"
-						class="btn-default" style="float:left"
-						rendered="#{user.toggleButton}" action="#{user.cancelSave}"
+						class="btn-default" style="float:left" action="#{user.cancelSave}"
 						onclick="return showCancelDialogMsg()">
 					</h:commandButton>
 
@@ -164,114 +173,114 @@
 	</h:form>
 
 	<ui:include src="commonFooter.xhtml" />
-	<script src="js/vsp.js"></script>
 	 <script>
     //<![CDATA[	
-   
-    $("#newUserButton").click(function(){
-    	
-		var buttonclicked = $("#newUserButton").val();
-		//alert("Button clicked: " + buttonclicked);
-		var status = false;
-		var count = 0;
+    	$("#newUserButton").click(function(){
+	
+	var buttonclicked = $("#newUserButton").val();
+	//alert("Button clicked: " + buttonclicked);
+	var status = false;
+	var count = 0;
 
-		if (buttonclicked == 'Save User') {
-			//alert("In loop Save User");
-			var table = $("#userResult tbody");
+	if (buttonclicked == 'Save User') {
+		//alert("In loop Save User");
+		var table = $("#userResult tbody");
 
-			table.find('tr').each(function(index) {
-								var $tds = $(this).find('td');
-								//Check if serialNo is 0 then it is a new row
-								var serialNo = $tds.eq(1).find("input:hidden").val();
+		table.find('tr').each(function(index) {
+							var $tds = $(this).find('td');
+							//Check if serialNo is 0 then it is a new row
+							var serialNo = $tds.eq(1).find("input:hidden").val();
 
-								if (serialNo == 0) {
-									//alert("serialNo is 0");
+							if (serialNo == 0) {
+								//alert("serialNo is 0");
 
-									var checkbox_sel_val = $tds.eq(0);
-									var checkbox = checkbox_sel_val.find("input:checked").val();
-									var username = $tds.eq(2).find("input:text").val();
-									var email = $tds.eq(3).find("input:text").val();
-									var imt_sel_val = $tds.eq(4);
-									var imt_Id = imt_sel_val.find("option:selected").val();
-									var role_sel_val = $tds.eq(6);
-									var role_Id = role_sel_val.find("option:selected").val();
+								var checkbox_sel_val = $tds.eq(0);
+								var checkbox = checkbox_sel_val.find("input:checked").val();
+								var username = $tds.eq(2).find("input:text").val();
+								var email = $tds.eq(3).find("input:text").val();
+								var imt_sel_val = $tds.eq(4);
+								var imt_Id = imt_sel_val.find("option:selected").val();
+								var role_sel_val = $tds.eq(6);
+								var role_Id = role_sel_val.find("option:selected").val();
 
-									//alert("Row: "+ index+ "\n checkbox: "+ checkbox+ "\n serialNo :"+ serialNo
-									//	+ "\n username: "+ username+ "\n email: "+ email+ "\n role_Id: "+ role_Id
-									 //   + "\n imt_Id: "+ imt_Id);
+								//alert("Row: "+ index+ "\n checkbox: "+ checkbox+ "\n serialNo :"+ serialNo
+								//	+ "\n username: "+ username+ "\n email: "+ email+ "\n role_Id: "+ role_Id
+								 //   + "\n imt_Id: "+ imt_Id);
 
-									var error_username = $tds.eq(2).find("span");
-									error_username.html("");
-									if (username == ''|| username == 'undefined') {
-										//$("#err_username").html("Username cannot be blank");
-										error_username.html("Username cannot be blank");
-										count++;
-									} else {
-										if (!isValidUserName(username)) {
-											//$('#err_username').html("Invalid username format");
-											error_username.html("Invalid username format");
-											count++;
-										}
-									}
-
-									var error_email = $tds.eq(3).find("span");
-									error_email.html("");
-									if (email == ''|| email == 'undefined') {
-										//$("#err_email").html("Email cannot be blank");
-										error_email.html("Email cannot be blank");
-										count++;
-									} else {
-										if (!isValidEmailAddress(email)) {
-											//$('#err_email').html("Invalid email format");
-											error_email.html("Invalid email format");
-											count++;
-										}
-									}
-
-									var error_imt_Id = $tds.eq(4).find("span");
-									error_imt_Id.html("");
-									if (imt_Id == ''|| imt_Id == 'Please Choose') {
-										//$("#err_imt_Id").html("Please select IMT");
-										error_imt_Id.html("Please select IMT");
+								var error_username = $tds.eq(2).find("span").first();
+								error_username.html("");
+								if (username == ''|| username == 'undefined') {
+									//$("#err_username").html("Username cannot be blank");
+									error_username.html("Username cannot be blank");
+								
+									count++;
+								} else {
+									if (!isValidUserName(username)) {
+										//$('#err_username').html("Invalid username format");
+										error_username.html("Invalid username format");
 										count++;
 									}
-
-									var error_role_Id = $tds.eq(6).find("span");
-									error_role_Id.html("");
-									if (role_Id == ''|| role_Id == 'Please Choose') {
-										//$("#err_role_Id").html("Please select Role");
-										error_role_Id.html("Please select Role");
-										count++;
-									}
-
 								}
 
-							});
+								var error_email = $tds.eq(3).find("span").first();
+								error_email.html("");
+								if (email == ''|| email == 'undefined') {
+									//$("#err_email").html("Email cannot be blank");
+									error_email.html("Email cannot be blank");
+									count++;
+								} else {
+									if (!isValidEmailAddress(email)) {
+										//$('#err_email').html("Invalid email format");
+										error_email.html("Invalid email format");
+										count++;
+									}
+								}
 
-		}
+								var error_imt_Id = $tds.eq(4).find("span").first();
+								error_imt_Id.html("");
+								if (imt_Id == ''|| imt_Id == 'Please Choose') {
+									//$("#err_imt_Id").html("Please select IMT");
+									error_imt_Id.html("Please select IMT");
+									count++;
+								}
 
-		if (count > 0) {
-			status = false;
-		} else {
-			status = true;
-		}
+								var error_role_Id = $tds.eq(6).find("span").first();
+								error_role_Id.html("");
+								if (role_Id == ''|| role_Id == 'Please Choose') {
+									//$("#err_role_Id").html("Please select Role");
+									error_role_Id.html("Please select Role");
+									count++;
+								}
 
-		//alert("status: " +status);
-		return status;
-	});
-    
-	function isValidEmailAddress(emailAddress) {
-		var pattern = new RegExp(
-				"^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$");
-		return pattern.test(emailAddress);
+							}
+
+						});
+
 	}
 
-	function isValidUserName(userName) {
-		var pattern = new RegExp("[a-zA-Z]+\\s+[a-zA-Z]+$");
-		return pattern.test(userName);
+	if (count > 0) {
+		status = false;
+	} else {
+		status = true;
 	}
-    
-    	
+
+	//alert("status: " +status);
+	return status;
+});
+
+function isValidEmailAddress(emailAddress) {
+	var pattern = new RegExp(
+			"^[A-Za-z0-9]+(\.[_A-Za-z0-9-]+)*@([A-Za-z0-9]+\.(IBM|ibm)\.(COM|com)|(IBM|ibm)\.(COM|com))$");
+	return pattern.test(emailAddress);
+}
+
+function isValidUserName(userName) {
+	var pattern = new RegExp("[a-zA-Z]+\\s+[a-zA-Z]+$");
+	return pattern.test(userName);
+}
+
+
+   	
 	//]]>
 	</script>
 </h:body>

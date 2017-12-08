@@ -126,6 +126,7 @@ public class User implements Serializable {
 			}
 			userInfo = new UserInfo();
 			userInfo.setCheckboxClickedFlag(true);
+			userInfo.setActive(true);
 			userInfoList.add(userInfo);
 			System.out.println("size of userInfoList in addNewRow: " + userInfoList.size());
 
