@@ -556,7 +556,7 @@ public class Deal implements Serializable {
 			whereClause = Constants.VSP_REF_NO + "and" +  Constants.A1_REF_NO;
 			String dealSQL = QueryBuilder.UPDATE_DEAL + " " + Constants.VSP_REF_NO;
 			a1FormObj.setA1_RefNo(a1RefNo);
-			
+			activeA1RefNo = a1RefNo;
 			System.out.println("getReferenceNo:"+a1FormObj.getReferenceNo()+":"+a1RefNo);
 				if (isA1Exist() == true) {
 					a1SQL = QueryBuilder.UPDATE_A1_WORKSHOP + " " +whereClause;

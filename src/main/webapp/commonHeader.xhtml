@@ -19,29 +19,29 @@
 										value="VSP MANAGEMENT TOOL" /></b></td>
 						</tr>
 						<tr>
-							<td style="width: 400px; padding-bottom: 20px"><h:outputText
+							<td style="width: 33 0px; padding-bottom: 20px"><h:outputText
 									value="GBS Value Selling Platform" /></td>
 
-							<td style="width: 200px; padding-bottom: 20px"><h:outputLink
-									style="text-decoration:none;color:black;font-size:14px"
-									value="admin.xhtml">DEAL MANAGEMENT</h:outputLink></td>
+							<td style="width: 150px; padding-bottom: 20px">
+							<h:commandLink action="#{deal.openDealManagement}" value="DEAL MANAGEMENT"></h:commandLink></td>
 
 							<td style="width: 100px; padding-bottom: 20px"><h:outputLink
-									style="text-decoration:none;color:black;font-size:14px"
+									
 									value="reports.xhtml">REPORTS</h:outputLink></td>
 
 
-							<td style="width: 150px; padding-bottom: 20px"><h:outputLink
-									style="text-decoration:none;color:black;font-size:14px"
+							<td style="width: 100px; padding-bottom: 20px"><h:outputLink
+								
 									value="participantMaster.xhtml">PARTICIPANTS</h:outputLink></td>
 
-							<td style="width: 180px; padding-bottom: 20px"><h:outputLink
-									style="text-decoration:none;color:black;font-size:14px"
+
+							<td style="width: 150px; padding-bottom: 20px"><h:outputLink
+									
 									rendered="#{sessionScope.roleId == 1}"
 									value="userInfo.xhtml">USER MANAGEMENT</h:outputLink></td>
                             
 							<td style="width: 200px; padding-bottom: 20px"><h:outputText
-									style="font-weight:bold;" value="Hi,  #{sessionScope.userName}" /></td>
+									 value="Hi,  #{sessionScope.userName}" /></td>
 						</tr>
 
 					</table>
