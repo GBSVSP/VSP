@@ -50,7 +50,17 @@
 $("#searchType").click(function () {
 	$("#dealList_input").val("");
 }); 
-
+$("#searchButton").click(function () {
+	var dealList_input = $("#dealList_input").val();
+	if (dealList_input == '') {
+		
+	   	 alert("Search Value Cannot be Blank");
+	   	 return false;
+	   } 
+	else{
+		return true;
+	}
+}); 
 </script>
 
 </h:body>

@@ -7,7 +7,7 @@
 
 </h:head>
 <body>
-	<h:form prependId="false">
+	<h:form>
 		<div class="navbar navbar-fixed-top"
 			style="position: fixed; width: 100%;">
 			<div class="navbar-inner">
@@ -15,30 +15,33 @@
 					<br></br>
 					<table border="0">
 						<tr>
-							<td style="width: 330px"><b><h:outputText
+							<td style="width: 400px"><b><h:outputText
 										value="VSP MANAGEMENT TOOL" /></b></td>
 						</tr>
 						<tr>
-							<td style="width: 33 0px; padding-bottom: 20px"><h:outputText
+							<td style="width: 400px; padding-bottom: 20px"><h:outputText
 									value="GBS Value Selling Platform" /></td>
 
-							<td style="width: 150px; padding-bottom: 20px">
-							<h:commandLink action="#{deal.openDealManagement}" value="DEAL MANAGEMENT"></h:commandLink></td>
+							<td style="width: 200px; padding-bottom: 20px"><h:outputLink
+									style="text-decoration:none;color:black;font-size:14px"
+									value="admin.xhtml">DEAL MANAGEMENT</h:outputLink></td>
 
 							<td style="width: 100px; padding-bottom: 20px"><h:outputLink
-									
+									style="text-decoration:none;color:black;font-size:14px"
 									value="reports.xhtml">REPORTS</h:outputLink></td>
 
 
-							<td style="width: 100px; padding-bottom: 20px"><h:outputLink
-								
+							<td style="width: 150px; padding-bottom: 20px"><h:outputLink
+									style="text-decoration:none;color:black;font-size:14px"
 									value="participantMaster.xhtml">PARTICIPANTS</h:outputLink></td>
 
-								<td style="width: 150px; padding-bottom: 20px"> <h:outputLink
-									value="userInfo.xhtml" rendered="#{sessionScope.roleId == 1}">USER MANAGEMENT</h:outputLink></td>
-									
+							<td style="width: 180px; padding-bottom: 20px"><h:outputLink
+									style="text-decoration:none;color:black;font-size:14px"
+									rendered="#{sessionScope.roleId == 1}"
+									value="userInfo.xhtml">USER MANAGEMENT</h:outputLink></td>
+                            
 							<td style="width: 200px; padding-bottom: 20px"><h:outputText
-									 value="Hi,  #{sessionScope.userName}" /></td>
+									style="font-weight:bold;" value="Hi,  #{sessionScope.userName}" /></td>
 						</tr>
 
 					</table>

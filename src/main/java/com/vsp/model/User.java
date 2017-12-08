@@ -11,8 +11,10 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 import com.vsp.dao.UserMgmtDAO;
 import com.vsp.util.Constants;
@@ -50,7 +52,8 @@ public class User implements Serializable {
 	private static String sql = null;
 	private static HashMap<Integer, String> optionMap;
 	public String toggleBtnChgValue = Constants.NEW_USER_BUTTON;
-	
+	private String jscript = "";
+	private String msgAppend = null;
     
 	// Populating Role drop down
 	public ArrayList<SelectItem> getRoleList() {
@@ -202,14 +205,19 @@ public class User implements Serializable {
 
 				if (insertFlag > 0) {
 					System.out.println("User insert successful.");
-					FacesContext.getCurrentInstance().addMessage("validationMsg",
+					/*FacesContext.getCurrentInstance().addMessage("validationMsg",
 							new FacesMessage(FacesMessage.SEVERITY_INFO, userInfo.getUser_Name() +" "+ bundle.getString(Constants.USER_ADDED_SUCCESS),
-									userInfo.getUser_Name()+" "+ bundle.getString(Constants.USER_ADDED_SUCCESS)));
+									userInfo.getUser_Name()+" "+ bundle.getString(Constants.USER_ADDED_SUCCESS)));*/
+					
+					setMsgAppend(userInfo.getUser_Name());
+					jscript= "addNewInfo";
+	
 				} else {
 					System.out.println("User insert unsuccessful.");
-					FacesContext.getCurrentInstance().addMessage("validationMsg",
+					/*FacesContext.getCurrentInstance().addMessage("validationMsg",
 							new FacesMessage(FacesMessage.SEVERITY_ERROR, bundle.getString(Constants.DATABASE_ERROR),
-									bundle.getString(Constants.DATABASE_ERROR)));
+									bundle.getString(Constants.DATABASE_ERROR)));*/
+					jscript ="error";
 				}
 
 			} catch (Exception e) {
@@ -219,10 +227,13 @@ public class User implements Serializable {
 
 		} else {
 			// error msg on UI
-			FacesContext.getCurrentInstance().addMessage("validationMsg",
+			/*FacesContext.getCurrentInstance().addMessage("validationMsg",
 					new FacesMessage(FacesMessage.SEVERITY_ERROR,
 							userInfo.getEmail() + " " + bundle.getString(Constants.USER_ALREADY_EXIST),
-							userInfo.getEmail() + " " + bundle.getString(Constants.USER_ALREADY_EXIST)));
+							userInfo.getEmail() + " " + bundle.getString(Constants.USER_ALREADY_EXIST)));*/
+			
+			setMsgAppend(userInfo.getEmail());
+			jscript= "addExistInfo";
 		}
 
 		System.out.println("In User: Exiting insertUser()...");
@@ -280,15 +291,20 @@ public class User implements Serializable {
 
 			if (updateFlag > 0) {
 				System.out.println("User update successful.");
-				FacesContext.getCurrentInstance().addMessage("validationMsg",
+				/*FacesContext.getCurrentInstance().addMessage("validationMsg",
 						new FacesMessage(FacesMessage.SEVERITY_INFO,
 								updateList.size() + " " + bundle.getString(Constants.USER_UPDATE_SUCCESS),
-								updateList.size() + " " + bundle.getString(Constants.USER_UPDATE_SUCCESS)));
+								updateList.size() + " " + bundle.getString(Constants.USER_UPDATE_SUCCESS)));*/
+				
+				setMsgAppend(String.valueOf(updateList.size()));
+				jscript= "updateInfo";
+				
 			} else {
 				System.out.println("User update unsuccessful.");
-				FacesContext.getCurrentInstance().addMessage("validationMsg",
+				/*FacesContext.getCurrentInstance().addMessage("validationMsg",
 						new FacesMessage(FacesMessage.SEVERITY_ERROR, bundle.getString(Constants.DATABASE_ERROR),
-								bundle.getString(Constants.DATABASE_ERROR)));
+								bundle.getString(Constants.DATABASE_ERROR)));*/
+				jscript= "error";
 			}
 
 		} catch (Exception e) {
@@ -325,15 +341,19 @@ public class User implements Serializable {
 
 			if (deleteFlag > 0) {
 				System.out.println("User delete successful.");
-				FacesContext.getCurrentInstance().addMessage("validationMsg",
+				/* FacesContext.getCurrentInstance().addMessage("validationMsg",
 						new FacesMessage(FacesMessage.SEVERITY_INFO,
 								deleteList.size() + " " + bundle.getString(Constants.USER_DELETE_SUCESS),
-								deleteList.size() + " " + bundle.getString(Constants.USER_DELETE_SUCESS)));
+								deleteList.size() + " " + bundle.getString(Constants.USER_DELETE_SUCESS)));*/
+				setMsgAppend(String.valueOf(deleteList.size()));
+				jscript= "deleteInfo";
+				
 			} else {
 				System.out.println("User delete unsuccessful.");
-				FacesContext.getCurrentInstance().addMessage("validationMsg",
+				/*FacesContext.getCurrentInstance().addMessage("validationMsg",
 						new FacesMessage(FacesMessage.SEVERITY_ERROR, bundle.getString(Constants.DATABASE_ERROR),
-								bundle.getString(Constants.DATABASE_ERROR)));
+								bundle.getString(Constants.DATABASE_ERROR)));*/
+				jscript = "error";
 			}
 
 		} catch (Exception e) {
@@ -343,7 +363,7 @@ public class User implements Serializable {
 
 		System.out.println("In User: Exiting deleteUser()...");
 	}
-	
+
 
 	/**
 	 * Method called on cancel action
@@ -395,9 +415,40 @@ public class User implements Serializable {
 			System.out.println("CheckboxAllFlag: "+isCheckboxAllFlag());
 			setCheckboxAllFlag(false);
 		}
+		jscript = null;
         System.out.println("TogglebuttonId clicked: "+ getToggleBtnChgValue());
 	}
+	
+	
+	/**
+	 *  Ajax listener for email address
+	 * @param e
+	 * @throws Exception
+	 */
 
+	public void onChangeAjaxListener(AjaxBehaviorEvent e) throws Exception {
+
+		UIComponent component = (UIComponent) e.getSource();
+		String emailAddress = (String) component.findComponent("email").getAttributes().get("value");
+		System.out.println("emailAddress:" + emailAddress);
+		boolean isexist = checkUserExist(emailAddress);
+		
+		if(isexist) {
+			System.out.println(isexist);
+			setMsgAppend(emailAddress);
+			jscript ="addUserExistInfo";
+			
+		   /*FacesContext.getCurrentInstance().addMessage("ajax_email",
+				new FacesMessage(FacesMessage.SEVERITY_ERROR, bundle.getString(Constants.USER_ALREADY_EXIST),
+						bundle.getString(Constants.USER_ALREADY_EXIST)));*/
+		}else {
+			jscript = null;
+		}
+		
+
+	}
+
+	
 	
 	public int getTotalSize() {
 		return totalSize;
@@ -438,5 +489,23 @@ public class User implements Serializable {
 	public void setToggleBtnChgValue(String toggleBtnChgValue) {
 		this.toggleBtnChgValue = toggleBtnChgValue;
 	}
+
+	public String getJscript() {
+		return jscript;
+	}
+
+	public void setJscript(String jscript) {
+		this.jscript = jscript;
+	}
+
+	public String getMsgAppend() {
+		return msgAppend;
+	}
+
+	public void setMsgAppend(String msgAppend) {
+		this.msgAppend = msgAppend;
+	}
+
+
 
 }

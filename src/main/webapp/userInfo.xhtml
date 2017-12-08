@@ -64,7 +64,7 @@
 						<h:column>
 							<f:facet name="header">User (Firstname Lastname)</f:facet>
 
-							<h:outputText value="#{userData.user_Name}"></h:outputText>
+							<h:outputText value="#{userData.user_Name}" rendered="#{userData.serialNo != '0'}"></h:outputText>
 
 							<h:inputText id="username" value="#{userData.user_Name}" style="width:120px"
 								rendered="#{user.toggleButton and userData.checkboxClickedFlag}" a:autofocus="true">
@@ -81,16 +81,9 @@
 							
 							<h:inputText id="email" value="#{userData.email}" style="width:140px"
 								rendered="#{user.toggleButton and userData.checkboxClickedFlag}">
-								 <f:ajax event="change" listener="#{user.onChangeAjaxListener}" 
-								  render="@form"/>
 							</h:inputText>
 							
-							<br></br>
-							<h:outputText style="color:red;font-size: 8pt;" id="ajax_email_new" 
-							value="#{msgbundle.user_already_exist}" 
-							rendered="#{user.jscript == 'addUserExistInfo' and userData.serialNo == '0'}"> 
-							</h:outputText>
-									
+							<br></br>		
 							<h:outputText style="color:red;font-size: 8pt;" id="error_email"></h:outputText>
 							  
 						</h:column>
@@ -171,6 +164,7 @@
 	</h:form>
 
 	<ui:include src="commonFooter.xhtml" />
+	<script src="js/vsp.js"></script>
 	 <script>
     //<![CDATA[	
    
