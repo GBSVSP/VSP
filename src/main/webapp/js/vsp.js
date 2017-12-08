@@ -13,7 +13,7 @@ function showUpdateDialogMsg() {
 }
 
 function showCancelDialogMsg() {
-	if (!confirm("Any answered data will be lost. Are you sure?"))
+	if (!confirm("Any unsaved data will be lost. Are you sure?"))
 		return false;
 	else
 		return true;
