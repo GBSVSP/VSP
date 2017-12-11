@@ -3,6 +3,9 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
+	<h:head>
+	<script src="js/vsp.js"></script>
+</h:head>
 <h:body>
 	
 						<table border="0" width="60%" class="panelGrid">
@@ -10,8 +13,8 @@
 								<td colspan="4" align="left"><b>A1 REF NO: 
 								<h:outputText name="a1RefNo" value=" ${deal.a1RefNo}" rendered="#{not empty deal.activeA1RefNo}"/></b>
 								<h:outputText  value="No A1 Exists" rendered="#{empty deal.activeA1RefNo}"/>
-								<h:outputScript rendered="#{deal.jscript == 'pendingA1'}">alert(#{msgbundle.pending_A1_error});</h:outputScript>
-								
+								<h:outputScript rendered="#{deal.jscript == 'pendingA1'}">alert("#{msgbundle.pending_A1_error}");</h:outputScript>
+						
 									<h:commandButton render="dataTableGroup" immediate="true"  rendered="${empty deal.activeA1RefNo}" disabled="#{deal.a1statusFlag }" id="a1Button" value="CREATE A1"	class="btn-default" actionListener="#{deal.addA1Form}" onclick="return validate()">
 								    
 								</h:commandButton>
