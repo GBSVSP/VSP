@@ -42,7 +42,7 @@ public class BluePages {
 		System.out.println("email:"+email);
 		 OkHttpClient client = new OkHttpClient();
 	        Request request = new Request.Builder()
-	          .url("https://w3.api.ibm.com/common/run/bluepages/userid/anju.sasidharan@in.ibm.com/emailaddress&hrFirstName&hrLastName&uid")
+	          .url("https://w3.api.ibm.com/common/run/bluepages/userid/"+email+"/emailaddress&hrFirstName&hrLastName&uid")
 	          .get()
 	          .addHeader("x-ibm-client-id", "e9559df8-11f2-42aa-9d4d-ac334d7b98b9")
 	          .addHeader("accept", "application/json")
@@ -66,6 +66,8 @@ public class BluePages {
 	        		 i++;
 	        		 data = properties[i];
 	        		 firstName = data.split(",")[0].replaceAll("[^a-zA-Z0-9]", "");
+	        		 System.out.println("firstName:"+firstName);
+	        		 SessionUtils.setFirstName(String.valueOf(firstName));
 	        	 }
 	        	 if(properties[i].contains("hrLastName")) {
 	        		 i++;

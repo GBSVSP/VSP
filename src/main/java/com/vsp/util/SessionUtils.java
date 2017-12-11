@@ -59,6 +59,13 @@ public class SessionUtils {
 		else
 			return null;
 	}
+	public static String getFirstName() {
+		HttpSession session = getSession();
+		if (session != null)
+			return (String) (session.getAttribute("firstName"));
+		else
+			return null;
+	}
 	public static void setRoleId(String roleId) {
 
 		getSession().setAttribute("roleId",roleId);
@@ -66,6 +73,10 @@ public class SessionUtils {
 	public static void setSerialNo(String serialNo) {
 
 		getSession().setAttribute("serialNo",serialNo);
+	}
+	public static void setFirstName(String serialNo) {
+
+		getSession().setAttribute("firstName",serialNo);
 	}
 	
 }
