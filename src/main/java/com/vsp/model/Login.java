@@ -10,6 +10,7 @@ import javax.faces.context.FacesContext;
 
 import com.ibm.swat.password.cwa2;
 import com.vsp.dao.LoginDAO;
+import com.vsp.util.BluePages;
 import com.vsp.util.Constants;
 import com.vsp.util.SessionUtils;
 
@@ -57,11 +58,14 @@ public class Login implements Serializable {
 		
 		 String page="index";
 		 String message = null;
+		 
+		 
 		 if (userName!=null && password !=null) {
-				cwa2 group = new cwa2();
+				//cwa2 group = new cwa2();
 				//ReturnCode rc = group.authenticate(userName, password);
 				//int code = rc.getCode();
 				int code = 0;
+				BluePages.getUserDetail(userName);
 				if ( code != 0) {
 
 					FacesContext.getCurrentInstance().addMessage("Login:validationMsg", 

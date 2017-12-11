@@ -52,11 +52,20 @@ public class SessionUtils {
 		else
 			return 0;
 	}
-	
+	public static String getSerialNo() {
+		HttpSession session = getSession();
+		if (session != null)
+			return (String) (session.getAttribute("serialNo"));
+		else
+			return null;
+	}
 	public static void setRoleId(String roleId) {
 
 		getSession().setAttribute("roleId",roleId);
 	}
-	
+	public static void setSerialNo(String serialNo) {
+
+		getSession().setAttribute("serialNo",serialNo);
+	}
 	
 }

@@ -43,6 +43,8 @@ public static final String SEARCH_MESSAGE = "search_message";
 public static final String LOGIN_INVALID = "login_invalid";
 public static final String LOGIN_ACCESS_DENIED = "login_access_denied";
 
+//blue pages constants
+public static final String CLIENT_ID = "client_id";
 
 //user form constants
 public static final String USER_ALREADY_EXIST = "user_exist";

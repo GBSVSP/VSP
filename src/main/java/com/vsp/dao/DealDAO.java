@@ -33,7 +33,7 @@ public class DealDAO {
 	static Connection con = DBConnect.getInstance().getConnInst();
 
 	public static ResultSet getDeal(String sql) throws Exception {
-
+		System.out.println("sql:" + sql);
 		Statement st = null;
 		ResultSet rs = null;
 		try {
