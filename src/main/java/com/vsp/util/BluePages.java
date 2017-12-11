@@ -48,33 +48,33 @@ public class BluePages {
 	          .addHeader("accept", "application/json")
 	          .build();
 	        Response response = client.newCall(request).execute();
-	      //  String output = response.body().string();
-	        String jsonData = response.body().string();
-	       // System.out.println(jsonData);
-	        jsonData = jsonData.replace("\n", "");
-	        jsonData= jsonData.substring(jsonData.indexOf("attribute"), jsonData.indexOf("return")-3);
-	        String properties [] = jsonData.split(":");
-	        String data ;
-	        for(int i = 0; i<properties.length;i++){
-	        	 if(properties[i].contains("uid")) {
-	        		 i++;
-	        		 data = properties[i];
-	        		serialNo = data.split(",")[0].replaceAll("[^a-zA-Z0-9]", "");
+	        String output = response.body().string();
+	        JSONObject jsonObj = new JSONObject(output);
+
+	        JSONArray jsonEntry = (JSONArray) ((JSONObject) jsonObj.get("search")).get("entry");
+	   
+	        for (int i = 0; i < jsonEntry.length(); i++) {
+	            JSONObject jsonEntryObj = jsonEntry.getJSONObject(i);
+	            JSONArray jsonAttribute = (JSONArray)jsonEntryObj.get("attribute");
+	           	 for (int j = 0; j < jsonAttribute.length(); j++) {
+		            JSONObject jsonProperty = jsonAttribute.getJSONObject(j);
+	
+	        	 if(jsonProperty.getString("name").contains("uid")) {
+	        		 serialNo = (jsonProperty.get("value")).toString().replaceAll("[^a-zA-Z0-9]", "");
 	        		 SessionUtils.setSerialNo(String.valueOf(serialNo));
 	        	 }
-	        	 if(properties[i].contains("hrFirstName")) {
-	        		 i++;
-	        		 data = properties[i];
-	        		 firstName = data.split(",")[0].replaceAll("[^a-zA-Z0-9]", "");
+	        	 if(jsonProperty.getString("name").contains("hrFirstName")) {
+	        		 
+	        		 firstName =(jsonProperty.get("value")).toString().replaceAll("[^a-zA-Z0-9]", "");
 	        		 System.out.println("firstName:"+firstName);
 	        		 SessionUtils.setFirstName(String.valueOf(firstName));
 	        	 }
-	        	 if(properties[i].contains("hrLastName")) {
-	        		 i++;
-	        		 data = properties[i];
-	        		 lastName = data.split(",")[0].replaceAll("[^a-zA-Z0-9]", "");
+	        	 if(jsonProperty.getString("name").contains("hrLastName")) {
+	        		 
+	        		 lastName = (jsonProperty.get("value")).toString().replaceAll("[^a-zA-Z0-9]", "");
 	        	 }
 	}
 	   	   }
+	}
 	}
 	
