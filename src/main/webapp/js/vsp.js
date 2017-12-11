@@ -13,7 +13,7 @@ function showUpdateDialogMsg() {
 }
 
 function showCancelDialogMsg() {
-	if (!confirm("You will lose the entered data, do you want to cancel?"))
+	if (!confirm("Any unsaved data will be lost. Are you sure?"))
 		return false;
 	else
 		return true;
@@ -33,9 +33,10 @@ function checkSelectedCheckBox(opvalue) {
 		}
 	}
 
-	if (count > 0) {
-		var flag;
-		var val = opvalue;
+	var flag;
+	var val = opvalue;
+	
+	if (count > 0) {	
 		if (val == 'update') {
 			flag = showUpdateDialogMsg();
 		} else {
@@ -43,9 +44,15 @@ function checkSelectedCheckBox(opvalue) {
 		}
 		return flag;
 	} else {
-		alert("Please select the checkbox");
+		
+		if (val == 'update') {
+			alert("Please select user(s) to update");
+		} else {
+			alert("Please select user(s) to delete");
+		}
 		return false;
 	}
 
 }
+
 

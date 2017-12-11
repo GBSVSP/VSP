@@ -45,6 +45,7 @@ public class Deal implements Serializable {
 	private static  List<DealInfo> dealList = new ArrayList<DealInfo>();
 	private static  List<DealInfo> searchList = new ArrayList<DealInfo>();
 	private static List<A1Form> a1FormList = new ArrayList<A1Form>();
+	private String jscript = "";
 	private static ArrayList<String> a1History;
 	private static HashMap<Integer, String> optionMap;
 	private static String searchValue;
@@ -113,6 +114,12 @@ public class Deal implements Serializable {
 		return reference_No;
 	}
 
+	public String getJscript() {
+		return jscript;
+	}
+	public void setJscript(String jscript) {
+		this.jscript = jscript;
+	}
 	public boolean isShow() {
 		return show;
 	}
@@ -213,6 +220,16 @@ public class Deal implements Serializable {
 	}
 
 	public void typeChanged(AjaxBehaviorEvent e) throws Exception {
+
+		UIComponent component = (UIComponent) e.getSource();
+		searchType = (String) component.findComponent("searchType").getAttributes().get("value");
+
+		System.out.println("type:" + searchType);
+		
+
+	}
+	//data table change
+	public void dataTableChange(AjaxBehaviorEvent e) throws Exception {
 
 		UIComponent component = (UIComponent) e.getSource();
 		searchType = (String) component.findComponent("searchType").getAttributes().get("value");
@@ -753,7 +770,7 @@ public class Deal implements Serializable {
 	public void addA1Form(ActionEvent e) throws Exception {
 		a1ButtonClick = true;
 		generateA1RefNo(false,0);
-		System.out.println("New A1 Ref No:"+a1RefNo);
+		System.out.println("New A1 Ref No:"+a1RefNo +a1statusFlag);
 	
 	}
 	/**
@@ -771,6 +788,7 @@ public class Deal implements Serializable {
 		int a1Count = validateA1Status(reference_No,a1RefNo);
 		System.out.println("a1Count:"+a1Count);
 		if(a1Count > 0) {
+			jscript = null;
 			a1StatusMessage = null;
 			a1FormList = new ArrayList<A1Form> ();
 			a1FormList.add(new A1Form());
@@ -778,7 +796,8 @@ public class Deal implements Serializable {
 			
 		}
 		else {
-			a1StatusMessage = Constants.A1_STATUS_MSG;
+		
+			jscript ="pendingA1";
 		}
 		
 	

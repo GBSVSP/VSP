@@ -42,7 +42,7 @@ public static final String SEARCH_MESSAGE = "search_message";
 //message constants
 public static final String LOGIN_INVALID = "login_invalid";
 public static final String LOGIN_ACCESS_DENIED = "login_access_denied";
-public static final String A1_STATUS_MSG = "Please Complete Current Active A1 Form";
+
 
 //user form constants
 public static final String USER_ALREADY_EXIST = "user_exist";

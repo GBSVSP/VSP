@@ -7,22 +7,26 @@
 	
 						<table border="0" width="60%" class="panelGrid">
 							<tr>
-								<td colspan="4" align="left"><b>A1 REF NO: <h:outputText name="a1RefNo" value=" ${deal.a1RefNo}" ></h:outputText></b>
+								<td colspan="4" align="left"><b>A1 REF NO: 
+								<h:outputText name="a1RefNo" value=" ${deal.a1RefNo}" rendered="#{not empty deal.activeA1RefNo}"/></b>
+								<h:outputText  value="No A1 Exists" rendered="#{empty deal.activeA1RefNo}"/>
+								<h:outputScript rendered="#{deal.jscript == 'pendingA1'}">alert(#{msgbundle.pending_A1_error});</h:outputScript>
 								
-								
-									<h:commandButton render="dataTableGroup" immediate="true"  rendered="${not deal.a1statusFlag}" disabled="" id="a1Button" value="CREATE A1"	class="btn-default" actionListener="#{deal.addA1Form}" onclick="return validate()">
+									<h:commandButton render="dataTableGroup" immediate="true"  rendered="${empty deal.activeA1RefNo}" disabled="#{deal.a1statusFlag }" id="a1Button" value="CREATE A1"	class="btn-default" actionListener="#{deal.addA1Form}" onclick="return validate()">
 								    
 								</h:commandButton>
-									<h:commandButton update="dataTableGroup"  rendered="${deal.a1statusFlag}" id="a1AddButton" value="+ NEW A1 FORM"	class="btn-default" actionListener="#{deal.addNewA1Form}" onclick="return validate()">
+									<h:commandButton update="dataTableGroup"  rendered="${not empty deal.activeA1RefNo}" 
+									id="a1AddButton" value="+ NEW A1 "	class="btn-default" actionListener="#{deal.addNewA1Form}" onclick="return validate()">
 								    
 								</h:commandButton>
-						   &nbsp;&nbsp;<h:outputText  style="color:red;font-size: 7pt;" id="error" value="${deal.a1StatusMessage}"></h:outputText>
+						  
 								</td>
 								</tr>
 								</table>
 								
 									<h:panelGroup id="dataTableGroup">
-								<h:dataTable  value="#{deal.a1FormList}" var="row" rows="1">
+									
+								<h:dataTable  value="#{deal.a1FormList}" var="row" rows="1" rendered="#{deal.a1statusFlag}">
 								<h:column>
 								<table width="60%" class="panelGrid">
 							<tr><td colspan="4" align="left"><b>A1 STATUS:#{row.a1_Status}</b>
@@ -69,8 +73,9 @@
 								<tr>
 								
 								<td align="right">
-								<h:outputText value="Active:" rendered="#{not empty deal.activeA1RefNo}"/><h:commandButton  value="#{deal.activeA1RefNo}" rendered="#{not empty deal.activeA1RefNo}" class="btn-default"  actionListener="#{deal.historyListener}"/>
-								<h:outputText value="Historical A1 Info:" rendered="#{not empty deal.activeA1RefNo}" /></td><td colspan="4">
+								<h:outputText value="Current:" rendered="#{not empty deal.a1History}"/>
+								<h:commandButton  value="#{deal.activeA1RefNo}" rendered="#{not empty deal.a1History}" class="btn-default"  actionListener="#{deal.historyListener}"/>
+								<h:outputText value="Historical A1 Info:" rendered="#{not empty deal.a1History}" /></td><td colspan="4">
 								<table>
 								 <tr>
 						    <ui:repeat value="#{deal.a1History}" var="row">
@@ -85,6 +90,7 @@
 						</table>
 						</h:column>
 					</h:dataTable>
+					
 					</h:panelGroup>
 				
 </h:body>
