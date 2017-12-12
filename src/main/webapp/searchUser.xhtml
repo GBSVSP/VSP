@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
+<h:head>
+
+	<link href="css/bootstrap.css" rel="stylesheet"></link>
+	<link href="css/bootstrap.min.css" rel="stylesheet"></link>
+	<link href="css/bootstrap-responsive.css" rel="stylesheet"></link>
+	<link href="css/site.css" rel="stylesheet"></link>
+	<link href="css/base-admin-3.css" rel="stylesheet"></link>
+	<link href="css/font-awesome.css" rel="stylesheet"></link>
+	<link href="css/font-awesome.min.css" rel="stylesheet"></link>
+	<link href="css/style.css" rel="stylesheet"></link>
+	
+	<script src="js/jquery-2.0.3.js"></script>
+	<script src="js/jquery.dataTables.min.js"></script>
+	<script src="js/bootstrap.js"></script>
+	<script src="js/vsp.js"></script>
+</h:head>
+<h:body>
+	<ui:include src="commonHeader.xhtml" />
+
+	<h:form prependId="false">
+	<br></br><br></br>	<br></br><br></br>
+<center>
+          <table style="align:center;top:900px;width:25%" border="0">
+ <tr><td align="center"  colspan="7"><b>USER SEARCH</b></td></tr>   
+     
+            <tr>
+           <td> Email : <h:inputText id="userEmail"/></td>
+            <td   align="center"  colspan="7">  
+           
+	<h:commandButton id="userSearch" value="Search" class="btn-default"></h:commandButton></td></tr> 
+			<tr><td><h:outputText id="firstName"/></td></tr>
+			<tr><td><h:outputText id="lastName"/></td></tr>
+            </table>  </center>
+            
+            
+
+<script>
+//<![CDATA[
+
+$("#userSearch").click(function () {
+	var email =	$("#userEmail").val();
+
+	var fName;
+	var lName;
+	var url = "https://w3.api.ibm.com/common/run/bluepages/userid/"+email+"/emailaddress&hrFirstName&hrLastName&uid?client_id=e9559df8-11f2-42aa-9d4d-ac334d7b98b9";
+	
+	$.getJSON(url, function (data, status) {
+		// alert(status);
+		  if (status == 'success') {
+			  $.each(data, function (key1, value1) {
+	                $.each(value1, function (key2, value2) {
+	                    $.each(value2, function (key3, value3) {
+	                        $.each(value3, function (key4, value4) {
+	                            if (key4 == 'attribute')
+	                            {
+	                                $.each(value4, function (key5, value5) {
+	                                   // alert(value5.name + "-" + value5.value);
+	                                    if(value5.name == 'hrFirstName'){
+	                                    	fName = value5.value;
+	                                    	//$("#usrName").val(fName);
+	                                    	$("#firstName").text("First Name:"+fName);
+	                                    }
+	                                    if(value5.name == 'hrLastName'){
+	                                    	lName = value5.value;
+	                                    	//$("#usrName").val(fName);
+	                                    	$("#lastName").text("Last Name:"+lName);
+	                                    }
+	                                });
+	                            }
+	                        });
+	                   });
+	                });
+	            });
+
+		    }
+		 
+		});
+	return false;
+});
+//]]>
+</script>
+</h:form>
+       	<ui:include src="commonFooter.xhtml" />
+</h:body>
+
+</html>

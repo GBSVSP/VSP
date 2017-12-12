@@ -37,7 +37,17 @@ public class Login implements Serializable {
 	private String password;
 	private String userName;
 	private int roleId;
+	private String fName;
 	
+	
+	public String getfName() {
+		return fName;
+	}
+
+	public void setfName(String fName) {
+		this.fName = fName;
+	}
+
 	public String getPassword() {
 		return password;
 	}
@@ -65,7 +75,7 @@ public class Login implements Serializable {
 				//ReturnCode rc = group.authenticate(userName, password);
 				//int code = rc.getCode();
 				int code = 0;
-				BluePages.getUserDetail(userName);
+				//BluePages.getUserDetail(userName);
 				if ( code != 0) {
 
 					FacesContext.getCurrentInstance().addMessage("Login:validationMsg", 

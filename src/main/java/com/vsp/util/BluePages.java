@@ -3,12 +3,13 @@ package com.vsp.util;
 import java.io.IOException;
 import java.util.ResourceBundle;
 
+import org.primefaces.json.JSONArray;
+import org.primefaces.json.JSONException;
+import org.primefaces.json.JSONObject;
+
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
-
-
-import org.json.*;
 
 public class BluePages {
 	public final static ResourceBundle bundle = ResourceBundle.getBundle("com.vsp.util.vspMessages");
@@ -49,6 +50,7 @@ public class BluePages {
 	          .build();
 	        Response response = client.newCall(request).execute();
 	        String output = response.body().string();
+	        System.out.println("json:"+output);
 	        JSONObject jsonObj = new JSONObject(output);
 
 	        JSONArray jsonEntry = (JSONArray) ((JSONObject) jsonObj.get("search")).get("entry");

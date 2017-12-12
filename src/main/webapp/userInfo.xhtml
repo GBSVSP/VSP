@@ -42,16 +42,15 @@
 					<td style="color: black; padding-left: 10px"><h4>USER ADMIN</h4></td>
 				</tr>
 			</table>
-				<p:scrollPanel mode="native"
-					style="width:1100px;height:320px;overflow:auto">
+				<p:scrollPanel mode="native" style="width:1100px;height:320px;overflow:auto" id="divTable">
 					
 					<h:dataTable id="userResult" var="userData"
 						value="#{user.allUserList}" styleClass="table table-striped">
 						<h:column>
 							<f:facet name="header"></f:facet>
 
-							<h:selectBooleanCheckbox id="checkboxClickedFlag"
-								label="checkboxInd" value="#{userData.checkboxClickedFlag}" disabled="#{user.checkboxAllFlag}">
+							<h:selectBooleanCheckbox id="checkboxClickedFlag" value="#{userData.checkboxClickedFlag}" disabled="#{user.checkboxAllFlag}"
+							styleClass="checkboxEventClass">
 							</h:selectBooleanCheckbox>
 
 						</h:column>
@@ -143,21 +142,18 @@
 					</h:commandButton>
 
 					<h:commandButton id="cancelButton" value="Cancel"
-						class="btn-default" style="float:left" action="#{user.cancelSave}"
-						onclick="return showCancelDialogMsg()">
+						class="btn-default" style="float:left" action="#{user.cancelSave}">
 					</h:commandButton>
 
 				</h:panelGroup>
 				<h:panelGroup>
 					<h:commandButton id="updateButton" value="Update User"
-						class="btn-default" style="float:right"
-						rendered="#{not user.toggleButton}" action="#{user.updateUser}"
-						onclick="return checkSelectedCheckBox('update')"></h:commandButton>
+						class="btn-default" style="float:right" action="#{user.updateUser}">
+					</h:commandButton>
 
 					<h:commandButton id="deleteButton" value="Delete User"
-						class="btn-default" style="float:right"
-						rendered="#{not user.toggleButton}" action="#{user.deleteUser}"
-						onclick="return checkSelectedCheckBox('delete')"></h:commandButton>
+						class="btn-default" style="float:right" action="#{user.deleteUser}">
+					</h:commandButton>
 				</h:panelGroup>
 			</h:panelGrid>
 			<h:panelGrid>
@@ -175,7 +171,8 @@
 	<ui:include src="commonFooter.xhtml" />
 	 <script>
     //<![CDATA[	
-    	$("#newUserButton").click(function(){
+    
+    $("#newUserButton").click(function(){
 	
 	var buttonclicked = $("#newUserButton").val();
 	//alert("Button clicked: " + buttonclicked);
@@ -266,21 +263,176 @@
 
 	//alert("status: " +status);
 	return status;
-});
+    });
 
-function isValidEmailAddress(emailAddress) {
-	var pattern = new RegExp(
-			"^[A-Za-z0-9]+(\.[_A-Za-z0-9-]+)*@([A-Za-z0-9]+\.(IBM|ibm)\.(COM|com)|(IBM|ibm)\.(COM|com))$");
-	return pattern.test(emailAddress);
-}
-
-function isValidUserName(userName) {
-	var pattern = new RegExp("[a-zA-Z]+\\s+[a-zA-Z]+$");
-	return pattern.test(userName);
-}
-
-
+		function isValidEmailAddress(emailAddress) {
+			var pattern = new RegExp(
+					"^[A-Za-z0-9]+(\.[_A-Za-z0-9-]+)*@([A-Za-z0-9]+\.(IBM|ibm)\.(COM|com)|(IBM|ibm)\.(COM|com))$");
+			return pattern.test(emailAddress);
+		}
+		
+		function isValidUserName(userName) {
+			var pattern = new RegExp("[a-zA-Z]+\\s+[a-zA-Z]+$");
+			return pattern.test(userName);
+		}
+		
+		$("#updateButton").click(function(){
+			
+			var buttonclicked = $("#updateButton").val();
+			//alert("Button clicked: " + buttonclicked);
+			var status = false;
+			var count = 0;
+			
+			var selected =0;
+				
+				var table = $("#userResult tbody");
+				
+				// Check if any checkbox is selected
+				table.find('tr').each(function(index) {
+					 var $tds = $(this).find('td');
+					 var serialNo = $tds.eq(1).find("input:hidden").val();
+		
+					 var checkbox_sel_val = $tds.eq(0);
+					 var checkbox = checkbox_sel_val.find("input:checked").val();
+					 //alert("checkbox :"+checkbox);
+					 if (checkbox == 'on') {
+						    selected++;
+						    
+							//alert("serialNo is 0");
+							var imt_sel_val = $tds.eq(4);
+							var imt_Id = imt_sel_val.find("option:selected").val();
+							var role_sel_val = $tds.eq(6);
+							var role_Id = role_sel_val.find("option:selected").val();
+		
+							//alert("Row: "+ index+ "\n checkbox: "+ checkbox+ "\n serialNo :"+ serialNo
+							//	+ "\n role_Id: "+ role_Id
+							 //   + "\n imt_Id: "+ imt_Id);
+		
+							var error_imt_Id = $tds.eq(4).find("span").first();
+							error_imt_Id.html("");
+							if (imt_Id == ''|| imt_Id == 'Please Choose') {
+								error_imt_Id.html("Please select IMT");
+								count++;
+							}
+		
+							var error_role_Id = $tds.eq(6).find("span").first();
+							error_role_Id.html("");
+							if (role_Id == ''|| role_Id == 'Please Choose') {
+								error_role_Id.html("Please select Role");
+								count++;
+							}
+		
+					 } else{
+						 
+							var error_imt_Id = $tds.eq(4).find("span").first();
+							error_imt_Id.html("");
+						
+							var error_role_Id = $tds.eq(6).find("span").first();
+							error_role_Id.html(""); 
+						 
+					 }
+					  
+				  });
+				
+			if (selected == 0) {
+				alert("Please select user(s) to update");
+				status = false;
+			} else {
+				
+				if(selected > 0){
+			    //Check if validation on IMT and Role
+			    if(count > 0){
+			    	status = false;	
+			    }else{
+			    	
+			    	status = confirm("Are you sure you want to update the selected record(s)?");
+			    }
+				
+			  }
+			}
+		
+		    //alert("status: " +status);
+			return status;
+		});
+		
+		
+		$("#deleteButton").click(function(){
+			var buttonclicked = $("#deleteButton").val();
+			//alert("Button clicked: " + buttonclicked);
+			var status = false;
+			var count = 0;
+			var selected = 0;
+			
+			var table = $("#userResult tbody");
+			
+			//Check if any checkbox is selected
+			table.find('tr').each(function(index) {
+				 var $tds = $(this).find('td');
+				 var serialNo = $tds.eq(1).find("input:hidden").val();
+		
+				 var checkbox_sel_val = $tds.eq(0);
+				 var checkbox = checkbox_sel_val.find("input:checked").val();
+				 
+				 if (checkbox == 'on') {
+					    selected++;		   
+				 }
+				  
+			  });
+			
+		
+		if (selected == 0) {
+			alert("Please select user(s) to delete");
+			status = false;
+		} else {
+		    	status = confirm("Are you sure you want to delete the selected record(s)?");
+		}
+		
+		//alert("status: " +status);
+		return status;
+			
+		});
+		
+		
+		$(document).on('change','.checkboxEventClass',function(){ 
+			//alert("In checkbox to page load");
+			var count =0;
+			
+			$(".checkboxEventClass").each(function(){
+				 if (this.checked) {
+		              count++;
+		         }
+			})
+			//alert("Selected count: " +count);	
+			
+			if(count > 0){
+				$("#updateButton").show();
+				$("#deleteButton").show();
+			}else{
+				$("#updateButton").hide();
+				$("#deleteButton").hide();
+				$("#divTable").load("userInfo.xhtml #userResult");
+			}
+			
+		});
+		
+		
+		
+		$("#cancelButton").click(function(){
+			
+			var buttonclicked = $("#cancelButton").val();
+			//alert("Button clicked: " + buttonclicked);
+			
+			return confirm("Any unsaved data will be lost. Are you sure?");;
+		});
    	
+		//Shorthand for $( document ).ready()
+		$(function() {
+			//hide update and delete button on page load
+			//alert("ready!");
+			$("#updateButton").hide();
+			$("#deleteButton").hide();
+			  
+		});
 	//]]>
 	</script>
 </h:body>

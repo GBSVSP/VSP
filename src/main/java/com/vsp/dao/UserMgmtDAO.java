@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import com.vsp.model.UserInfo;
@@ -76,66 +75,6 @@ public class UserMgmtDAO {
 		return userInfoList;
 	}
 
-	/**
-	 * Method to populate userRoleList from Database
-	 * 
-	 * @param sql
-	 * @return HashMap<Integer, String>
-	 * @throws Exception
-	 */
-
-	public static HashMap<Integer, String> getRoleList(String sql) throws Exception {
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		HashMap<Integer, String> userRoleByMap = new HashMap<Integer, String>();
-
-		try {
-
-			ps = con.prepareStatement(sql);
-
-			rs = ps.executeQuery();
-
-			while (rs.next()) {
-				userRoleByMap.put(rs.getInt(1), rs.getString(2));
-			}
-
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-
-		}finally {
-			ps.close();
-			rs.close();
-		}
-
-		return userRoleByMap;
-
-	}
-
-	public static HashMap<Integer, String> getOptionList(String sql) throws Exception {
-
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		HashMap<Integer, String> optionMap = new HashMap<Integer, String>();
-
-		try {
-
-			ps = con.prepareStatement(sql);
-
-			rs = ps.executeQuery();
-
-			while (rs.next()) {
-				optionMap.put(rs.getInt(1), rs.getString(2));
-			}
-
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-
-		}finally{
-			ps.close();
-			rs.close();
-		}
-		return optionMap;
-	}
 
 	/**
 	 * Method to insert a new user into Database

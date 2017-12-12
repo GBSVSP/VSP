@@ -101,5 +101,9 @@
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/jsf-api-2.2.0.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/jsf-impl-2.2.0.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/jstl-1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Anju/softwares/apache-tomcat-7.0.67-windows-x64/apache-tomcat-7.0.67/lib/catalina.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/okhttp-2.7.5.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/okio-1.6.0.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/org.json.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -82,10 +82,34 @@ public static String INSERT_USER_INFO ="Insert into USERS (USER_NAME, EMAIL, ROL
 //User Info update
 public static String UPDATE_USER_INFO = "Update USERS set ROLE_ID =?, ACTIVE =?, MODIFIED_BY =?, IMT_ID=? where";
 
-//check existing deal
+//check existing user
 public static String COUNT_USER ="Select count(USER_ID) from USERS where";
 
 //User Info delete
 public static String DELETE_USER_INFO = "Update USERS set IS_DELETE= ? , MODIFIED_BY =? where ";
+
+/** Participant Master Form Queries **/
+
+//Participant Role 
+public static String SELECT_PARTICIPANT_SENTIMENT ="Select VALUE_ID, TAGGED_TO from VSP_OPTION_MASTER where "; 
+
+//Participant Info
+public static String SELECT_PARTICIPANT_INFO ="Select PARTICIPANT_ID, USER_NAME, EMAIL, STORM_TRAINED, IMT_ID, A2_INVITED, "
+		+ "A2_ATTENDED, A3_INVITED, A3_ATTENDED, SENTIMENT_ID from PARTICIPANTS where";
+
+//Participant Info insert
+public static String INSERT_PARTICIPANT_INFO ="Insert into PARTICIPANTS (USER_NAME, EMAIL, STORM_TRAINED, IMT_ID, "
+		+ "A2_INVITED, A2_ATTENDED, A3_INVITED, A3_ATTENDED, SENTIMENT_ID, ACTIVE, CREATED_BY, IS_DELETE) "
+		+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+//Participant Info update
+public static String UPDATE_PARTICIPANT_INFO = "Update PARTICIPANTS set IMT_ID =?, SENTIMENT_ID =?, STORM_TRAINED =?, "
+		+ "MODIFIED_BY =? where";
+
+//check existing participant
+public static String COUNT_PARTICIPANT ="Select count(PARTICIPANT_ID) from PARTICIPANTS where";
+
+//Participant Info delete
+public static String DELETE_PARTICIPANT_INFO = "Update PARTICIPANTS set IS_DELETE= ? , MODIFIED_BY =? where ";
 
 }

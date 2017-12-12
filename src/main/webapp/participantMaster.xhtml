@@ -1,31 +1,471 @@
-<?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets">
-<h:head>
-	<link href="css/bootstrap.css" rel="stylesheet"></link>
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 
+<h:head>
+
+	<link href="css/bootstrap.css" rel="stylesheet"></link>
 	<link href="css/bootstrap.min.css" rel="stylesheet"></link>
 	<link href="css/bootstrap-responsive.css" rel="stylesheet"></link>
 	<link href="css/site.css" rel="stylesheet"></link>
 	<link href="css/base-admin-3.css" rel="stylesheet"></link>
 	<link href="css/font-awesome.css" rel="stylesheet"></link>
 	<link href="css/font-awesome.min.css" rel="stylesheet"></link>
-
+	<link href="css/style.css" rel="stylesheet"></link>
+	
+	<script src="js/jquery-2.0.3.js"></script>
+	<script src="js/jquery-ui.js"></script>
+	<script src="js/bootstrap.js"></script>
 </h:head>
+
 <h:body>
+	<ui:include src="commonHeader.xhtml" />
 
-	<div align="center">
+	<h:form prependId="false">
+		<br></br>
+		<br></br>
+        
+		<div align="center">
+			<h:panelGrid columns="1">
+				<h:messages for="validationMsg" id="validationMsg" style="color:red"></h:messages>
 
-		<h:form id="ParticipantMaster">
-			<h2>Participant Master</h2>
+			</h:panelGrid>
+			
+			<table border="0" width="85%">
+				<tr bgcolor="grey">
+					<td style="color: black; padding-left: 10px"><h4>PARTICIPANT MASTER</h4></td>
+					
+					<td align="right" style="padding-right: 10px; padding-top: 10px;">
+					<h:inputText id="searchFilter" size= "20" value="#{participant.searchFilter}" a:placeholder="Filter by Name, Email">
+					</h:inputText>
+					</td>				
+				</tr>
+			</table>
 
-		</h:form>
+			<h:panelGrid width="80%">
+			
+				<p:scrollPanel mode="native" style="width:1180px;height:320px;overflow:auto" id="divTable">
+					
+					<h:dataTable id="participantResult" var="participantData"
+						value="#{participant.allParticipantList}" styleClass="table table-striped">
+						<h:column>
+							<f:facet name="header"></f:facet>
+
+							<h:selectBooleanCheckbox id="checkboxClickedFlag" value="#{participantData.checkboxClickedFlag}" 
+							disabled="#{participant.checkboxAllFlag}" styleClass="checkboxEventClass">
+							</h:selectBooleanCheckbox>
+
+						</h:column>
+
+						<h:column>
+							<h:inputHidden id="serialNo" value="#{participantData.serialNo}"></h:inputHidden>
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">User</f:facet>
+
+							<h:outputText value="#{participantData.user_Name}" rendered="#{participantData.serialNo != '0'}"></h:outputText>
+							
+						    <h:outputText style="color:red;font-size:8pt;" id="error_username"></h:outputText>
+						    <br></br>
+							<h:inputText id="username" value="#{participantData.user_Name}" style="width:120px"
+								rendered="#{participant.toggleButton and participantData.checkboxClickedFlag}" a:autofocus="true" 
+								a:placeholder="firstname lastname">
+							</h:inputText>
+							<h:outputText value="*" style="color:red; font-size: 10pt; width:2px" rendered="#{participantData.serialNo == '0'}">
+							</h:outputText>
+					
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">Email </f:facet>
+							
+							<h:outputText value="#{participantData.email}" rendered="#{participantData.serialNo != '0'}"></h:outputText>
+							
+						    <h:outputText style="color:red;font-size: 8pt;" id="error_email"></h:outputText>
+						     <br></br>
+							<h:inputText id="email" value="#{participantData.email}" style="width:140px"
+								rendered="#{participant.toggleButton and participantData.checkboxClickedFlag}">
+							</h:inputText>
+							<h:outputText value="*" style="color:red; font-size:10pt; width:2px" rendered="#{participantData.serialNo == '0'}">
+							</h:outputText> 
+							 
+						</h:column>
+						<h:column>
+							<f:facet name="header">IMT</f:facet>
+							
+							<h:outputText style="color:red;font-size: 8pt;" id="error_imt_Id"></h:outputText>
+							 <br></br>
+							<h:selectOneMenu id="imt_Id" value="#{participantData.imt_Id}" style="width:140px">
+								<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true" />
+								<f:selectItems value="#{participant.imtList}" />
+							</h:selectOneMenu>
+							<h:outputText value="*" style="color:red; font-size:8pt; width:2px" rendered="#{participantData.serialNo == '0'}">
+							</h:outputText>
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">Trained:<br></br>Revenue Storm</f:facet>
+							<h:selectBooleanCheckbox id="storm_Trained" value="#{participantData.storm_Trained}" style="width:50px">
+							</h:selectBooleanCheckbox>
+						</h:column>
+
+                       <h:column>
+							<f:facet name="header">A2<br></br>Invited</f:facet>
+							<h:commandLink id="a2_invited" value="#{participantData.a2_invited}" style="text-decoration:underline; font-size:14px"
+							rendered="#{participantData.a2_invited != '0'}">
+							</h:commandLink>
+						</h:column>
+						
+						<h:column>
+							<f:facet name="header">A2<br></br>Attended</f:facet>
+							<h:commandLink id="a2_attended" value="#{participantData.a2_attended}" style="text-decoration:underline; font-size:14px"
+							rendered="#{participantData.a2_attended != '0'}">
+							</h:commandLink>
+							
+						</h:column>
+						
+						<h:column>
+							<f:facet name="header">A3<br></br>Invited</f:facet>
+							<h:commandLink id="a3_invited" value="#{participantData.a3_invited}" style="text-decoration:underline; font-size:14px"
+							rendered="#{participantData.a3_invited != '0'}">
+							</h:commandLink>
+						</h:column>
+						
+						<h:column>
+							<f:facet name="header">A3<br></br>Attended</f:facet>
+							<h:commandLink id="a3_attended" value="#{participantData.a3_attended}" style="text-decoration:underline; font-size:14px"
+							rendered="#{participantData.a3_attended != '0'}">
+							</h:commandLink>
+						</h:column>
+
+						<h:column>
+							<f:facet name="header">Sentiment?</f:facet>
+							
+							<h:outputText style="color:red;font-size: 8pt;" id="error_sentiment_Id"></h:outputText>
+							 <br></br>
+							<h:selectOneMenu id="sent_Id" value="#{participantData.sentiment}" style="width:140px">
+								<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true" />
+								<f:selectItems value="#{participant.sentimentList}" />
+							</h:selectOneMenu>
+							<h:outputText value="*" style="color:red; font-size:10pt; width:2px" rendered="#{participantData.serialNo == '0'}">
+							</h:outputText>
+						</h:column>
+
+					</h:dataTable>
+					
+				</p:scrollPanel>
+				<h:panelGrid width="100%" style="text-align:right;">
+			      <h:outputText value="*All fields are mandatory" style="color:red;font-size:9pt;" rendered="#{participant.toggleButton}">
+				  </h:outputText>
+				<hr></hr>
+			</h:panelGrid>
+			
+			</h:panelGrid>			
+			
+			<h:inputHidden id="totalCheckedSize" value="#{participant.totalSize}"></h:inputHidden>
+			
+			<h:panelGrid columns="2" width="85%">
+				<h:panelGroup>
+					<h:commandButton id="newParticipantButton" value="#{participant.toggleBtnChgValue}" class="btn-default" 
+					style="float:left" action="#{participant.addNewRow}" actionListener="#{participant.toggleBtnAction}">
+					</h:commandButton>
+
+					<h:commandButton id="cancelButton" value="Cancel"
+						class="btn-default" style="float:left" action="#{participant.cancelSave}">
+					</h:commandButton>
+
+				</h:panelGroup>
+				<h:panelGroup>
+					<h:commandButton id="updateButton" value="Update User"
+						class="btn-default" style="float:right" action="#{participant.updateParticipant}">
+					</h:commandButton>
+
+					<h:commandButton id="deleteButton" value="Delete User"
+						class="btn-default" style="float:right" action="#{participant.deleteParticipant}">
+					</h:commandButton>
+				</h:panelGroup>
+			</h:panelGrid>
+			
+			<h:panelGrid>
+			<h:outputScript rendered="#{participant.jscript == 'deleteInfo'}">alert("#{participant.msgAppend} #{msgbundle.participant_delete_success}");</h:outputScript>
+			<h:outputScript rendered="#{participant.jscript == 'updateInfo'}">alert("#{participant.msgAppend} #{msgbundle.participant_update_success}");</h:outputScript>
+			<h:outputScript rendered="#{participant.jscript == 'addNewInfo'}">alert("#{participant.msgAppend} #{msgbundle.participant_create_success}");</h:outputScript>
+			<h:outputScript rendered="#{participant.jscript == 'addExistInfo'}">alert("#{participant.msgAppend} #{msgbundle.participant_exist}");</h:outputScript>
+			<h:outputScript rendered="#{participant.jscript == 'error'}">alert("#{msgbundle.database_error}");</h:outputScript>
+			</h:panelGrid>
+		</div>
 
 
-	</div>
+	</h:form>
 
+	<ui:include src="commonFooter.xhtml" />
+	
+	 <script>
+    //<![CDATA[	
+    
+    	 $("#newParticipantButton").click(function(){
+    	
+		var buttonclicked = $("#newParticipantButton").val();
+		//alert("Button clicked: " + buttonclicked);
+		var status = false;
+		var count = 0;
+
+		if (buttonclicked == 'Save Participant') {
+			//alert("In loop Save User");
+			var table = $("#participantResult tbody");
+
+			table.find('tr').each(function(index) {
+							var $tds = $(this).find('td');
+							//Check if serialNo is 0 then it is a new row
+							var serialNo = $tds.eq(1).find("input:hidden").val();
+
+							if (serialNo == 0) {
+								//alert("serialNo is 0");
+
+								var checkbox_sel_val = $tds.eq(0);
+								var checkbox = checkbox_sel_val.find("input:checked").val();
+								var username = $tds.eq(2).find("input:text").val();
+								var email = $tds.eq(3).find("input:text").val();
+								var imt_sel_val = $tds.eq(4);
+								var imt_Id = imt_sel_val.find("option:selected").val();
+								
+								var sentiment_sel_val = $tds.eq(10);
+								var sentiment_Id = sentiment_sel_val.find("option:selected").val();
+
+								//alert("Row: "+ index+ "\n checkbox: "+ checkbox+ "\n serialNo :"+ serialNo
+								//	+ "\n username: "+ username+ "\n email: "+ email+ "\n sentiment_Id: "+ sentiment_Id
+								 //   + "\n imt_Id: "+ imt_Id);
+
+								var error_username = $tds.eq(2).find("span").first();
+								error_username.html("");
+								if (username == ''|| username == 'undefined') {
+									error_username.html("Username cannot be blank");
+								
+									count++;
+								} else {
+									if (!isValidUserName(username)) {
+										error_username.html("Invalid username format");
+										count++;
+									}
+								}
+
+								var error_email = $tds.eq(3).find("span").first();
+								error_email.html("");
+								if (email == ''|| email == 'undefined') {
+									error_email.html("Email cannot be blank");
+									count++;
+								} else {
+									if (!isValidEmailAddress(email)) {
+										error_email.html("Invalid email format");
+										count++;
+									}
+								}
+
+								var error_imt_Id = $tds.eq(4).find("span").first();
+								error_imt_Id.html("");
+								if (imt_Id == ''|| imt_Id == 'Please Choose') {
+									error_imt_Id.html("Please select IMT");
+									count++;
+								}
+
+								var error_sentiment_Id = $tds.eq(10).find("span").first();
+								error_sentiment_Id.html("");
+								if (sentiment_Id == ''|| sentiment_Id == 'Please Choose') {
+									error_sentiment_Id.html("Please select Sentiment");
+									count++;
+								}
+
+							}
+
+						});
+
+			}
+	
+			if (count > 0) {
+				status = false;
+			} else {
+				status = true;
+			}
+	
+			//alert("status: " +status);
+			return status;
+        });
+
+   
+		function isValidEmailAddress(emailAddress) {
+			var pattern = new RegExp(
+					"^[A-Za-z0-9]+(\.[_A-Za-z0-9-]+)*@([A-Za-z0-9]+\.(IBM|ibm)\.(COM|com)|(IBM|ibm)\.(COM|com))$");
+			return pattern.test(emailAddress);
+		}
+		
+		function isValidUserName(userName) {
+			var pattern = new RegExp("[a-zA-Z]+\\s+[a-zA-Z]+$");
+			return pattern.test(userName);
+		}
+		
+		$("#updateButton").click(function(){
+			
+			var buttonclicked = $("#updateButton").val();
+			//alert("Button clicked: " + buttonclicked);
+			var status = false;
+			var count = 0;
+			
+			var selected =0;
+				
+				var table = $("#participantResult tbody");
+				
+				// Check if any checkbox is selected
+				table.find('tr').each(function(index) {
+					 var $tds = $(this).find('td');
+					 var serialNo = $tds.eq(1).find("input:hidden").val();
+		
+					 var checkbox_sel_val = $tds.eq(0);
+					 var checkbox = checkbox_sel_val.find("input:checked").val();
+					 //alert("checkbox :"+checkbox);
+					 if (checkbox == 'on') {
+						    selected++;
+
+							var imt_sel_val = $tds.eq(4);
+							var imt_Id = imt_sel_val.find("option:selected").val();
+							
+							var sentiment_sel_val = $tds.eq(10);
+							var sentiment_Id = sentiment_sel_val.find("option:selected").val();
+		
+							//alert("Row: "+ index+ "\n checkbox: "+ checkbox+ "\n serialNo :"+ serialNo
+							//+ "\n sentiment_Id: "+ sentiment_Id
+							 //+ "\n imt_Id: "+ imt_Id);
+		
+							var error_imt_Id = $tds.eq(4).find("span").first();
+							error_imt_Id.html("");
+							if (imt_Id == ''|| imt_Id == 'Please Choose') {
+								error_imt_Id.html("Please select IMT");
+								count++;
+							}
+		
+							var error_sentiment_Id = $tds.eq(10).find("span").first();
+							error_sentiment_Id.html("");
+							if (sentiment_Id == ''|| sentiment_Id == 'Please Choose') {
+								error_sentiment_Id.html("Please select Sentiment");
+								count++;
+							}
+		
+					 } else{
+						 
+							var error_imt_Id = $tds.eq(4).find("span").first();
+							error_imt_Id.html("");
+						
+							var error_sentiment_Id = $tds.eq(10).find("span").first();
+							error_sentiment_Id.html(""); 
+						 
+					 }
+					  
+				  });
+				
+			if (selected == 0) {
+				alert("Please select participant(s) to update");
+				status = false;
+			} else {
+				
+				if(selected > 0){
+			    //Check if validation on IMT and 
+			    if(count > 0){
+			    	status = false;	
+			    }else{
+			    	
+			    	status = confirm("Are you sure you want to update the selected record(s)?");
+			    }
+				
+			  }
+			}
+		
+		    //alert("status: " +status);
+			return status;
+		});
+		
+		
+		$("#deleteButton").click(function(){
+			var buttonclicked = $("#deleteButton").val();
+			//alert("Button clicked: " + buttonclicked);
+			var status = false;
+			var count = 0;
+			var selected = 0;
+			
+			var table = $("#participantResult tbody");
+			
+			//Check if any checkbox is selected
+			table.find('tr').each(function(index) {
+				 var $tds = $(this).find('td');
+				 var serialNo = $tds.eq(1).find("input:hidden").val();
+		
+				 var checkbox_sel_val = $tds.eq(0);
+				 var checkbox = checkbox_sel_val.find("input:checked").val();
+				 
+				 if (checkbox == 'on') {
+					    selected++;		   
+				 }
+				  
+			  });
+			
+		
+		if (selected == 0) {
+			alert("Please select participant(s) to delete");
+			status = false;
+		} else {
+		    status = confirm("Are you sure you want to delete the selected record(s)?");
+		}
+		
+		//alert("status: " +status);
+		return status;
+			
+		});
+		
+		
+		$(document).on('change','.checkboxEventClass',function(){ 
+			//alert("In checkbox to page load");
+			var count =0;
+			
+			$(".checkboxEventClass").each(function(){
+				 if (this.checked) {
+		              count++;
+		         }
+			})
+			//alert("Selected count: " +count);	
+			
+			if(count > 0){
+				$("#updateButton").show();
+				$("#deleteButton").show();
+			}else{
+				$("#updateButton").hide();
+				$("#deleteButton").hide();
+				$("#divTable").load("participantMaster.xhtml #participantResult");
+			}
+			
+		});
+		
+		
+		
+		$("#cancelButton").click(function(){
+			
+			var buttonclicked = $("#cancelButton").val();
+			//alert("Button clicked: " + buttonclicked);
+			
+			return confirm("Any unsaved data will be lost. Are you sure?");;
+		});
+   	
+		//Shorthand for $( document ).ready()
+		$(function() {
+			//hide update and delete button on page load
+			$("#updateButton").hide();
+			$("#deleteButton").hide();
+			  
+		});
+	//]]>
+	</script>
 </h:body>
+
 </html>

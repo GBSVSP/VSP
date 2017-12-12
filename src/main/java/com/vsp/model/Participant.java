@@ -2,9 +2,7 @@ package com.vsp.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.faces.bean.ManagedBean;
@@ -13,50 +11,49 @@ import javax.faces.component.UIComponent;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
-import com.vsp.dao.UserMgmtDAO;
+
+import com.vsp.dao.ParticipantDAO;
 import com.vsp.util.CommonUtils;
 import com.vsp.util.Constants;
 import com.vsp.util.QueryBuilder;
 
 /**
  * <p>
- * This the bean class for user management
+ * This the bean class for participant master.
  *
  * </p>
  * 
  * @author Amrita Sahu (amrita.sahu@in.ibm.com)
  * @version 1.0
- * @Date 29/Nov/2017
+ * @Date 12/Dec/2017
  */
-@ManagedBean(name = "user")
-//@SessionScoped
+@ManagedBean(name = "participant")
 @ViewScoped
-public class User implements Serializable {
+public class Participant implements Serializable {
 
 	private static final long serialVersionUID = 5199551491746665622L;
 
 	// Specify the property file name for resource bundle
 	public final static ResourceBundle bundle = ResourceBundle.getBundle("com.vsp.util.vspMessages");
-	private Map<String, Object> sessionMap;
 	
-	private static ArrayList<UserInfo> userInfoList;
+	private static ArrayList<ParticipantInfo> partInfoList;
 
 	private int totalSize = 0;
 	private boolean toggleButton = false;
 	private boolean checkboxAllFlag =false;
-	private UserInfo userInfo;
+	private ParticipantInfo partInfo;
 	private String whereClause = null;
 	private String orderBy = null;
 	private static String sql = null;
-	private static HashMap<Integer, String> optionMap;
-	public String toggleBtnChgValue = Constants.NEW_USER_BUTTON;
+	public String toggleBtnChgValue = Constants.NEW_PARTICIPANT_BUTTON;
 	private String jscript = "";
 	private String msgAppend = null;
+	private String searchFilter;
     
-	// Populating Role drop down
-	public ArrayList<SelectItem> getRoleList() {
-		ArrayList<SelectItem> roleList = CommonUtils.getRoleList();
-		return roleList;
+	// Populating Sentiment drop down
+	public ArrayList<SelectItem> getSentimentList() {
+		ArrayList<SelectItem> sentimentList = CommonUtils.getSentimentList();
+		return sentimentList;
 	}
 
 	// Populating IMT drop down
@@ -67,7 +64,7 @@ public class User implements Serializable {
 
 	
 	/**
-	 * Method to add a new row
+	 * Method to add a new participant row
 	 * 
 	 * @param value
 	 * @return void
@@ -75,223 +72,224 @@ public class User implements Serializable {
 	 */
 	public void addNewRow() throws Exception {
 
-		System.out.println("In User: Entering addNewRow()...");
+		System.out.println("In Participant: Entering addNewRow()...");
 		
-		if(getToggleBtnChgValue().equals(Constants.SAVE_USER_BUTTON)) {
-			for(UserInfo userInfo: userInfoList) {
-				userInfo.setCheckboxClickedFlag(false);
+		if(getToggleBtnChgValue().equals(Constants.SAVE_PARTICIPANT_BUTTON)) {
+			for(ParticipantInfo partInfo: partInfoList) {
+				partInfo.setCheckboxClickedFlag(false);
 			}
-			userInfo = new UserInfo();
-			userInfo.setCheckboxClickedFlag(true);
-			userInfo.setActive(true);
-			userInfoList.add(userInfo);
-			System.out.println("size of userInfoList in addNewRow: " + userInfoList.size());
+			partInfo = new ParticipantInfo();
+			partInfo.setCheckboxClickedFlag(true);
+			partInfoList.add(partInfo);
+			
+			System.out.println("size of partInfoList in addNewRow: " + partInfoList.size());
 
 			setToggleButton(true);
 			
-		}else if(getToggleBtnChgValue().equals(Constants.NEW_USER_BUTTON)){
+		}else if(getToggleBtnChgValue().equals(Constants.NEW_PARTICIPANT_BUTTON)){
 			//save clicked
-			insertUser();
+			insertParticipant();
 			setToggleButton(false);
 		}
 
-		System.out.println("In User: Exiting addNewRow()...");
+		System.out.println("In Participant: Exiting addNewRow()...");
 	}
 
 	/**
-	 * Method to retrieve entire user list from db2 table
+	 * Method to retrieve entire participant list from db2 table
 	 * 
-	 * @return ArrayList<UserInfo>
+	 * @return ArrayList<ParticipantInfo>
 	 * @throws Exception
 	 */
 
-	public ArrayList<UserInfo> getAllUserList() throws Exception {
-		System.out.println("In User: Entering getAllUserList()...");
+	public ArrayList<ParticipantInfo> getAllParticipantList() throws Exception {
+		System.out.println("In Participant: Entering getAllParticipantList()...");
 		try {
 			System.out.println("toggleButton :" + toggleButton);
 
-			if(!getToggleBtnChgValue().equals(Constants.SAVE_USER_BUTTON)){
+			//if (isToggleButton() == false) {
+			if(!getToggleBtnChgValue().equals(Constants.SAVE_PARTICIPANT_BUTTON)){
 				orderBy = "order by "+ Constants.USER_NAME;
 				whereClause = Constants.DELETE_CONDITION;
-				sql = QueryBuilder.SELECT_USER_INFO + " " + whereClause +" "+orderBy;
+				sql = QueryBuilder.SELECT_PARTICIPANT_INFO + " " + whereClause +" "+orderBy;
 
-				userInfoList = UserMgmtDAO.getAllUserList(sql);
-				totalSize = userInfoList.size();
+				partInfoList = ParticipantDAO.getAllParticipantList(sql);
+				totalSize = partInfoList.size();
 				setToggleButton(false);
-				System.out.println("Size of userInfoList : " + userInfoList.size());
+				System.out.println("Size of partInfoList : " + partInfoList.size());
 			}
 
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
 		}
-		System.out.println("In User: Exiting getAllUserList()...");
-		return userInfoList;
+		System.out.println("In Participant: Exiting getAllParticipantList()...");
+		return partInfoList;
 	}
 
 	
 	/**
-	 * Method to add a new user to db2 table
+	 * Method to add a new participant to db2 table
 	 * 
 	 * @param value
 	 * @return void
 	 * @throws Exception
 	 */
-	public void insertUser() throws Exception {
+	public void insertParticipant() throws Exception {
 
-		System.out.println("In User: Entering insertUser()... ");
+		System.out.println("In Participant: Entering insertParticipant()... ");
 
-		for (UserInfo userInfoTemp : userInfoList) {
-			if (userInfoTemp.isCheckboxClickedFlag() == true) {
+		for (ParticipantInfo partInfoTemp : partInfoList) {
+			if (partInfoTemp.isCheckboxClickedFlag() == true) {
 				System.out.println("trying to insert");
-				userInfoTemp.setCheckboxClickedFlag(false);
+				partInfoTemp.setCheckboxClickedFlag(false);
 
-				userInfo = userInfoTemp;
+				partInfo = partInfoTemp;
 				break;
 			}
 		}
 
-		// Check if user already exist
-		boolean existFlag = checkUserExist(userInfo.getEmail());
+		// Check if participant already exist
+		boolean existFlag = checkParticipantExist(partInfo.getEmail());
 
 		if (existFlag == false) {
 
 			try {
-				sql = QueryBuilder.INSERT_USER_INFO;
+				sql = QueryBuilder.INSERT_PARTICIPANT_INFO;
 
-				int insertFlag = UserMgmtDAO.insertUser(sql, userInfo);
+				int insertFlag = ParticipantDAO.insertParticipant(sql, partInfo);
 
 				if (insertFlag > 0) {
-					System.out.println("User insert successful.");
-					
-					setMsgAppend(userInfo.getUser_Name());
+					System.out.println("Participant insert successful.");
+					setMsgAppend(partInfo.getUser_Name());
 					jscript= "addNewInfo";
 	
 				} else {
-					System.out.println("User insert unsuccessful.");
+					System.out.println("Participant insert unsuccessful.");
 					jscript ="error";
 				}
 
 			} catch (Exception e) {
-				System.out.println("Error in insertUser():" + e);
+				System.out.println("Error in insertParticipant():" + e);
 				e.printStackTrace();
 			}
 
-		} else {		
-			setMsgAppend(userInfo.getEmail());
+		} else {
+			// error msg on UI	
+			setMsgAppend(partInfo.getEmail());
 			jscript= "addExistInfo";
 		}
 
-		System.out.println("In User: Exiting insertUser()...");
+		System.out.println("In Participant: Exiting insertParticipant()...");
 
 	}
 
 	/**
-	 * Method to check an existing user in USERS table
+	 * Method to check an existing participant in db2 table
 	 * 
 	 * @param value
 	 * @return void
 	 * @throws Exception
 	 */
-	public boolean checkUserExist(String email) throws Exception {
-		System.out.println("In User: Entering checkUserExist()...");
+	public boolean checkParticipantExist(String email) throws Exception {
+		System.out.println("In Participant: Entering checkParticipantExist()...");
 		boolean existDealFlag = false;
 		try {
 
 			whereClause = Constants.EMAIL_ADDRESS;
-			String sql = QueryBuilder.COUNT_USER + " " + whereClause;
+			String sql = QueryBuilder.COUNT_PARTICIPANT + " " + whereClause;
 
-			existDealFlag = UserMgmtDAO.checkUserExist(sql, email);
+			existDealFlag = ParticipantDAO.checkParticipantExist(sql, email);
 		} catch (Exception e) {
-			System.out.println("Error in checkUserExist():" + e);
+			System.out.println("Error in checkParticipantExist():" + e);
 			e.printStackTrace();
 		}
-		System.out.println("In User: Exiting checkUserExist()...");
+		System.out.println("In Participant: Exiting checkParticipantExist()...");
 
 		return existDealFlag;
 	}
 
 	/**
-	 * Method to update an existing user into db2 table
+	 * Method to update an existing participant into db2 table
 	 * 
 	 * @param value
 	 * @return void
 	 * @throws Exception
 	 */
-	public void updateUser() throws Exception {
+	public void updateParticipant() throws Exception {
 
-		System.out.println("In User: Entering updateUser()...");
-		List<UserInfo> updateList = new ArrayList<UserInfo>();
+		System.out.println("In Participant: Entering updateParticipant()...");
+		List<ParticipantInfo> updateList = new ArrayList<ParticipantInfo>();
 
 		try {
 
-			for (UserInfo userInfo : userInfoList) {
-				if (userInfo.isCheckboxClickedFlag() == true) {
-					updateList.add(userInfo);
+			for (ParticipantInfo partInfo : partInfoList) {
+				if (partInfo.isCheckboxClickedFlag() == true) {
+					updateList.add(partInfo);
 				}
 			}
-			whereClause = Constants.USER_ID;
-			sql = QueryBuilder.UPDATE_USER_INFO + " " + whereClause;
+			whereClause = Constants.PARTICIPANT_ID;
+			sql = QueryBuilder.UPDATE_PARTICIPANT_INFO + " " + whereClause;
 
-			int updateFlag = UserMgmtDAO.updateUser(sql, updateList);
+			int updateFlag = ParticipantDAO.updateParticipant(sql, updateList);
 
 			if (updateFlag > 0) {
-				System.out.println("User update successful.");
+				System.out.println("Participant update successful.");
 				setMsgAppend(String.valueOf(updateList.size()));
 				jscript= "updateInfo";
 				
 			} else {
-				System.out.println("User update unsuccessful.");
+				System.out.println("Participant update unsuccessful.");
 				jscript= "error";
 			}
 
 		} catch (Exception e) {
-			System.out.println("Error in updateUser():" + e);
+			System.out.println("Error in updateParticipant():" + e);
 			e.printStackTrace();
 		}
 
-		System.out.println("In User: Exiting updateUser()...");
+		System.out.println("In Participant: Exiting updateParticipant()...");
 	}
 
 	/**
-	 * Method to delete an existing user from db2 table
+	 * Method to delete an existing participant from db2 table
 	 * 
 	 * @param
 	 * @return void
 	 * @throws Exception
 	 */
-	public void deleteUser() throws Exception {
+	public void deleteParticipant() throws Exception {
 
-		System.out.println("In User: Entering deleteUser()...");
-		List<UserInfo> deleteList = new ArrayList<UserInfo>();
+		System.out.println("In Participant: Entering deleteParticipant()...");
+		List<ParticipantInfo> deleteList = new ArrayList<ParticipantInfo>();
 
 		try {
 
-			for (UserInfo userInfo : userInfoList) {
-				if (userInfo.isCheckboxClickedFlag() == true) {
-					deleteList.add(userInfo);
+			for (ParticipantInfo partInfo : partInfoList) {
+				if (partInfo.isCheckboxClickedFlag() == true) {
+					deleteList.add(partInfo);
 				}
 			}
-			whereClause = Constants.USER_ID;
-			sql = QueryBuilder.DELETE_USER_INFO + " " + whereClause;
+			whereClause = Constants.PARTICIPANT_ID;
+			sql = QueryBuilder.DELETE_PARTICIPANT_INFO + " " + whereClause;
 
-			int deleteFlag = UserMgmtDAO.deleteUser(sql, deleteList);
+			int deleteFlag = ParticipantDAO.deleteParticipant(sql, deleteList);
 
 			if (deleteFlag > 0) {
-				System.out.println("User delete successful.");
+				System.out.println("Participant delete successful.");
 				setMsgAppend(String.valueOf(deleteList.size()));
 				jscript= "deleteInfo";
 				
 			} else {
-				System.out.println("User delete unsuccessful.");
+				System.out.println("Participant delete unsuccessful.");
 				jscript = "error";
 			}
 
 		} catch (Exception e) {
-			System.out.println("Error in deleteUser():" + e);
+			System.out.println("Error in deleteParticipant():" + e);
 			e.printStackTrace();
 		}
 
-		System.out.println("In User: Exiting deleteUser()...");
+		System.out.println("In Participant: Exiting deleteParticipant()...");
 	}
 
 
@@ -304,7 +302,7 @@ public class User implements Serializable {
 	 */
 	public String cancelSave(){
 		System.out.println("Entering cancelSave()...");
-		return "userInfo";
+		return "participantMaster";
 	}
 	
 	/**
@@ -334,12 +332,12 @@ public class User implements Serializable {
 		String buttonId = event.getComponent().getId();
 		System.out.println("buttonId clicked:" +buttonId);
 		
-		if(toggleBtnChgValue.equals(Constants.NEW_USER_BUTTON)) {
-			setToggleBtnChgValue("Save User");
+		if(toggleBtnChgValue.equals(Constants.NEW_PARTICIPANT_BUTTON)) {
+			setToggleBtnChgValue(Constants.SAVE_PARTICIPANT_BUTTON);
 			setCheckboxAllFlag(true);
 			System.out.println("CheckboxAllFlag: "+isCheckboxAllFlag());
-		}else if(toggleBtnChgValue.equals(Constants.SAVE_USER_BUTTON)){
-			setToggleBtnChgValue("+ New User");
+		}else if(toggleBtnChgValue.equals(Constants.SAVE_PARTICIPANT_BUTTON)){
+			setToggleBtnChgValue(Constants.NEW_PARTICIPANT_BUTTON);
 			System.out.println("CheckboxAllFlag: "+isCheckboxAllFlag());
 			setCheckboxAllFlag(false);
 		}
@@ -388,14 +386,6 @@ public class User implements Serializable {
 		this.checkboxAllFlag = checkboxAllFlag;
 	}
 
-	public UserInfo getUserInfo() {
-		return userInfo;
-	}
-
-	public void setUserInfo(UserInfo userInfo) {
-		this.userInfo = userInfo;
-	}
-
 	public String getToggleBtnChgValue() {
 		return toggleBtnChgValue;
 	}
@@ -418,6 +408,14 @@ public class User implements Serializable {
 
 	public void setMsgAppend(String msgAppend) {
 		this.msgAppend = msgAppend;
+	}
+
+	public String getSearchFilter() {
+		return searchFilter;
+	}
+
+	public void setSearchFilter(String searchFilter) {
+		this.searchFilter = searchFilter;
 	}
 
 

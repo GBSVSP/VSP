@@ -60,4 +60,15 @@ public static final String EMAIL_ADDRESS="EMAIL=?";
 public static final String USER_NAME="USER_NAME";
 public static final String NEW_USER_BUTTON="+ New User";
 public static final String SAVE_USER_BUTTON="Save User";
+
+//participant form constants
+public static final String PARTICIPANT_ALREADY_EXIST = "participant_exist";
+public static final String PARTICIPANT_ADDED_SUCCESS = "participant_create_success";
+public static final String PARTICIPANT_UPDATE_SUCCESS = "participant_update_success";
+public static final String PARTICIPANT_DELETE_SUCESS = "participant_delete_success";
+public static final String PARTICIPANT_ID="PARTICIPANT_ID=?";
+public static final String NEW_PARTICIPANT_BUTTON="+ New Participant";
+public static final String SAVE_PARTICIPANT_BUTTON="Save Participant";
+public static final String SENTIMENT="VALUE_NAME='Sentiment'";
+
 }

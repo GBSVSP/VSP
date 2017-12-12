@@ -1,22 +1,14 @@
 function showDeleteDialogMsg() {
-	if (!confirm("Are you sure you want to delete the selected record(s)?"))
-		return false;
-	else
-		return true;
+	return confirm("Are you sure you want to delete the selected record(s)?");
 }
 
 function showUpdateDialogMsg() {
-	if (!confirm("Are you sure you want to update the selected record(s)?"))
-		return false;
-	else
-		return true;
+ 
+	return confirm("Are you sure you want to update the selected record(s)?");
 }
 
 function showCancelDialogMsg() {
-	if (!confirm("Any unsaved data will be lost. Are you sure?"))
-		return false;
-	else
-		return true;
+	return confirm("Any unsaved data will be lost. Are you sure?");
 }
 
 function checkSelectedCheckBox(opvalue) {
