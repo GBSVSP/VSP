@@ -2,16 +2,21 @@ package com.vsp.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIComponent;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import com.vsp.dao.ParticipantDAO;
 import com.vsp.util.CommonUtils;
 import com.vsp.util.Constants;
@@ -49,6 +54,8 @@ public class Participant implements Serializable {
 	private String jscript = "";
 	private String msgAppend = null;
 	private String searchFilter;
+	private boolean sortAscending = true;
+	private String sortOrder = "";
     
 	// Populating Sentiment drop down
 	public ArrayList<SelectItem> getSentimentList() {
@@ -106,9 +113,10 @@ public class Participant implements Serializable {
 		System.out.println("In Participant: Entering getAllParticipantList()...");
 		try {
 			System.out.println("toggleButton :" + toggleButton);
-
+            System.out.println("getSortOrder().isEmpty():" +getSortOrder().isEmpty());
+            
 			//if (isToggleButton() == false) {
-			if(!getToggleBtnChgValue().equals(Constants.SAVE_PARTICIPANT_BUTTON)){
+			if(!getToggleBtnChgValue().equals(Constants.SAVE_PARTICIPANT_BUTTON) && getSortOrder().isEmpty()){
 				orderBy = "order by "+ Constants.USER_NAME;
 				whereClause = Constants.DELETE_CONDITION;
 				sql = QueryBuilder.SELECT_PARTICIPANT_INFO + " " + whereClause +" "+orderBy;
@@ -137,7 +145,8 @@ public class Participant implements Serializable {
 	public void insertParticipant() throws Exception {
 
 		System.out.println("In Participant: Entering insertParticipant()... ");
-
+		setSortOrder("");
+		
 		for (ParticipantInfo partInfoTemp : partInfoList) {
 			if (partInfoTemp.isCheckboxClickedFlag() == true) {
 				System.out.println("trying to insert");
@@ -162,7 +171,6 @@ public class Participant implements Serializable {
 					System.out.println("Participant insert successful.");
 					setMsgAppend(partInfo.getUser_Name());
 					jscript= "addNewInfo";
-	
 				} else {
 					System.out.println("Participant insert unsuccessful.");
 					jscript ="error";
@@ -219,7 +227,7 @@ public class Participant implements Serializable {
 
 		System.out.println("In Participant: Entering updateParticipant()...");
 		List<ParticipantInfo> updateList = new ArrayList<ParticipantInfo>();
-
+		setSortOrder("");
 		try {
 
 			for (ParticipantInfo partInfo : partInfoList) {
@@ -261,7 +269,7 @@ public class Participant implements Serializable {
 
 		System.out.println("In Participant: Entering deleteParticipant()...");
 		List<ParticipantInfo> deleteList = new ArrayList<ParticipantInfo>();
-
+		setSortOrder("");
 		try {
 
 			for (ParticipantInfo partInfo : partInfoList) {
@@ -346,6 +354,117 @@ public class Participant implements Serializable {
 	}
 	
 	
+	public void sortBy(String value) {
+		System.out.println("In sortby...............................");
+		System.out.println("sortOrder :" + value);
+		setSortOrder(value);
+		jscript = null;
+		
+		switch (value) {
+
+			case "user":
+	
+				Collections.sort(partInfoList, new Comparator<ParticipantInfo>() {
+	
+					@Override
+					public int compare(ParticipantInfo o1, ParticipantInfo o2) {
+						if (sortAscending == true) {
+							System.out.println("asc........");
+							// ascending order
+							return o1.getUser_Name().compareTo(o2.getUser_Name());
+						} else {
+							// descending order
+							System.out.println("desc........");
+							return o2.getUser_Name().compareTo(o1.getUser_Name());
+						}
+					}
+	
+				});
+				break;
+	
+			case "email":
+	
+				Collections.sort(partInfoList, new Comparator<ParticipantInfo>() {
+	
+					@Override
+					public int compare(ParticipantInfo o1, ParticipantInfo o2) {
+						if (sortAscending == true) {
+							System.out.println("asc........");
+							// ascending order
+							return o1.getEmail().compareTo(o2.getEmail());
+						} else {
+							// descending order
+							System.out.println("desc........");
+							return o2.getEmail().compareTo(o1.getEmail());
+						}
+					}
+	
+				});
+	
+				break;
+	
+			case "imt":
+	
+				Collections.sort(partInfoList, new Comparator<ParticipantInfo>() {
+	
+					@Override
+					public int compare(ParticipantInfo o1, ParticipantInfo o2) {
+						if (sortAscending == true) {
+							System.out.println("asc........");
+							// ascending order
+							return o1.getImt_Id().compareTo(o2.getImt_Id());
+						} else {
+							// descending order
+							System.out.println("desc........");
+							return o2.getImt_Id().compareTo(o1.getImt_Id());
+						}
+					}
+	
+				});
+				break;
+	
+			case "storm":
+	
+				Collections.sort(partInfoList, new Comparator<ParticipantInfo>() {
+	
+					@Override
+					public int compare(ParticipantInfo o1, ParticipantInfo o2) {
+						if (sortAscending == true) {
+							System.out.println("asc........");
+							// ascending order
+							return Boolean.valueOf(o1.isStorm_Trained()).compareTo(Boolean.valueOf(o2.isStorm_Trained()));
+						} else {
+							// descending order
+							System.out.println("desc........");
+							return Boolean.valueOf(o2.isStorm_Trained()).compareTo(Boolean.valueOf(o1.isStorm_Trained()));
+						}
+					}
+	
+				});
+				break;
+	
+			default:
+				System.out.println("Default Sort");
+				
+		}
+
+		for (ParticipantInfo info : partInfoList) {
+			System.out.println("List sort change:" + info.getUser_Name()+ "" + info.isStorm_Trained());
+		}
+
+		if (sortAscending) {
+			sortAscending = false;
+		} else {
+			sortAscending = true;
+		}
+
+	}
+	
+	
+	
+	
+	
+	
 	/**
 	 *  Ajax listener for email address
 	 * @param e
@@ -416,6 +535,22 @@ public class Participant implements Serializable {
 
 	public void setSearchFilter(String searchFilter) {
 		this.searchFilter = searchFilter;
+	}
+
+	public boolean isSortAscending() {
+		return sortAscending;
+	}
+
+	public void setSortAscending(boolean sortAscending) {
+		this.sortAscending = sortAscending;
+	}
+
+	public String getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(String sortOrder) {
+		this.sortOrder = sortOrder;
 	}
 
 

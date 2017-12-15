@@ -20,6 +20,7 @@ import javax.faces.model.SelectItem;
 
 import org.primefaces.event.SelectEvent;
 
+import com.vsp.dao.CommentsDAO;
 import com.vsp.dao.DealDAO;
 import com.vsp.dao.FormDAO;
 import com.vsp.util.Constants;
@@ -44,13 +45,14 @@ public class Deal implements Serializable {
 	private static String searchType = Constants.DEFAULT_SEARCH_TYPE;
 	private static  List<DealInfo> dealList = new ArrayList<DealInfo>();
 	private static  List<DealInfo> searchList = new ArrayList<DealInfo>();
+	private static  List<Comments> commentsList = new ArrayList<Comments>();
 	private static List<A1Form> a1FormList = new ArrayList<A1Form>();
 	private String jscript = "";
 	private static ArrayList<String> a1History;
 	private static HashMap<Integer, String> optionMap;
 	private static String searchValue;
 
-	private static int reference_No;
+	public static int reference_No;
 
 	private static String whereClause = null;
 	private boolean show = false;
@@ -66,6 +68,9 @@ public class Deal implements Serializable {
 	public static String activeA1RefNo;
 	
 	
+	public  List<Comments> getCommentsList() {
+		return commentsList;
+	}
 	public  String getSearchMsg() {
 		return searchMsg;
 	}
@@ -108,6 +113,13 @@ public class Deal implements Serializable {
 	public void setA1FormObj(A1Form a1Form) {
 		this.a1FormObj = a1Form;
 	}
+	@ManagedProperty(value = "#{comments}")
+	private Comments commentsObj = new Comments();
+
+	public void setCommentsObj(Comments comments) {
+		this.commentsObj = comments;
+	}
+	
 	// generating the reference number in YYYY+4 digit serial number format
 	public int getReference_No() {
 		
@@ -228,16 +240,7 @@ public class Deal implements Serializable {
 		
 
 	}
-	//data table change
-	public void dataTableChange(AjaxBehaviorEvent e) throws Exception {
 
-		UIComponent component = (UIComponent) e.getSource();
-		searchType = (String) component.findComponent("searchType").getAttributes().get("value");
-
-		System.out.println("type:" + searchType);
-		
-
-	}
 	//on change event of search value - auto complete
 	public void valueChanged(SelectEvent event) throws Exception {
 		System.out.println("In Deal: Entering valueChanged()...");
@@ -307,7 +310,9 @@ public class Deal implements Serializable {
 			a1statusFlag = false;
 			
 		}
-	
+		sql = QueryBuilder.SELECT_COMMENTS;
+		commentsList = CommentsDAO.getComments(sql,reference_No);
+		
 		System.out.println("In Deal: Exiting openDeal()...");
 		return "dealForm";
 	
@@ -867,4 +872,34 @@ public class Deal implements Serializable {
 		}
 			
 	}
+	/**
+	 * Method to add a new comment to database
+	 * 
+	 * @param value
+	 * @return void
+	 * @throws Exception
+	 */
+	public void addComment()  {
+		
+		System.out.println("In Comments: Entering addComment()...");
+		
+		try {
+			
+			String sql = QueryBuilder.INSERT_COMMENT;
+			int status = CommentsDAO.insertComments(sql,commentsObj);
+			if (status<=0) {
+			
+					jscript ="database_error";
+				}
+			else {
+				sql = QueryBuilder.SELECT_COMMENTS;
+				commentsList = CommentsDAO.getComments(sql,reference_No);
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("In Comments: Exit addComment()...");
+	}
+	
 }

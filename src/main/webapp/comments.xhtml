@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	>
+	<h:head>
+
+</h:head>
+<h:body>
+<h:form id="comments" prependId="false">
+	
+         <table style="align:center;top:900px;width:65%" border="0">
+ 		<tr><td align="left"  colspan="2"><b>Add New Comment:</b>
+ 		<h:outputScript rendered="#{deal.jscript == 'database_error'}">alert("#{msgbundle.database_error}");</h:outputScript>
+ 		</td></tr>   
+     	<tr><td style="font-size:12px;width:60px"><img  src="https://w3.api.ibm.com/common/run/bluepages/photo?cnum=#{sessionScope.userName} &amp;client_id=#{msgbundle.client_id}"/></td>
+     	<td style="font-size:12px"><h:inputTextarea id="userComment" style=" width: 700px; height: 45px" 
+     	value="#{comments.userComment}" onfocus="this.value==this.defaultValue?this.value='':null"/></td></tr>
+        <tr><td></td><td align="left">  
+           
+	<h:commandButton id="postComment" value="Post Comment"  action="#{deal.addComment}" class="btn-default"/>&nbsp;&nbsp;
+	<h:commandButton id="cancel" value="Cancel" class="btn-default"/>
+	</td></tr> 
+	</table>
+
+   	<h:dataTable id="commentsList" var="row" value="#{deal.commentsList}" headerClass="dealTableHeader" oncomplete="getUserData()">
+		<h:column>
+		<table  style="width:100%" border="0">
+		<tr><td style="width:20px" ><img class="height:100px;width:0%;" src="https://w3.api.ibm.com/common/run/bluepages/photo?cnum=#{row.createdUser} &amp;client_id=#{msgbundle.client_id}"/></td>
+		<td id="commentedUser#{row.count}"></td><td> Commented on #{row.createdDate}</td>
+		<h:outputScript>  
+		$(document).ready( function(){  getUserNames("#{row.count}","#{row.createdUser}");} );
+		</h:outputScript></tr>
+		<tr><td></td><td colspan="2">#{row.userComment}</td></tr>
+			
+		</table>
+		
+		</h:column>
+		<hr/>
+	</h:dataTable>       
+		<script src="js/vsp_comments.js"></script>
+</h:form>
+ 
+</h:body>
+
+</html>

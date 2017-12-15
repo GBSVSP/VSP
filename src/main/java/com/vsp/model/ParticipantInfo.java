@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
+import com.vsp.util.Constants;
+
 /**
  * <p>
  * This the bean class for participant master information
@@ -37,6 +39,7 @@ public class ParticipantInfo implements Serializable {
 	private String modified_By;
 	private boolean is_Delete;
 	private boolean checkboxClickedFlag;
+	private String showDetails = Constants.SHOW_DETAILS;
 	
 	
 	public int getParticipant_Id() {
@@ -140,6 +143,12 @@ public class ParticipantInfo implements Serializable {
 	}
 	public void setCheckboxClickedFlag(boolean checkboxClickedFlag) {
 		this.checkboxClickedFlag = checkboxClickedFlag;
+	}
+	public String getShowDetails() {
+		return showDetails;
+	}
+	public void setShowDetails(String showDetails) {
+		this.showDetails = showDetails;
 	}
 	
 	

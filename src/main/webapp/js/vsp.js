@@ -1,3 +1,4 @@
+
 function showDeleteDialogMsg() {
 	return confirm("Are you sure you want to delete the selected record(s)?");
 }
@@ -46,5 +47,3 @@ function checkSelectedCheckBox(opvalue) {
 	}
 
 }
-
-

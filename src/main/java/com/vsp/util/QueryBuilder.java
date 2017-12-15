@@ -112,4 +112,9 @@ public static String COUNT_PARTICIPANT ="Select count(PARTICIPANT_ID) from PARTI
 //Participant Info delete
 public static String DELETE_PARTICIPANT_INFO = "Update PARTICIPANTS set IS_DELETE= ? , MODIFIED_BY =? where ";
 
+//Insert Comments
+public static String INSERT_COMMENT ="Insert into DEAL_COMMENTS ( VSP_OPP_ID,COMMENT,CREATED_BY ) "
+		+ "values (?, ?, ?)";
+//select comments
+public static String SELECT_COMMENTS ="Select COMMENT,CREATION_DATE,CREATED_BY from DEAL_COMMENTS where IS_DELETE='N' and VSP_OPP_ID=? order by COMMENT_ID desc";
 }

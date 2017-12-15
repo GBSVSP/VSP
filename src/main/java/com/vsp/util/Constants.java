@@ -39,6 +39,10 @@ public static final String VSP_REF_NO = "REFERENCE_NO=?";
 public static final String A1_REF_NO = "A1_REF_NO=?";
 public static final String A1_STATUS = "A1_STATUS_ID in ('Complete','Cancelled')";
 public static final String SEARCH_MESSAGE = "search_message";
+
+//comments constants
+public static final String DEFAULT_COMMENT = "default_comment";
+
 //message constants
 public static final String LOGIN_INVALID = "login_invalid";
 public static final String LOGIN_ACCESS_DENIED = "login_access_denied";
@@ -70,5 +74,7 @@ public static final String PARTICIPANT_ID="PARTICIPANT_ID=?";
 public static final String NEW_PARTICIPANT_BUTTON="+ New Participant";
 public static final String SAVE_PARTICIPANT_BUTTON="Save Participant";
 public static final String SENTIMENT="VALUE_NAME='Sentiment'";
+
+public static final String SHOW_DETAILS="Show Details";  
 
 }
