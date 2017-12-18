@@ -3,15 +3,26 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"   
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      >
+      xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:head>
 
-    <link href="css/bootstrap.css" rel="stylesheet"></link>
-   
-</h:head>
-    <h:body > 
+    <link href="css/bootstrap.css" rel="stylesheet"></link> 
+	<link href="css/bootstrap.min.css" rel="stylesheet"></link>
+	<link href="css/bootstrap-responsive.css" rel="stylesheet"></link>
+	<link href="css/site.css" rel="stylesheet"></link>
+	<link href="css/base-admin-3.css" rel="stylesheet"></link>
+	<link href="css/font-awesome.css" rel="stylesheet"></link>
+	<link href="css/font-awesome.min.css" rel="stylesheet"></link>
+	<link href="css/style.css" rel="stylesheet"></link>
+	
 
+</h:head>
+
+    <h:body > 
+	<script src="js/jquery-2.0.3.js"></script>
+	<script src="js/jquery-ui.js"></script>
+	<script src="js/bootstrap.js"></script> 
+	<script src="js/vsp.js"></script>
 	<div id="page" >
 	<div id="header-container">
 			<div id="header">
@@ -31,7 +42,44 @@
 	    	</ui:insert>
     		</div>
     </div>
-   
+    <script>
+		//<![CDATA[
+		$(document).ready(function() {
+			
+			var email =	$("#email").val();
+			var fName;
+			var url = "https://w3.api.ibm.com/common/run/bluepages/userid/"+email+"/emailaddress&hrFirstName&hrLastName&uid?client_id=e9559df8-11f2-42aa-9d4d-ac334d7b98b9";
+			$.getJSON(url, function (data, status) {
+				 //alert(status);
+				  if (status == 'success') {
+					  $.each(data, function (key1, value1) {
+			                $.each(value1, function (key2, value2) {
+			                    $.each(value2, function (key3, value3) {
+			                        $.each(value3, function (key4, value4) {
+			                            if (key4 == 'attribute')
+			                            {
+			                                $.each(value4, function (key5, value5) {
+			                                   // alert(value5.name + "-" + value5.value);
+			                                    if(value5.name == 'hrFirstName'){
+			                                    	fName = value5.value;
+			                                    	//$("#usrName").val(fName);
+			                                    	$("#usrName").text("Hi, "+fName);
+			                                    }
+			                                });
+			                            }
+			                        });
+			                   });
+			                });
+			            });
+
+				    }
+				 
+				});
+
+			  
+		});
+		//]]>
+		</script>
     </h:body>
 
 </html>

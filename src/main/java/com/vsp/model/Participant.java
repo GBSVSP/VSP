@@ -9,14 +9,9 @@ import java.util.ResourceBundle;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.component.UIComponent;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import com.vsp.dao.ParticipantDAO;
 import com.vsp.util.CommonUtils;
 import com.vsp.util.Constants;
@@ -54,8 +49,11 @@ public class Participant implements Serializable {
 	private String jscript = "";
 	private String msgAppend = null;
 	private String searchFilter;
-	private boolean sortAscending = true;
+	private boolean sortAscending = false;
 	private String sortOrder = "";
+	private String addEmail;
+	private String addFirstName;
+	private String addLastName;
     
 	// Populating Sentiment drop down
 	public ArrayList<SelectItem> getSentimentList() {
@@ -77,9 +75,10 @@ public class Participant implements Serializable {
 	 * @return void
 	 * @throws Exception
 	 */
-	public void addNewRow() throws Exception {
+	public void addNewRow() throws Exception{
 
 		System.out.println("In Participant: Entering addNewRow()...");
+		System.out.println("AddEmail:" +getAddEmail()+" "+" AddFirstName:"+getAddFirstName()+" AddLastName:"+getAddLastName());
 		
 		if(getToggleBtnChgValue().equals(Constants.SAVE_PARTICIPANT_BUTTON)) {
 			for(ParticipantInfo partInfo: partInfoList) {
@@ -87,6 +86,8 @@ public class Participant implements Serializable {
 			}
 			partInfo = new ParticipantInfo();
 			partInfo.setCheckboxClickedFlag(true);
+			partInfo.setEmail(getAddEmail());
+			partInfo.setUser_Name(getAddFirstName()+" "+getAddLastName());
 			partInfoList.add(partInfo);
 			
 			System.out.println("size of partInfoList in addNewRow: " + partInfoList.size());
@@ -95,7 +96,7 @@ public class Participant implements Serializable {
 			
 		}else if(getToggleBtnChgValue().equals(Constants.NEW_PARTICIPANT_BUTTON)){
 			//save clicked
-			insertParticipant();
+			insertParticipant();	
 			setToggleButton(false);
 		}
 
@@ -114,6 +115,7 @@ public class Participant implements Serializable {
 		try {
 			System.out.println("toggleButton :" + toggleButton);
             System.out.println("getSortOrder().isEmpty():" +getSortOrder().isEmpty());
+            System.out.println("getToggleBtnChgValue :" + getToggleBtnChgValue());
             
 			//if (isToggleButton() == false) {
 			if(!getToggleBtnChgValue().equals(Constants.SAVE_PARTICIPANT_BUTTON) && getSortOrder().isEmpty()){
@@ -338,9 +340,9 @@ public class Participant implements Serializable {
 		//Get toggle button id
 		System.out.println("In toggleBtnAction.. ");
 		String buttonId = event.getComponent().getId();
-		System.out.println("buttonId clicked:" +buttonId);
-		
-		if(toggleBtnChgValue.equals(Constants.NEW_PARTICIPANT_BUTTON)) {
+		System.out.println("Actual buttonId clicked:" +buttonId);
+				
+		if(toggleBtnChgValue.equals(Constants.NEW_PARTICIPANT_BUTTON)||toggleBtnChgValue.equals(Constants.ADD_USER_BUTTON)) {
 			setToggleBtnChgValue(Constants.SAVE_PARTICIPANT_BUTTON);
 			setCheckboxAllFlag(true);
 			System.out.println("CheckboxAllFlag: "+isCheckboxAllFlag());
@@ -459,27 +461,7 @@ public class Participant implements Serializable {
 		}
 
 	}
-	
-	
-	
-	
-	
-	
-	/**
-	 *  Ajax listener for email address
-	 * @param e
-	 * @throws Exception
-	 */
-
-	public void onChangeAjaxListener(AjaxBehaviorEvent e) throws Exception {
-
-		UIComponent component = (UIComponent) e.getSource();
-		boolean checkedvalue = (boolean) component.findComponent("checkboxClickedFlag").getAttributes().get("value");
-		System.out.println("checkedvalue:" + checkedvalue);
-				
-	}
-
-	
+		
 	
 	public int getTotalSize() {
 		return totalSize;
@@ -553,6 +535,28 @@ public class Participant implements Serializable {
 		this.sortOrder = sortOrder;
 	}
 
+	public String getAddEmail() {
+		return addEmail;
+	}
+	public void setAddEmail(String addEmail) {
+		this.addEmail = addEmail;
+	}
 
+	public String getAddFirstName() {
+		return addFirstName;
+	}
+
+	public void setAddFirstName(String addFirstName) {
+		this.addFirstName = addFirstName;
+	}
+
+	public String getAddLastName() {
+		return addLastName;
+	}
+
+	public void setAddLastName(String addLastName) {
+		this.addLastName = addLastName;
+	}
+	
 
 }

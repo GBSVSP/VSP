@@ -5,34 +5,35 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+	
 
 <h:head>
+	
+
 </h:head>
 
 <h:body>
-	
+
+		
     <ui:composition template="commonLayout.xhtml">
     
     <ui:define name="content">
-    <br></br>
-	<br></br>
-	<h:form prependId="false">
-		<br></br>
-		<br></br>
-        
+
+	<h:form id="participantForm"  prependId="false"> 
+	<br></br><br></br>       
 		<div align="center">
 			<h:panelGrid columns="1">
 				<h:messages for="validationMsg" id="validationMsg" style="color:red"></h:messages>
 			</h:panelGrid>
-			<table border="0" width="84%">
-				<tr bgcolor="grey">
-					<td style="color: black; padding-left: 10px"><h4>PARTICIPANT MASTER</h4></td>				
-				</tr>
-			</table>
 			
 			<h:panelGrid width="80%">
-			
-				<p:scrollPanel mode="native" style="width:1180px;height:320px;overflow:auto" id="divTable" >
+				<table border="0" width="110%">
+					<tr bgcolor="grey">
+						<td style="color: black; padding-left: 10px"><h4>PARTICIPANT MASTER</h4></td>				
+					</tr>
+				</table>
+				
+				<p:scrollPanel mode="native" style="width:1200px;height:320px;overflow:auto" id="divTable" >
 					
 					<h:dataTable id="participantResult" var="participantData"
 						value="#{participant.allParticipantList}" styleClass="table table-striped">
@@ -70,7 +71,7 @@
 
 						<h:column>
 							<f:facet name="header">
-							<h:commandLink id="user_header" value="User" style="text-decoration:underline; font-size:14px" 
+							<h:commandLink id="user_header" value="User" style="text-decoration:underline; font-size:13px" 
 							styleClass="sort_header" action="#{participant.sortBy('user')}">
 							</h:commandLink>
 						
@@ -92,7 +93,7 @@
 
 						<h:column>
 							<f:facet name="header">
-							<h:commandLink id="imt_header" value="IMT" style="text-decoration:underline; font-size:14px" 
+							<h:commandLink id="imt_header" value="IMT" style="text-decoration:underline; font-size:13px" 
 							styleClass="sort_header" action="#{participant.sortBy('imt')}"></h:commandLink>
 							</f:facet>
 							
@@ -108,7 +109,7 @@
 
 						<h:column>
 							<f:facet name="header">
-							<h:commandLink id="storm_header" value="Trained:&#10;&#10;Revenue Storm" style="text-decoration:underline; font-size:14px;
+							<h:commandLink id="storm_header" value="Trained:&#10;&#10;Revenue Storm" style="text-decoration:underline; font-size:13px;
 							 white-space: pre;" action="#{participant.sortBy('storm')}">
 							</h:commandLink>
 							</f:facet>
@@ -117,25 +118,25 @@
 						</h:column>
 
                        <h:column>
-							<f:facet name="header">A2<br></br>Invited</f:facet>
+							<f:facet name="header"><h:outputText value="A2&#10;&#10;Invited" style="white-space: pre;font-size:13px"></h:outputText></f:facet>
 							<h:outputText id="a2_invited" value="#{participantData.a2_invited}" rendered="#{participantData.a2_invited != '0'}"> 
 							</h:outputText>
 						</h:column>
 						
 						<h:column>
-							<f:facet name="header">A2<br></br>Attended</f:facet>
+							<f:facet name="header"><h:outputText value="A2&#10;&#10;Attended" style="white-space: pre;font-size:13px"></h:outputText></f:facet>
 							<h:outputText id="a2_attended" value="#{participantData.a2_attended}" rendered="#{participantData.a2_attended != '0'}"> 
 							</h:outputText>
 						</h:column>
 						
 						<h:column>
-							<f:facet name="header">A3<br></br>Invited</f:facet>
+							<f:facet name="header"><h:outputText value="A3&#10;&#10;Invited" style="white-space: pre;font-size:13px"></h:outputText></f:facet>
 							<h:outputText id="a3_invited" value="#{participantData.a3_invited}" rendered="#{participantData.a3_invited != '0'}"> 
 							</h:outputText>
 						</h:column>
 						
 						<h:column>
-							<f:facet name="header">A3<br></br>Attended</f:facet>
+							<f:facet name="header"><h:outputText value="A3&#10;&#10;Attended" style="white-space: pre;font-size:13px"></h:outputText></f:facet>
 							<h:outputText id="a3_attended" value="#{participantData.a3_attended}" rendered="#{participantData.a3_attended != '0'}"> 
 							</h:outputText>
 						</h:column>
@@ -149,7 +150,7 @@
 
 
 						<h:column>
-							<f:facet name="header">Sentiment?</f:facet>
+							<f:facet name="header"><h:outputText value="Sentiment?" style="font-size:13px"></h:outputText></f:facet>
 							
 							<h:outputText style="color:red;font-size: 8pt;" id="error_sentiment_Id"></h:outputText>
 							 <br></br>
@@ -196,6 +197,7 @@
 				</h:panelGroup>
 			</h:panelGrid>
 			
+			 
 			<h:panelGrid>
 			<h:outputScript rendered="#{participant.jscript == 'deleteInfo'}">alert("#{participant.msgAppend} #{msgbundle.participant_delete_success}");</h:outputScript>
 			<h:outputScript rendered="#{participant.jscript == 'updateInfo'}">alert("#{participant.msgAppend} #{msgbundle.participant_update_success}");</h:outputScript>
@@ -204,305 +206,89 @@
 			<h:outputScript rendered="#{participant.jscript == 'error'}">alert("#{msgbundle.database_error}");</h:outputScript>
 						
 			</h:panelGrid>
+			 
+					<div class="modal fade" id="searchUserModal">
+						<div class="modal-dialog">
 
-			<br></br>
-			<br></br>
-			
-			<div class="modal fade" id="searchUser">
-				<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+									<h4 class="modal-title">USER SEARCH</h4>
+								</div>
+								<div class="modal-body">
+									<div align="center">
+										<table style="top: 900px;" border="0">
 
-					<div class="modal-content">
+											<tr>
+												<td align="center" colspan="3"><h:outputText
+														style="color:red;font-size: 8pt;" id="err_email"></h:outputText></td>
+											</tr>
 
-						<div class="modal-body"></div>
+											<tr>
+												<td><b>Email: </b></td>
+												<td><h:inputText id="userEmail"/></td>
+												<td><h:commandButton id="userSearch" value="Search" class="btn-default"></h:commandButton></td>
+											</tr>
+
+											<tr>
+												<td colspan="3"><h:outputText id="firstName"/></td>
+											</tr>
+											<tr>
+												<td colspan="3"> <h:outputText id="lastName"/></td>
+											</tr>
+											<tr>
+												<td align="center" colspan="3"><h:outputText id="userNotFound" /></td>
+											</tr>
+											<tr></tr>
+											<tr>
+												<td colspan="3">
+												<h:commandButton id="addUserBtn" value="Add User" class="btn-default"
+												actionListener="#{participant.toggleBtnAction}" action="#{participant.addNewRow}">
+												 </h:commandButton></td>
+											</tr>
+											<tr>
+											<td>
+											<h:inputHidden id="addEmail" value="#{participant.addEmail}"></h:inputHidden>
+										    <h:inputHidden id="addFirstName" value="#{participant.addFirstName}"></h:inputHidden>
+									        <h:inputHidden id="addLastName" value="#{participant.addLastName}"></h:inputHidden>
+		                                    </td>
+											</tr>
+											
+										</table>
+									</div>
+								</div>
+								 <div class="modal-footer">
+                    			<button type="button" class="btn-danger" data-dismiss="modal">Close</button>
+                				</div>
+							</div>
+						</div>
 					</div>
+
 				</div>
-			</div>
-		   
-		</div>
-		
-	</h:form>
-		<script src="js/jquery-2.0.3.js"></script>
-		<script src="js/jquery-ui.js"></script>
-		<script src="js/bootstrap.js"></script>
-		 <script>
-	 
-    //<![CDATA[	
-    
-       $("#newParticipantButton").click(function(){
-    	    		 
-		var buttonclicked = $("#newParticipantButton").val();
-		alert("Button clicked: " + buttonclicked);
-		
-		var status = false;
-		var count = 0;
-		
-		if (buttonclicked == '+ New Participant'){
-			alert("count....");
-			$("#searchUser").modal('show');
-
-	        $('.modal-body').load('searchUser.xhtml');
-		    
-			count = 1;
-			alert("count 1");
-			
-		}
-
-		if (buttonclicked == 'Save Participant') {
-			//alert("In loop Save User");
-			var table = $("#participantResult tbody");
-
-			table.find('tr').each(function(index) {
-							var $tds = $(this).find('td');
-							//Check if serialNo is 0 then it is a new row
-							var serialNo = $tds.eq(1).find("input:hidden").val();
-
-							if (serialNo == 0) {
-								//alert("serialNo is 0");
-
-								var checkbox_sel_val = $tds.eq(0);
-								var checkbox = checkbox_sel_val.find("input:checked").val();
-								var email = $tds.eq(2).find("input:text").val();
-								var username = $tds.eq(3).find("input:text").val();
-								var imt_sel_val = $tds.eq(4);
-								var imt_Id = imt_sel_val.find("option:selected").val();
-								
-								var sentiment_sel_val = $tds.eq(11);
-								var sentiment_Id = sentiment_sel_val.find("option:selected").val();
-
-								//alert("Row: "+ index+ "\n checkbox: "+ checkbox+ "\n serialNo :"+ serialNo
-								//	+ "\n username: "+ username+ "\n email: "+ email+ "\n sentiment_Id: "+ sentiment_Id
-								 //   + "\n imt_Id: "+ imt_Id);
-								
-								var error_email = $tds.eq(2).find("span").first();
-								error_email.html("");
-								if (email == ''|| email == 'undefined') {
-									error_email.html("Email cannot be blank");
-									count++;
-								} else {
-									if (!isValidEmailAddress(email)) {
-										error_email.html("Invalid email format");
-										count++;
-									}
-								}
-
-								var error_username = $tds.eq(3).find("span").first();
-								error_username.html("");
-								if (username == ''|| username == 'undefined') {
-									error_username.html("Username cannot be blank");
-								
-									count++;
-								} else {
-									if (!isValidUserName(username)) {
-										error_username.html("Invalid username format");
-										count++;
-									}
-								}
-
-								var error_imt_Id = $tds.eq(4).find("span").first();
-								error_imt_Id.html("");
-								if (imt_Id == ''|| imt_Id == 'Please Choose') {
-									error_imt_Id.html("Please select IMT");
-									count++;
-								}
-
-								var error_sentiment_Id = $tds.eq(11).find("span").first();
-								error_sentiment_Id.html("");
-								if (sentiment_Id == ''|| sentiment_Id == 'Please Choose') {
-									error_sentiment_Id.html("Please select Sentiment");
-									count++;
-								}
-
-							}
-
-						});
-
-			}
 	
-			if (count > 0) {
-				status = false;
-			} else {
-				status = true;
-			}
-	
-			alert("status: " +status);
-			//return status;
-			return false;
-        });
-
-   
-		function isValidEmailAddress(emailAddress) {
-			var pattern = new RegExp(
-					"^[A-Za-z0-9]+(\.[_A-Za-z0-9-]+)*@([A-Za-z0-9]+\.(IBM|ibm)\.(COM|com)|(IBM|ibm)\.(COM|com))$");
-			return pattern.test(emailAddress);
-		}
-		
-		function isValidUserName(userName) {
-			var pattern = new RegExp("[a-zA-Z]+\\s+[a-zA-Z]+$");
-			return pattern.test(userName);
-		}
-		
-		$("#updateButton").click(function(){
-			
-			var buttonclicked = $("#updateButton").val();
-			//alert("Button clicked: " + buttonclicked);
-			var status = false;
-			var count = 0;
-			
-			var selected =0;
-				
-				var table = $("#participantResult tbody");
-				
-				// Check if any checkbox is selected
-				table.find('tr').each(function(index) {
-					 var $tds = $(this).find('td');
-					 var serialNo = $tds.eq(1).find("input:hidden").val();
-		
-					 var checkbox_sel_val = $tds.eq(0);
-					 var checkbox = checkbox_sel_val.find("input:checked").val();
-					 //alert("checkbox :"+checkbox);
-					 if (checkbox == 'on') {
-						    selected++;
-
-							var imt_sel_val = $tds.eq(4);
-							var imt_Id = imt_sel_val.find("option:selected").val();
-							
-							var sentiment_sel_val = $tds.eq(11);
-							var sentiment_Id = sentiment_sel_val.find("option:selected").val();
-		
-							//alert("Row: "+ index+ "\n checkbox: "+ checkbox+ "\n serialNo :"+ serialNo
-							//+ "\n sentiment_Id: "+ sentiment_Id
-							 //+ "\n imt_Id: "+ imt_Id);
-		
-							var error_imt_Id = $tds.eq(4).find("span").first();
-							error_imt_Id.html("");
-							if (imt_Id == ''|| imt_Id == 'Please Choose') {
-								error_imt_Id.html("Please select IMT");
-								count++;
-							}
-		
-							var error_sentiment_Id = $tds.eq(11).find("span").first();
-							error_sentiment_Id.html("");
-							if (sentiment_Id == ''|| sentiment_Id == 'Please Choose') {
-								error_sentiment_Id.html("Please select Sentiment");
-								count++;
-							}
-		
-					 } else{
-						 
-							var error_imt_Id = $tds.eq(4).find("span").first();
-							error_imt_Id.html("");
-						
-							var error_sentiment_Id = $tds.eq(11).find("span").first();
-							error_sentiment_Id.html(""); 
-						 
-					 }
-					  
-				  });
-				
-			if (selected == 0) {
-				alert("Please select participant(s) to update");
-				status = false;
-			} else {
-				
-				if(selected > 0){
-			    //Check if validation on IMT and 
-			    if(count > 0){
-			    	status = false;	
-			    }else{
-			    	
-			    	status = confirm("Are you sure you want to update the selected record(s)?");
-			    }
-				
-			  }
-			}
-		
-		    //alert("status: " +status);
-			return status;
-		});
-		
-		
-		$("#deleteButton").click(function(){
-			var buttonclicked = $("#deleteButton").val();
-			//alert("Button clicked: " + buttonclicked);
-			var status = false;
-			var count = 0;
-			var selected = 0;
-			
-			var table = $("#participantResult tbody");
-			
-			//Check if any checkbox is selected
-			table.find('tr').each(function(index) {
-				 var $tds = $(this).find('td');
-				 var serialNo = $tds.eq(1).find("input:hidden").val();
-		
-				 var checkbox_sel_val = $tds.eq(0);
-				 var checkbox = checkbox_sel_val.find("input:checked").val();
-				 
-				 if (checkbox == 'on') {
-					    selected++;		   
-				 }
-				  
-			  });
-			
-		
-		if (selected == 0) {
-			alert("Please select participant(s) to delete");
-			status = false;
-		} else {
-		    status = confirm("Are you sure you want to delete the selected record(s)?");
-		}
-		
-		//alert("status: " +status);
-		return status;
-			
-		});
-		
-		
-		$(document).on('change','.checkboxEventClass',function(){ 
-			//alert("In checkbox to page load");
-			var count =0;
-			
-			$(".checkboxEventClass").each(function(){
-				 if (this.checked) {
-		              count++;
-		         }
-			})
-			//alert("Selected count: " +count);	
-			
-			if(count > 0){
-				$("#updateButton").show();
-				$("#deleteButton").show();
-			}else{
-				$("#updateButton").hide();
-				$("#deleteButton").hide();
-				$("#divTable").load("participantMaster.xhtml #participantResult");
-			}
-			
-		});
-		
-		
-		
-		$("#cancelButton").click(function(){
-			
-			var buttonclicked = $("#cancelButton").val();
-			//alert("Button clicked: " + buttonclicked);
-			
-			return confirm("Any unsaved data will be lost. Are you sure?");;
-		});
-   	
-		//Shorthand for $( document ).ready()
-		$(function() {
-			//hide update and delete button on page load
-			$("#updateButton").hide();
-			$("#deleteButton").hide();
-			  
-		});
-		
-
-	//]]>
+	   </h:form>	
+	<script src="js/jquery-2.0.3.js"></script>
+	<script src="js/jquery-ui.js"></script>
+	<script src="js/bootstrap.js"></script> 
+	<script src="js/vsp.js"></script>
+	   <script>
+         //<![CDATA[	
+   	    
+				$(document).ready(function(){
+					//hide update and delete button on page load
+					$("#updateButton").hide();
+					$("#deleteButton").hide();
+					//hide add user button on modal load
+					$("#addUserBtn").hide();
+					
+			   });
+	    //]]>
 	</script>
+
+	
 	</ui:define>
 	</ui:composition>
-</h:body>
 
+</h:body>
+	
 </html>

@@ -40,7 +40,7 @@ public class ParticipantInfo implements Serializable {
 	private boolean is_Delete;
 	private boolean checkboxClickedFlag;
 	private String showDetails = Constants.SHOW_DETAILS;
-	
+
 	
 	public int getParticipant_Id() {
 		return participant_Id;
@@ -150,8 +150,6 @@ public class ParticipantInfo implements Serializable {
 	public void setShowDetails(String showDetails) {
 		this.showDetails = showDetails;
 	}
-	
-	
 	
 
 }

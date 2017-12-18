@@ -2,7 +2,6 @@ package com.vsp.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -29,7 +28,6 @@ import com.vsp.util.QueryBuilder;
  * @Date 29/Nov/2017
  */
 @ManagedBean(name = "user")
-//@SessionScoped
 @ViewScoped
 public class User implements Serializable {
 
@@ -37,7 +35,6 @@ public class User implements Serializable {
 
 	// Specify the property file name for resource bundle
 	public final static ResourceBundle bundle = ResourceBundle.getBundle("com.vsp.util.vspMessages");
-	private Map<String, Object> sessionMap;
 	
 	private static ArrayList<UserInfo> userInfoList;
 
@@ -48,10 +45,12 @@ public class User implements Serializable {
 	private String whereClause = null;
 	private String orderBy = null;
 	private static String sql = null;
-	private static HashMap<Integer, String> optionMap;
 	public String toggleBtnChgValue = Constants.NEW_USER_BUTTON;
 	private String jscript = "";
 	private String msgAppend = null;
+	private String addEmail;
+	private String addFirstName;
+	private String addLastName;
     
 	// Populating Role drop down
 	public ArrayList<SelectItem> getRoleList() {
@@ -76,6 +75,7 @@ public class User implements Serializable {
 	public void addNewRow() throws Exception {
 
 		System.out.println("In User: Entering addNewRow()...");
+		System.out.println("AddEmail:" +getAddEmail()+" "+" AddFirstName:"+getAddFirstName()+" AddLastName:"+getAddLastName());
 		
 		if(getToggleBtnChgValue().equals(Constants.SAVE_USER_BUTTON)) {
 			for(UserInfo userInfo: userInfoList) {
@@ -83,6 +83,8 @@ public class User implements Serializable {
 			}
 			userInfo = new UserInfo();
 			userInfo.setCheckboxClickedFlag(true);
+			userInfo.setEmail(getAddEmail());
+			userInfo.setUser_Name(getAddFirstName()+" "+getAddLastName());
 			userInfo.setActive(true);
 			userInfoList.add(userInfo);
 			System.out.println("size of userInfoList in addNewRow: " + userInfoList.size());
@@ -306,21 +308,7 @@ public class User implements Serializable {
 		System.out.println("Entering cancelSave()...");
 		return "userInfo";
 	}
-	
-	/**
-	 * Method called on cancel action listener
-	 * 
-	 * @param value
-	 * @return void
-	 * @throws Exception
-	 */
-	public void cancelAction(ActionEvent event){
-		//Get submit button id
-		System.out.println("In cancelAction..");
-		String buttonId = event.getComponent().getId();
-        System.out.println("buttonId clicked: " +buttonId);
-	}
-	
+		
 	/**
 	 * Method to toggleBtnAction
 	 * 
@@ -334,7 +322,7 @@ public class User implements Serializable {
 		String buttonId = event.getComponent().getId();
 		System.out.println("buttonId clicked:" +buttonId);
 		
-		if(toggleBtnChgValue.equals(Constants.NEW_USER_BUTTON)) {
+		if(toggleBtnChgValue.equals(Constants.NEW_USER_BUTTON)||toggleBtnChgValue.equals(Constants.ADD_USER_BUTTON)) {
 			setToggleBtnChgValue("Save User");
 			setCheckboxAllFlag(true);
 			System.out.println("CheckboxAllFlag: "+isCheckboxAllFlag());
@@ -420,6 +408,27 @@ public class User implements Serializable {
 		this.msgAppend = msgAppend;
 	}
 
+	public String getAddEmail() {
+		return addEmail;
+	}
+	public void setAddEmail(String addEmail) {
+		this.addEmail = addEmail;
+	}
 
+	public String getAddFirstName() {
+		return addFirstName;
+	}
+
+	public void setAddFirstName(String addFirstName) {
+		this.addFirstName = addFirstName;
+	}
+
+	public String getAddLastName() {
+		return addLastName;
+	}
+
+	public void setAddLastName(String addLastName) {
+		this.addLastName = addLastName;
+	}
 
 }

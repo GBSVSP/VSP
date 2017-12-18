@@ -56,44 +56,7 @@
 
 			</div>
 		</div>
-		<script>
-		//<![CDATA[
-		$(document).ready(function() {
-			
-			var email =	$("#email").val();
-			var fName;
-			var url = "https://w3.api.ibm.com/common/run/bluepages/userid/"+email+"/emailaddress&hrFirstName&hrLastName&uid?client_id=e9559df8-11f2-42aa-9d4d-ac334d7b98b9";
-			$.getJSON(url, function (data, status) {
-				 //alert(status);
-				  if (status == 'success') {
-					  $.each(data, function (key1, value1) {
-			                $.each(value1, function (key2, value2) {
-			                    $.each(value2, function (key3, value3) {
-			                        $.each(value3, function (key4, value4) {
-			                            if (key4 == 'attribute')
-			                            {
-			                                $.each(value4, function (key5, value5) {
-			                                   // alert(value5.name + "-" + value5.value);
-			                                    if(value5.name == 'hrFirstName'){
-			                                    	fName = value5.value;
-			                                    	//$("#usrName").val(fName);
-			                                    	$("#usrName").text("Hi, "+fName);
-			                                    }
-			                                });
-			                            }
-			                        });
-			                   });
-			                });
-			            });
-
-				    }
-				 
-				});
-
-			  
-		});
-		//]]>
-		</script>
+		
 	</h:form>
 
 

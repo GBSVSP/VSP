@@ -42,7 +42,7 @@
 					<td style="color: black; padding-left: 10px"><h4>USER ADMIN</h4></td>
 				</tr>
 			</table>
-				<p:scrollPanel mode="native" style="width:1100px;height:320px;overflow:auto" id="divTable">
+				<p:scrollPanel mode="native" style="width:1110px;height:320px;overflow:auto" id="divUserTable">
 					
 					<h:dataTable id="userResult" var="userData"
 						value="#{user.allUserList}" styleClass="table table-striped">
@@ -57,6 +57,21 @@
 
 						<h:column>
 							<h:inputHidden id="serialNo" value="#{userData.serialNo}"></h:inputHidden>
+						</h:column>
+						
+						<h:column>
+							<f:facet name="header">Email </f:facet>
+							
+							<h:outputText value="#{userData.email}" rendered="#{userData.serialNo != '0'}"></h:outputText>
+							
+						    <h:outputText style="color:red;font-size: 8pt;" id="error_email"></h:outputText>
+						     <br></br>
+							<h:inputText id="email" value="#{userData.email}" style="width:170px"
+								rendered="#{user.toggleButton and userData.checkboxClickedFlag}">
+							</h:inputText>
+							<h:outputText value="*" style="color:red; font-size:10pt; width:2px" rendered="#{userData.serialNo == '0'}">
+							</h:outputText> 
+							 
 						</h:column>
 
 						<h:column>
@@ -75,20 +90,7 @@
 					
 						</h:column>
 
-						<h:column>
-							<f:facet name="header">Email </f:facet>
-							
-							<h:outputText value="#{userData.email}" rendered="#{userData.serialNo != '0'}"></h:outputText>
-							
-						    <h:outputText style="color:red;font-size: 8pt;" id="error_email"></h:outputText>
-						     <br></br>
-							<h:inputText id="email" value="#{userData.email}" style="width:140px"
-								rendered="#{user.toggleButton and userData.checkboxClickedFlag}">
-							</h:inputText>
-							<h:outputText value="*" style="color:red; font-size:10pt; width:2px" rendered="#{userData.serialNo == '0'}">
-							</h:outputText> 
-							 
-						</h:column>
+
 						<h:column>
 							<f:facet name="header">IMT </f:facet>
 							
@@ -141,17 +143,17 @@
 					style="float:left" action="#{user.addNewRow}" actionListener="#{user.toggleBtnAction}">
 					</h:commandButton>
 
-					<h:commandButton id="cancelButton" value="Cancel"
+					<h:commandButton id="cancelUserButton" value="Cancel"
 						class="btn-default" style="float:left" action="#{user.cancelSave}">
 					</h:commandButton>
 
 				</h:panelGroup>
 				<h:panelGroup>
-					<h:commandButton id="updateButton" value="Update User"
+					<h:commandButton id="updateUserButton" value="Update User"
 						class="btn-default" style="float:right" action="#{user.updateUser}">
 					</h:commandButton>
 
-					<h:commandButton id="deleteButton" value="Delete User"
+					<h:commandButton id="deleteUserButton" value="Delete User"
 						class="btn-default" style="float:right" action="#{user.deleteUser}">
 					</h:commandButton>
 				</h:panelGroup>
@@ -163,278 +165,84 @@
 			<h:outputScript rendered="#{user.jscript == 'addExistInfo'}">alert("#{user.msgAppend} #{msgbundle.user_exist}");</h:outputScript>
 			<h:outputScript rendered="#{user.jscript == 'error'}">alert("#{msgbundle.database_error}");</h:outputScript>
 			</h:panelGrid>
-		</div>
+			
+			<div class="modal fade" id="searchUserModal">
+						<div class="modal-dialog">
 
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+									<h4 class="modal-title">USER SEARCH</h4>
+								</div>
+								<div class="modal-body">
+									<div align="center">
+										<table style="top: 900px;" border="0">
+
+											<tr>
+												<td align="center" colspan="3"><h:outputText
+														style="color:red;font-size: 8pt;" id="err_email"></h:outputText></td>
+											</tr>
+
+											<tr>
+												<td><b>Email: </b></td>
+												<td><h:inputText id="userEmail"/></td>
+												<td><h:commandButton id="userSearch" value="Search" class="btn-default"></h:commandButton></td>
+											</tr>
+
+											<tr>
+												<td colspan="3"><h:outputText id="firstName"/></td>
+											</tr>
+											<tr>
+												<td colspan="3"> <h:outputText id="lastName"/></td>
+											</tr>
+											<tr>
+												<td align="center" colspan="3"><h:outputText id="userNotFound" /></td>
+											</tr>
+											<tr></tr>
+											<tr>
+												<td colspan="3">
+												<h:commandButton id="addUserBtn" value="Add User" class="btn-default"
+												actionListener="#{user.toggleBtnAction}" action="#{user.addNewRow}">
+												 </h:commandButton></td>
+											</tr>
+											<tr>
+											<td>
+											<h:inputHidden id="addEmail" value="#{user.addEmail}"></h:inputHidden>
+										    <h:inputHidden id="addFirstName" value="#{user.addFirstName}"></h:inputHidden>
+									        <h:inputHidden id="addLastName" value="#{user.addLastName}"></h:inputHidden>
+		                                    </td>
+											</tr>
+											
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+			
+			
+		</div>
 
 	</h:form>
 
 	<ui:include src="commonFooter.xhtml" />
-	 <script>
-    //<![CDATA[	
-    
-    $("#newUserButton").click(function(){
 	
-	var buttonclicked = $("#newUserButton").val();
-	//alert("Button clicked: " + buttonclicked);
-	var status = false;
-	var count = 0;
-
-	if (buttonclicked == 'Save User') {
-		//alert("In loop Save User");
-		var table = $("#userResult tbody");
-
-		table.find('tr').each(function(index) {
-							var $tds = $(this).find('td');
-							//Check if serialNo is 0 then it is a new row
-							var serialNo = $tds.eq(1).find("input:hidden").val();
-
-							if (serialNo == 0) {
-								//alert("serialNo is 0");
-
-								var checkbox_sel_val = $tds.eq(0);
-								var checkbox = checkbox_sel_val.find("input:checked").val();
-								var username = $tds.eq(2).find("input:text").val();
-								var email = $tds.eq(3).find("input:text").val();
-								var imt_sel_val = $tds.eq(4);
-								var imt_Id = imt_sel_val.find("option:selected").val();
-								var role_sel_val = $tds.eq(6);
-								var role_Id = role_sel_val.find("option:selected").val();
-
-								//alert("Row: "+ index+ "\n checkbox: "+ checkbox+ "\n serialNo :"+ serialNo
-								//	+ "\n username: "+ username+ "\n email: "+ email+ "\n role_Id: "+ role_Id
-								 //   + "\n imt_Id: "+ imt_Id);
-
-								var error_username = $tds.eq(2).find("span").first();
-								error_username.html("");
-								if (username == ''|| username == 'undefined') {
-									//$("#err_username").html("Username cannot be blank");
-									error_username.html("Username cannot be blank");
-								
-									count++;
-								} else {
-									if (!isValidUserName(username)) {
-										//$('#err_username').html("Invalid username format");
-										error_username.html("Invalid username format");
-										count++;
-									}
-								}
-
-								var error_email = $tds.eq(3).find("span").first();
-								error_email.html("");
-								if (email == ''|| email == 'undefined') {
-									//$("#err_email").html("Email cannot be blank");
-									error_email.html("Email cannot be blank");
-									count++;
-								} else {
-									if (!isValidEmailAddress(email)) {
-										//$('#err_email').html("Invalid email format");
-										error_email.html("Invalid email format");
-										count++;
-									}
-								}
-
-								var error_imt_Id = $tds.eq(4).find("span").first();
-								error_imt_Id.html("");
-								if (imt_Id == ''|| imt_Id == 'Please Choose') {
-									//$("#err_imt_Id").html("Please select IMT");
-									error_imt_Id.html("Please select IMT");
-									count++;
-								}
-
-								var error_role_Id = $tds.eq(6).find("span").first();
-								error_role_Id.html("");
-								if (role_Id == ''|| role_Id == 'Please Choose') {
-									//$("#err_role_Id").html("Please select Role");
-									error_role_Id.html("Please select Role");
-									count++;
-								}
-
-							}
-
-						});
-
-	}
-
-	if (count > 0) {
-		status = false;
-	} else {
-		status = true;
-	}
-
-	//alert("status: " +status);
-	return status;
-    });
-
-		function isValidEmailAddress(emailAddress) {
-			var pattern = new RegExp(
-					"^[A-Za-z0-9]+(\.[_A-Za-z0-9-]+)*@([A-Za-z0-9]+\.(IBM|ibm)\.(COM|com)|(IBM|ibm)\.(COM|com))$");
-			return pattern.test(emailAddress);
-		}
-		
-		function isValidUserName(userName) {
-			var pattern = new RegExp("[a-zA-Z]+\\s+[a-zA-Z]+$");
-			return pattern.test(userName);
-		}
-		
-		$("#updateButton").click(function(){
-			
-			var buttonclicked = $("#updateButton").val();
-			//alert("Button clicked: " + buttonclicked);
-			var status = false;
-			var count = 0;
-			
-			var selected =0;
-				
-				var table = $("#userResult tbody");
-				
-				// Check if any checkbox is selected
-				table.find('tr').each(function(index) {
-					 var $tds = $(this).find('td');
-					 var serialNo = $tds.eq(1).find("input:hidden").val();
-		
-					 var checkbox_sel_val = $tds.eq(0);
-					 var checkbox = checkbox_sel_val.find("input:checked").val();
-					 //alert("checkbox :"+checkbox);
-					 if (checkbox == 'on') {
-						    selected++;
-						    
-							//alert("serialNo is 0");
-							var imt_sel_val = $tds.eq(4);
-							var imt_Id = imt_sel_val.find("option:selected").val();
-							var role_sel_val = $tds.eq(6);
-							var role_Id = role_sel_val.find("option:selected").val();
-		
-							//alert("Row: "+ index+ "\n checkbox: "+ checkbox+ "\n serialNo :"+ serialNo
-							//	+ "\n role_Id: "+ role_Id
-							 //   + "\n imt_Id: "+ imt_Id);
-		
-							var error_imt_Id = $tds.eq(4).find("span").first();
-							error_imt_Id.html("");
-							if (imt_Id == ''|| imt_Id == 'Please Choose') {
-								error_imt_Id.html("Please select IMT");
-								count++;
-							}
-		
-							var error_role_Id = $tds.eq(6).find("span").first();
-							error_role_Id.html("");
-							if (role_Id == ''|| role_Id == 'Please Choose') {
-								error_role_Id.html("Please select Role");
-								count++;
-							}
-		
-					 } else{
-						 
-							var error_imt_Id = $tds.eq(4).find("span").first();
-							error_imt_Id.html("");
-						
-							var error_role_Id = $tds.eq(6).find("span").first();
-							error_role_Id.html(""); 
-						 
-					 }
-					  
-				  });
-				
-			if (selected == 0) {
-				alert("Please select user(s) to update");
-				status = false;
-			} else {
-				
-				if(selected > 0){
-			    //Check if validation on IMT and Role
-			    if(count > 0){
-			    	status = false;	
-			    }else{
-			    	
-			    	status = confirm("Are you sure you want to update the selected record(s)?");
-			    }
-				
-			  }
-			}
-		
-		    //alert("status: " +status);
-			return status;
-		});
-		
-		
-		$("#deleteButton").click(function(){
-			var buttonclicked = $("#deleteButton").val();
-			//alert("Button clicked: " + buttonclicked);
-			var status = false;
-			var count = 0;
-			var selected = 0;
-			
-			var table = $("#userResult tbody");
-			
-			//Check if any checkbox is selected
-			table.find('tr').each(function(index) {
-				 var $tds = $(this).find('td');
-				 var serialNo = $tds.eq(1).find("input:hidden").val();
-		
-				 var checkbox_sel_val = $tds.eq(0);
-				 var checkbox = checkbox_sel_val.find("input:checked").val();
-				 
-				 if (checkbox == 'on') {
-					    selected++;		   
-				 }
+	 <script>
+        //<![CDATA[	
+			 $(document).ready(function(){
+				//hide update and delete button on page load
+				//alert("ready!");
+				$("#updateUserButton").hide();
+				$("#deleteUserButton").hide();
+				//hide add user button on modal load
+				$("#addUserBtn").hide();
 				  
-			  });
-			
-		
-		if (selected == 0) {
-			alert("Please select user(s) to delete");
-			status = false;
-		} else {
-		    	status = confirm("Are you sure you want to delete the selected record(s)?");
-		}
-		
-		//alert("status: " +status);
-		return status;
-			
-		});
-		
-		
-		$(document).on('change','.checkboxEventClass',function(){ 
-			//alert("In checkbox to page load");
-			var count =0;
-			
-			$(".checkboxEventClass").each(function(){
-				 if (this.checked) {
-		              count++;
-		         }
-			})
-			//alert("Selected count: " +count);	
-			
-			if(count > 0){
-				$("#updateButton").show();
-				$("#deleteButton").show();
-			}else{
-				$("#updateButton").hide();
-				$("#deleteButton").hide();
-				$("#divTable").load("userInfo.xhtml #userResult");
-			}
-			
-		});
-		
-		
-		
-		$("#cancelButton").click(function(){
-			
-			var buttonclicked = $("#cancelButton").val();
-			//alert("Button clicked: " + buttonclicked);
-			
-			return confirm("Any unsaved data will be lost. Are you sure?");;
-		});
-   	
-		//Shorthand for $( document ).ready()
-		$(function() {
-			//hide update and delete button on page load
-			//alert("ready!");
-			$("#updateButton").hide();
-			$("#deleteButton").hide();
-			  
-		});
-	//]]>
+			});
+	    //]]>
 	</script>
+	
+	<script src="js/vsp.js"></script>
+	
 </h:body>
 
 </html>

@@ -24,71 +24,107 @@
 </h:head>
 <h:body>
 	<ui:include src="commonHeader.xhtml" />
-
 	<h:form prependId="false">
-	<br></br><br></br>	<br></br><br></br>
-<center>
-          <table style="align:center;top:900px;width:25%" border="0">
- <tr><td align="center"  colspan="7"><b>USER SEARCH</b></td></tr>   
-     
-            <tr>
-           <td> Email : <h:inputText id="userEmail"/></td>
-            <td   align="center"  colspan="7">  
-           
-	<h:commandButton id="userSearch" value="Search" class="btn-default"></h:commandButton></td></tr> 
-			<tr><td><h:outputText id="firstName"/></td></tr>
-			<tr><td><h:outputText id="lastName"/></td></tr>
-            </table>  </center>
-            
-            
+      <br></br><br></br> <br></br><br></br>
+		<div align="center">
+			<table style="top: 900px;" border="0">
 
-<script>
+				<tr>
+					<td align="center" colspan="3"><h:outputText style="color:red;font-size: 8pt;" id="err_email"></h:outputText></td>
+				</tr>
+				
+				<tr>
+					<td><b>Email: </b></td>
+					<td><h:inputText id="userEmail"/></td>
+					<td> <h:commandButton id="userSearch" value="Search" class="btn-default"></h:commandButton></td>
+				</tr>
+				
+				<tr>
+					<td colspan="3"><h:outputText id="firstName"/></td>
+	            </tr>
+	            <tr>
+					<td colspan="3"><h:outputText id="lastName"/></td>
+				</tr>
+				 <tr>
+					<td align="center" colspan="3"><h:outputText id="userNotFound"/></td>
+				</tr>
+				    
+			</table>
+		</div>
+
+
+
+		<script>
 //<![CDATA[
-
 $("#userSearch").click(function () {
 	var email =	$("#userEmail").val();
-
+	var err_email = $("#err_email");
+	$("#userNotFound").html("");
+	$("#firstName").html("");
+	$("#lastName").html("");
+	
+	err_email.html("");
+	if (email == ''|| email == 'undefined') {
+		err_email.html("Email cannot be blank");
+		return false;
+	} else {
+		if (!isValidEmailAddress(email)) {
+			err_email.html("Invalid email format");
+		return false;
+		}
+	}
+	
 	var fName;
 	var lName;
 	var url = "https://w3.api.ibm.com/common/run/bluepages/userid/"+email+"/emailaddress&hrFirstName&hrLastName&uid?client_id=e9559df8-11f2-42aa-9d4d-ac334d7b98b9";
 	
 	$.getJSON(url, function (data, status) {
-		// alert(status);
+	
 		  if (status == 'success') {
 			  $.each(data, function (key1, value1) {
 	                $.each(value1, function (key2, value2) {
+	                	if(value2 == ''){
+	                		//alert("Empty!");
+	                		$("#userNotFound").text("User not found, try again!")
+	                		$("#firstName").text("");
+	                		$("#lastName").text("");
+	                	}
 	                    $.each(value2, function (key3, value3) {
 	                        $.each(value3, function (key4, value4) {
 	                            if (key4 == 'attribute')
 	                            {
 	                                $.each(value4, function (key5, value5) {
-	                                   // alert(value5.name + "-" + value5.value);
 	                                    if(value5.name == 'hrFirstName'){
 	                                    	fName = value5.value;
-	                                    	//$("#usrName").val(fName);
-	                                    	$("#firstName").text("First Name:"+fName);
+	                                    	$("#firstName").text("First Name: "+fName);
 	                                    }
 	                                    if(value5.name == 'hrLastName'){
 	                                    	lName = value5.value;
-	                                    	//$("#usrName").val(fName);
-	                                    	$("#lastName").text("Last Name:"+lName);
+	                                    	$("#lastName").text("Last Name: "+lName);
 	                                    }
 	                                });
+	                                
 	                            }
 	                        });
 	                   });
 	                });
 	            });
-
-		    }
-		 
+		    } 
 		});
 	return false;
+});
+
+
+//Shorthand for $( document ).ready()
+$(function() {
+	//hide add user button on modal load
+	$("#addUserBtn").hide();
+	  
 });
 //]]>
 </script>
 </h:form>
-       	<ui:include src="commonFooter.xhtml" />
+   <ui:include src="commonFooter.xhtml" />    
 </h:body>
 
 </html>

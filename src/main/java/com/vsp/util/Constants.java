@@ -73,8 +73,8 @@ public static final String PARTICIPANT_DELETE_SUCESS = "participant_delete_succe
 public static final String PARTICIPANT_ID="PARTICIPANT_ID=?";
 public static final String NEW_PARTICIPANT_BUTTON="+ New Participant";
 public static final String SAVE_PARTICIPANT_BUTTON="Save Participant";
+public static final String ADD_USER_BUTTON="Add User";
 public static final String SENTIMENT="VALUE_NAME='Sentiment'";
-
 public static final String SHOW_DETAILS="Show Details";  
 
 }
