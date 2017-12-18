@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	 $("#userComment").val("");
-	 $("#userComment").attr("placeholder","Add a comment at the selected stage.");
+	 $("#userComment").attr("placeholder","Add a comment at the selected stage. Maximum Length 400 characters");
 	 
 	});
 
@@ -17,13 +17,29 @@ $("#postComment").click(function () {
 		}
 						
 	}); 
+$("#userComment").keyup(function () {
+
+	var commentLength = $("#userComment").val().length;
+
+	if(commentLength>= 400){
+		 $('#commentError').html("Exceeds character length");
+	}
+	else{
+	var remaining = 400-commentLength;
+	  $('#commentError').html("Remaining character length:"+remaining);
+	}				
+	}); 
 $("#cancelComment").click(function () {
 
 	 $("#userComment").val("");
 	return false;	
 						
 	}); 
-
+$("#addComment").click(function () {
+	
+	 $('#commentDiv').show();
+	 return true;
+});
 function getUserNames(count,createdUser){
 	var fName = null;
 	var lName = null;

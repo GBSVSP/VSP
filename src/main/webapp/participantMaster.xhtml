@@ -18,25 +18,28 @@
     <ui:composition template="commonLayout.xhtml">
     
     <ui:define name="content">
-
+<br></br>
 	<h:form id="participantForm"  prependId="false"> 
-	<br></br><br></br>       
+  
 		<div align="center">
 			<h:panelGrid columns="1">
 				<h:messages for="validationMsg" id="validationMsg" style="color:red"></h:messages>
 			</h:panelGrid>
 			
 			<h:panelGrid width="80%">
+				<br></br><br></br> <br></br><br></br>    
 				<table border="0" width="110%">
 					<tr bgcolor="grey">
-						<td style="color: black; padding-left: 10px"><h4>PARTICIPANT MASTER</h4></td>				
+						<td style="color: black; padding-left: 10px"><b>PARTICIPANT MASTER</b></td>				
 					</tr>
 				</table>
 				
-				<p:scrollPanel mode="native" style="width:1200px;height:320px;overflow:auto" id="divTable" >
-					
+				<p:scrollPanel mode="native" style="width:1200px;height:320px;overflow:auto;vertical-align: top" id="divTable" >
+					<center>
 					<h:dataTable id="participantResult" var="participantData"
-						value="#{participant.allParticipantList}" styleClass="table table-striped">
+						value="#{participant.allParticipantList}" styleClass = "vspTable"
+            headerClass = "vspTableHeader"
+            rowClasses = "vspTableOddRow,vspTableEvenRow">
 						<h:column>
 							<f:facet name="header"></f:facet>
 
@@ -91,7 +94,7 @@
 						</h:column>
 
 
-						<h:column>
+						<h:column >
 							<f:facet name="header">
 							<h:commandLink id="imt_header" value="IMT" style="text-decoration:underline; font-size:13px" 
 							styleClass="sort_header" action="#{participant.sortBy('imt')}"></h:commandLink>
@@ -163,7 +166,7 @@
 						</h:column>
 
 					</h:dataTable>
-					
+					</center>
 				</p:scrollPanel>
 				<h:panelGrid width="100%" style="text-align:right;">
 			      <h:outputText value="*All fields are mandatory" style="color:red;font-size:9pt;" rendered="#{participant.toggleButton}">

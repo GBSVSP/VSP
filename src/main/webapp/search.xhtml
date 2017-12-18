@@ -10,8 +10,8 @@
   	<script src="js/bootstrap.js"></script>
 	<h:form prependId="false">
 	<br></br><br></br>	<br></br><br></br>
-
-          <table style="align:center;top:900px;width:100%" border="0">
+<center>
+          <table style="align:center;top:900px;width:30%" border="0">
  <tr><td align="center"  colspan="7"><b>DEAL MANAGEMENT</b></td></tr>   
           <tr>
               <td colspan="7" align="center"> 
@@ -26,16 +26,14 @@
             </td></tr>
             <tr>
            <!--  <td><h:inputText value="#{deal.searchValue}"/></td> -->
-            <td   align="center"  colspan="7">  
+            <td   align="right">  
             <p:autoComplete id="dealList" value="#{deal.searchValue}" completeMethod="#{deal.getDeal}"  > 
                  <p:ajax event="itemSelect" listener="#{deal.valueChanged}"  process="@this"/>
-            </p:autoComplete>        
-
-	<h:commandButton action="#{deal.searchDeal}"
+            </p:autoComplete> </td><td><h:commandButton action="#{deal.searchDeal}"
 			id="searchButton" value="Search" class="btn-default" render="dealResult" ></h:commandButton></td></tr> 
 			
             </table>  
-
+</center>
 <script>
 /* $(document).ready(function() {
 	$("#dealList_input").val("");

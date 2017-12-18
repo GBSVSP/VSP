@@ -7,24 +7,13 @@
 	xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 
 <h:head>
-
-	<link href="css/bootstrap.css" rel="stylesheet"></link>
-	<link href="css/bootstrap.min.css" rel="stylesheet"></link>
-	<link href="css/bootstrap-responsive.css" rel="stylesheet"></link>
-	<link href="css/site.css" rel="stylesheet"></link>
-	<link href="css/base-admin-3.css" rel="stylesheet"></link>
-	<link href="css/font-awesome.css" rel="stylesheet"></link>
-	<link href="css/font-awesome.min.css" rel="stylesheet"></link>
-	<link href="css/style.css" rel="stylesheet"></link>
-	
-	<script src="js/jquery-2.0.3.js"></script>
-	<script src="js/jquery-ui.js"></script>
-	<script src="js/bootstrap.js"></script>
-	<script src="js/vsp.js"></script>
 </h:head>
 
 <h:body>
-	<ui:include src="commonHeader.xhtml" />
+			
+    <ui:composition template="commonLayout.xhtml">
+    
+    <ui:define name="content">
 
 	<h:form prependId="false">
 		<br></br>
@@ -37,15 +26,19 @@
 			</h:panelGrid>
 
 			<h:panelGrid width="80%">
+			<br></br><br></br> <br></br>
 			<table border="0" width="100%">
 				<tr bgcolor="grey">
-					<td style="color: black; padding-left: 10px"><h4>USER ADMIN</h4></td>
+					<td style="color: black; padding-left: 10px"><b>USER ADMIN</b></td>
 				</tr>
 			</table>
+			
 				<p:scrollPanel mode="native" style="width:1110px;height:320px;overflow:auto" id="divUserTable">
 					
 					<h:dataTable id="userResult" var="userData"
-						value="#{user.allUserList}" styleClass="table table-striped">
+						value="#{user.allUserList}" styleClass = "vspTable"
+            headerClass = "vspTableHeader"
+            rowClasses = "vspTableOddRow,vspTableEvenRow">
 						<h:column>
 							<f:facet name="header"></f:facet>
 
@@ -225,8 +218,12 @@
 
 	</h:form>
 
-	<ui:include src="commonFooter.xhtml" />
-	
+</ui:define>
+</ui:composition>
+	<script src="js/jquery-2.0.3.js"></script>
+	<script src="js/jquery-ui.js"></script>
+	<script src="js/bootstrap.js"></script> 
+	<script src="js/vsp.js"></script>
 	 <script>
         //<![CDATA[	
 			 $(document).ready(function(){

@@ -16,14 +16,15 @@
 			<p:scrollPanel mode="native" style="position: absolute; height: 88%;width:100%"> 
 
 <ui:include src="search.xhtml" />
-  <h:form prependId="false">  
-  <table border="0" style="width :60%;"><tr>
-  <td style="padding: 3px; text-align: right;"> <h:outputText value="#{deal.searchMsg}"/>
+  <h:form prependId="false"> 
+  <center> 
+  <table border="0" style="width :30%;"><tr>
+  <td style="padding: 3px; text-align: right;"> <h:outputText value="#{deal.searchMsg}"/></td><td align="right">
 <h:commandButton action="#{deal.newDeal}"
 			class="btn-default" value=" ADD NEW DEAL "/>	 </td></tr>
 			
 			</table>
-	 
+	 </center>
 	<center>		<h:dataTable id="dealResult"  var="row" value="#{deal.searchList}" 
                     headerClass = "dealTableHeader" rendered="#{not empty deal.searchList}">   
     
