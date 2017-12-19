@@ -9,16 +9,13 @@
 <h:head>
 </h:head>
 
-<h:body>
-			
+<h:body>	
     <ui:composition template="commonLayout.xhtml">
     
     <ui:define name="content">
-
+    <br></br><br></br>  
 	<h:form prependId="false">
-		<br></br>
-		<br></br>
-        
+		<br></br><br></br>
 		<div align="center">
 			<h:panelGrid columns="1">
 				<h:messages for="validationMsg" id="validationMsg" style="color:red"></h:messages>
@@ -26,19 +23,16 @@
 			</h:panelGrid>
 
 			<h:panelGrid width="80%">
-			<br></br><br></br> <br></br>
-			<table border="0" width="100%">
+			<table border="0" width="99%">
 				<tr bgcolor="grey">
-					<td style="color: black; padding-left: 10px"><b>USER ADMIN</b></td>
+					<td style="color: black; padding-left: 10px"><h4>USER ADMIN</h4></td>
 				</tr>
 			</table>
 			
-				<p:scrollPanel mode="native" style="width:1110px;height:320px;overflow:auto" id="divUserTable">
+				<p:scrollPanel mode="native" style="width:1100px;height:320px;overflow:auto" id="divUserTable">
 					
 					<h:dataTable id="userResult" var="userData"
-						value="#{user.allUserList}" styleClass = "vspTable"
-            headerClass = "vspTableHeader"
-            rowClasses = "vspTableOddRow,vspTableEvenRow">
+						value="#{user.allUserList}" styleClass="table table-striped">
 						<h:column>
 							<f:facet name="header"></f:facet>
 
@@ -164,7 +158,6 @@
 
 							<div class="modal-content">
 								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal">&times;</button>
 									<h4 class="modal-title">USER SEARCH</h4>
 								</div>
 								<div class="modal-body">
@@ -188,9 +181,6 @@
 											<tr>
 												<td colspan="3"> <h:outputText id="lastName"/></td>
 											</tr>
-											<tr>
-												<td align="center" colspan="3"><h:outputText id="userNotFound" /></td>
-											</tr>
 											<tr></tr>
 											<tr>
 												<td colspan="3">
@@ -210,15 +200,14 @@
 									</div>
 								</div>
 								<div class="modal-footer">
-                    			<button type="button" class="btn-danger" data-dismiss="modal">Close</button>
-                				</div>
+								     <button type="button" class="btn-danger" data-dismiss="modal">Close</button>
+                                </div>
 							</div>
 						</div>
 					</div>
 			
 			
 		</div>
-
 	</h:form>
 
 	<script src="js/jquery-2.0.3.js"></script>
@@ -229,7 +218,6 @@
         //<![CDATA[	
 			 $(document).ready(function(){
 				//hide update and delete button on page load
-				//alert("ready!");
 				$("#updateUserButton").hide();
 				$("#deleteUserButton").hide();
 				//hide add user button on modal load

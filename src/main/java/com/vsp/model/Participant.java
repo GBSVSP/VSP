@@ -47,7 +47,7 @@ public class Participant implements Serializable {
 	private static String sql = null;
 	public String toggleBtnChgValue = Constants.NEW_PARTICIPANT_BUTTON;
 	private String jscript = "";
-	private String msgAppend = null;
+	private String msgAppend = "";
 	private String searchFilter;
 	private boolean sortAscending = false;
 	private String sortOrder = "";
@@ -81,19 +81,19 @@ public class Participant implements Serializable {
 		System.out.println("AddEmail:" +getAddEmail()+" "+" AddFirstName:"+getAddFirstName()+" AddLastName:"+getAddLastName());
 		
 		if(getToggleBtnChgValue().equals(Constants.SAVE_PARTICIPANT_BUTTON)) {
+		
 			for(ParticipantInfo partInfo: partInfoList) {
-				partInfo.setCheckboxClickedFlag(false);
+					partInfo.setCheckboxClickedFlag(false);
 			}
+				
 			partInfo = new ParticipantInfo();
 			partInfo.setCheckboxClickedFlag(true);
 			partInfo.setEmail(getAddEmail());
 			partInfo.setUser_Name(getAddFirstName()+" "+getAddLastName());
 			partInfoList.add(partInfo);
-			
-			System.out.println("size of partInfoList in addNewRow: " + partInfoList.size());
-
 			setToggleButton(true);
-			
+			System.out.println("size of partInfoList in addNewRow: " + partInfoList.size());
+		
 		}else if(getToggleBtnChgValue().equals(Constants.NEW_PARTICIPANT_BUTTON)){
 			//save clicked
 			insertParticipant();	
@@ -361,97 +361,176 @@ public class Participant implements Serializable {
 		System.out.println("sortOrder :" + value);
 		setSortOrder(value);
 		jscript = null;
-		
+
 		switch (value) {
 
-			case "user":
-	
-				Collections.sort(partInfoList, new Comparator<ParticipantInfo>() {
-	
-					@Override
-					public int compare(ParticipantInfo o1, ParticipantInfo o2) {
-						if (sortAscending == true) {
-							System.out.println("asc........");
-							// ascending order
-							return o1.getUser_Name().compareTo(o2.getUser_Name());
-						} else {
-							// descending order
-							System.out.println("desc........");
-							return o2.getUser_Name().compareTo(o1.getUser_Name());
-						}
+		case "participant":
+
+			Collections.sort(partInfoList, new Comparator<ParticipantInfo>() {
+
+				@Override
+				public int compare(ParticipantInfo o1, ParticipantInfo o2) {
+					if (sortAscending == true) {
+						System.out.println("asc........");
+						// ascending order
+						return o1.getUser_Name().compareTo(o2.getUser_Name());
+					} else {
+						// descending order
+						System.out.println("desc........");
+						return o2.getUser_Name().compareTo(o1.getUser_Name());
 					}
-	
-				});
-				break;
-	
-			case "email":
-	
-				Collections.sort(partInfoList, new Comparator<ParticipantInfo>() {
-	
-					@Override
-					public int compare(ParticipantInfo o1, ParticipantInfo o2) {
-						if (sortAscending == true) {
-							System.out.println("asc........");
-							// ascending order
-							return o1.getEmail().compareTo(o2.getEmail());
-						} else {
-							// descending order
-							System.out.println("desc........");
-							return o2.getEmail().compareTo(o1.getEmail());
-						}
+				}
+
+			});
+			break;
+
+		case "email":
+
+			Collections.sort(partInfoList, new Comparator<ParticipantInfo>() {
+
+				@Override
+				public int compare(ParticipantInfo o1, ParticipantInfo o2) {
+					if (sortAscending == true) {
+						System.out.println("asc........");
+						// ascending order
+						return o1.getEmail().compareTo(o2.getEmail());
+					} else {
+						// descending order
+						System.out.println("desc........");
+						return o2.getEmail().compareTo(o1.getEmail());
 					}
-	
-				});
-	
-				break;
-	
-			case "imt":
-	
-				Collections.sort(partInfoList, new Comparator<ParticipantInfo>() {
-	
-					@Override
-					public int compare(ParticipantInfo o1, ParticipantInfo o2) {
-						if (sortAscending == true) {
-							System.out.println("asc........");
-							// ascending order
-							return o1.getImt_Id().compareTo(o2.getImt_Id());
-						} else {
-							// descending order
-							System.out.println("desc........");
-							return o2.getImt_Id().compareTo(o1.getImt_Id());
-						}
+				}
+
+			});
+
+			break;
+
+		case "imt":
+
+			Collections.sort(partInfoList, new Comparator<ParticipantInfo>() {
+
+				@Override
+				public int compare(ParticipantInfo o1, ParticipantInfo o2) {
+					if (sortAscending == true) {
+						System.out.println("asc........");
+						// ascending order
+						return o1.getImt_Id().compareTo(o2.getImt_Id());
+					} else {
+						// descending order
+						System.out.println("desc........");
+						return o2.getImt_Id().compareTo(o1.getImt_Id());
 					}
-	
-				});
-				break;
-	
-			case "storm":
-	
-				Collections.sort(partInfoList, new Comparator<ParticipantInfo>() {
-	
-					@Override
-					public int compare(ParticipantInfo o1, ParticipantInfo o2) {
-						if (sortAscending == true) {
-							System.out.println("asc........");
-							// ascending order
-							return Boolean.valueOf(o1.isStorm_Trained()).compareTo(Boolean.valueOf(o2.isStorm_Trained()));
-						} else {
-							// descending order
-							System.out.println("desc........");
-							return Boolean.valueOf(o2.isStorm_Trained()).compareTo(Boolean.valueOf(o1.isStorm_Trained()));
-						}
+				}
+
+			});
+			break;
+
+		case "storm":
+
+			Collections.sort(partInfoList, new Comparator<ParticipantInfo>() {
+
+				@Override
+				public int compare(ParticipantInfo o1, ParticipantInfo o2) {
+					if (sortAscending == true) {
+						System.out.println("asc........");
+						// ascending order
+						return Boolean.valueOf(o1.isStorm_Trained()).compareTo(Boolean.valueOf(o2.isStorm_Trained()));
+					} else {
+						// descending order
+						System.out.println("desc........");
+						return Boolean.valueOf(o2.isStorm_Trained()).compareTo(Boolean.valueOf(o1.isStorm_Trained()));
 					}
-	
-				});
-				break;
-	
-			default:
-				System.out.println("Default Sort");
-				
+				}
+
+			});
+			break;
+
+		case "a2_invited":
+
+			Collections.sort(partInfoList, new Comparator<ParticipantInfo>() {
+
+				@Override
+				public int compare(ParticipantInfo o1, ParticipantInfo o2) {
+					if (sortAscending == true) {
+						System.out.println("asc........");
+						// ascending order
+						return Integer.valueOf(o1.getA2_invited()).compareTo(Integer.valueOf(o2.getA2_invited()));
+					} else {
+						// descending order
+						System.out.println("desc........");
+						return Integer.valueOf(o2.getA2_invited()).compareTo(Integer.valueOf(o1.getA2_invited()));
+					}
+				}
+
+			});
+			break;
+
+		case "a2_attended":
+
+			Collections.sort(partInfoList, new Comparator<ParticipantInfo>() {
+
+				@Override
+				public int compare(ParticipantInfo o1, ParticipantInfo o2) {
+					if (sortAscending == true) {
+						System.out.println("asc........");
+						// ascending order
+						return Integer.valueOf(o1.getA2_attended()).compareTo(Integer.valueOf(o2.getA2_attended()));
+					} else {
+						// descending order
+						System.out.println("desc........");
+						return Integer.valueOf(o2.getA2_attended()).compareTo(Integer.valueOf(o1.getA2_attended()));
+					}
+				}
+
+			});
+			break;
+
+		case "a3_invited":
+
+			Collections.sort(partInfoList, new Comparator<ParticipantInfo>() {
+
+				@Override
+				public int compare(ParticipantInfo o1, ParticipantInfo o2) {
+					if (sortAscending == true) {
+						System.out.println("asc........");
+						// ascending order
+						return Integer.valueOf(o1.getA3_invited()).compareTo(Integer.valueOf(o2.getA3_invited()));
+					} else {
+						// descending order
+						System.out.println("desc........");
+						return Integer.valueOf(o2.getA3_invited()).compareTo(Integer.valueOf(o1.getA3_invited()));
+					}
+				}
+
+			});
+			break;
+
+		case "a3_attended":
+
+			Collections.sort(partInfoList, new Comparator<ParticipantInfo>() {
+
+				@Override
+				public int compare(ParticipantInfo o1, ParticipantInfo o2) {
+					if (sortAscending == true) {
+						System.out.println("asc........");
+						// ascending order
+						return Integer.valueOf(o1.getA3_attended()).compareTo(Integer.valueOf(o2.getA3_attended()));
+					} else {
+						// descending order
+						System.out.println("desc........");
+						return Integer.valueOf(o2.getA3_attended()).compareTo(Integer.valueOf(o1.getA3_attended()));
+					}
+				}
+
+			});
+			break;
+		default:
+			System.out.println("Default Sort");
+
 		}
 
 		for (ParticipantInfo info : partInfoList) {
-			System.out.println("List sort change:" + info.getUser_Name()+ "" + info.isStorm_Trained());
+			System.out.println("List sort change:" + info.getUser_Name() + "" + info.isStorm_Trained());
 		}
 
 		if (sortAscending) {

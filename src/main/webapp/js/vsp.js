@@ -1,6 +1,6 @@
 //<![CDATA[	
 
-
+    
  /***** PARTICIPANT MASTER start *****/
 	      
        $("#newParticipantButton").click(function(){
@@ -14,6 +14,12 @@
 		if (buttonclicked == '+ New Participant'){
 			//alert("Modal called"); 
 			//$('.modal-body').load('searchUser.xhtml');
+			$("#userEmail").val("");
+			$("#firstName").text("");
+			$("#lastName").text("");
+		    $("#err_email").html("");
+		    $("#userNotFound").text("");
+			$("#addPartBtn").hide();
 			$("#searchUserModal").modal('show');
             count =1; 
             			            
@@ -43,7 +49,7 @@
 		
 										//alert("Row: "+ index+ "\n checkbox: "+ checkbox+ "\n serialNo :"+ serialNo
 										//	+ "\n username: "+ username+ "\n email: "+ email+ "\n sentiment_Id: "+ sentiment_Id
-										 //   + "\n imt_Id: "+ imt_Id);
+										 //  + "\n imt_Id: "+ imt_Id);
 										
 										var error_email = $tds.eq(2).find("span").first();
 										error_email.html("");
@@ -101,18 +107,6 @@
 			return status;
         });
 
-   
-		function isValidEmailAddress(emailAddress) {
-			var pattern = new RegExp(
-					"^[A-Za-z0-9]+(\.[_A-Za-z0-9-]+)*@([A-Za-z0-9]+\.(IBM|ibm)\.(COM|com)|(IBM|ibm)\.(COM|com))$");
-			return pattern.test(emailAddress);
-		}
-		
-		function isValidUserName(userName) {
-			var pattern = new RegExp("[a-zA-Z]+\\s+[a-zA-Z]+$");
-			return pattern.test(userName);
-		}
-		
 			
 		$("#updateButton").click(function(){
 			
@@ -167,6 +161,7 @@
 						
 							var error_sentiment_Id = $tds.eq(11).find("span").first();
 							error_sentiment_Id.html(""); 
+							
 						 
 					 }
 					  
@@ -234,7 +229,7 @@
 		$(document).on('change','.checkboxEventClass',function(){ 
 			//alert("In checkbox to page load");
 			var count =0;
-			
+				
 			$(".checkboxEventClass").each(function(){
 				 if (this.checked) {
 		              count++;
@@ -246,9 +241,10 @@
 				$("#updateButton").show();
 				$("#deleteButton").show();
 			}else{
+				$("#divTable").load("participantMaster.xhtml #participantResult");
 				$("#updateButton").hide();
 				$("#deleteButton").hide();
-				$("#divTable").load("participantMaster.xhtml #participantResult");
+				
 			}
 			
 		});
@@ -260,7 +256,7 @@
 			var buttonclicked = $("#cancelButton").val();
 			//alert("Button clicked: " + buttonclicked);
 			
-			return confirm("Any unsaved data will be lost. Are you sure?");;
+			return confirm("Any unsaved data will be lost. Are you sure?");
 		});
    			
 		
@@ -278,6 +274,13 @@
 	    	if (buttonclicked == '+ New User'){
 				//alert("Modal called"); 
 				//$('.modal-body').load('searchUser.xhtml');
+	    		$("#userEmail").val("");
+				$("#firstName").text("");
+				$("#lastName").text("");
+			    $("#err_email").html("");
+			    $("#userNotFound").text("");
+				$("#addUserBtn").hide();
+				$("#searchUserModal").modal('show');
 				$("#searchUserModal").modal('show');
 	            count =1; 
 	            			            
@@ -370,17 +373,6 @@
 	    	//alert("status: " +status);
 	    	return status;
 	        });
-
-	    		function isValidEmailAddress(emailAddress) {
-	    			var pattern = new RegExp(
-	    					"^[A-Za-z0-9]+(\.[_A-Za-z0-9-]+)*@([A-Za-z0-9]+\.(IBM|ibm)\.(COM|com)|(IBM|ibm)\.(COM|com))$");
-	    			return pattern.test(emailAddress);
-	    		}
-	    		
-	    		function isValidUserName(userName) {
-	    			var pattern = new RegExp("[a-zA-Z]+\\s+[a-zA-Z]+$");
-	    			return pattern.test(userName);
-	    		}
 	    		
 	    		$("#updateUserButton").click(function(){
 	    			
@@ -499,11 +491,11 @@
 	    		});
 	    		
 	    		
-	    		$(document).on('change','.checkboxEventClass',function(){ 
+	    		$(document).on('change','.checkboxUserEventClass',function(){ 
 	    			//alert("In checkbox to page load");
 	    			var count =0;
 	    			
-	    			$(".checkboxEventClass").each(function(){
+	    			$(".checkboxUserEventClass").each(function(){
 	    				 if (this.checked) {
 	    		              count++;
 	    		         }
@@ -514,9 +506,10 @@
 	    				$("#updateUserButton").show();
 	    				$("#deleteUserButton").show();
 	    			}else{
+	    				$("#divUserTable").load("userInfo.xhtml #userResult");
 	    				$("#updateUserButton").hide();
 	    				$("#deleteUserButton").hide();
-	    				$("#divUserTable").load("userInfo.xhtml #userResult");
+	    				
 	    			}
 	    			
 	    		});
@@ -528,7 +521,7 @@
 	    			var buttonclicked = $("#cancelUserButton").val();
 	    			//alert("Button clicked: " + buttonclicked);
 	    			
-	    			return confirm("Any unsaved data will be lost. Are you sure?");;
+	    			return confirm("Any unsaved data will be lost. Are you sure?");
 	    		});
 	       		    			
  /***** USER ADMIN end *****/		
@@ -536,22 +529,87 @@
 	    		
  /***** Common scripts start ******/
 	    		
-	    	$("#addUserBtn").click(function(event) {
-    	            //alert("Add user clicked");
-    	        	//alert("EM "+ $('#userEmail').val() +" FN "+$("#firstName").text()+" LN "+ $("#lastName").text());
-    	        	$('#myModal').modal('hide');
+	    	$("#addPartBtn").click(function(event) {
+    	          //alert('Add user clicked');
+    	          //alert("EM "+ $('#userEmail').val() +" FN "+$("#firstName").text()+" LN "+ $("#lastName").text());
+	    		   var table = $("#participantResult tbody");
+	    		   
+	    		   $("#addEmail").val("");
+	    		   var matchedFlag= false;
+	    		   var err_email = $("#err_email");
+	    		   var partEmail = $("#userEmail").val();
+	    		    
+				   table.find('tr').each(function(index) {
+						var $tds = $(this).find('td');
+						var email = $tds.eq(2).text().trim();
+						var addEmail = $("#addEmail").val(email);
+
+						if(addEmail.val() == partEmail){
+							matchedFlag = true;
+						}
+				   })			
+
+				   //alert(matchedFlag);
+				   
+	    		   err_email.html("");
+				   if(matchedFlag == true){
+					  err_email.html("Participant already exist!");
+					  $('#myModal').modal('show');
+					  return false;
+				   }else{ 
+					  $("#addEmail").val(partEmail); 
+					  $('#myModal').modal('hide');
+					  return true;
+				   }
+				   
     	    });
+	    	
+	    	$("#addUserBtn").click(function(event) {
+  	          //alert("Add user clicked");
+  	          //alert("EM "+ $('#userEmail').val() +" FN "+$("#firstName").text()+" LN "+ $("#lastName").text());
+	    		   var table = $("#userResult tbody");
+	    		   $("#addEmail").val("");
+	    		   var matchedFlag= false;
+	    		   var err_email = $("#err_email");
+	    		   var userEmail = $("#userEmail").val();
+	    		     		   
+				   table.find('tr').each(function(index) {
+						var $tds = $(this).find('td');
+						var email = $tds.eq(2).text().trim();
+						var addEmail = $("#addEmail").val(email);
+						
+						if(addEmail.val() == userEmail){
+							matchedFlag = true;
+						}
+				   })			
+				   
+				   //alert(matchedFlag);
+				   
+	    		   err_email.html("");
+				   if(matchedFlag == true){
+					   err_email.html("User already exist!");
+					  $('#myModal').modal('show');
+					  return false;
+				   }else{
+					  $("#addEmail").val(userEmail);
+					  $('#myModal').modal('hide');
+					  return true;
+				   }
+				   
+  	    });
     	       	    	 
 	     		
     		$("#userSearch").click(function () {
     				var email =	$("#userEmail").val();
     				var err_email = $("#err_email");
+    				//alert(email);
+    				
     				$("#addEmail").val(email);
     				$("#userNotFound").html("");
     				$("#firstName").html("");
     				$("#lastName").html("");
     				$("#addUserBtn").hide();
-    				
+    				$("#addPartBtn").hide();
     				err_email.html("");
     				if (email == ''|| email == 'undefined') {
     					err_email.html("Email cannot be blank");
@@ -574,10 +632,12 @@
     				                $.each(value1, function (key2, value2) {
     				                	if(value2 == ''){
     				                		//alert("Empty!");
-    				                		$("#userNotFound").text("User not found, try again!")
+    				                		//$("#userNotFound").text("User not found, try again!")
+    				                		err_email.html("User not found, try again!");
     				                		$("#firstName").text("");
     				                		$("#lastName").text("");
     				                		$("#addUserBtn").hide();
+    				                		$("#addPartBtn").hide();
     				                	}
     				                    $.each(value2, function (key3, value3) {
     				                        $.each(value3, function (key4, value4) {
@@ -597,6 +657,7 @@
     				                                });
     				                                
     				                                $("#addUserBtn").show();
+    				                                $("#addPartBtn").show();
     				                            }
     				                        });
     				                   });
@@ -606,8 +667,20 @@
     					});
     				return false;
     			});   	  	
-	       
-
+    		
+    		
+    		function isValidEmailAddress(emailAddress) {
+    			var pattern = new RegExp(
+    					"^[A-Za-z0-9]+(\.[_A-Za-z0-9-]+)*@([A-Za-z0-9]+\.(IBM|ibm)\.(COM|com)|(IBM|ibm)\.(COM|com))$");
+    			return pattern.test(emailAddress);
+    		}
+    		
+    		function isValidUserName(userName) {
+    			var pattern = new RegExp("[a-zA-Z]+\\s+[a-zA-Z]+$");
+    			return pattern.test(userName);
+    		}
+    			       
 /***** Common scripts end ******/	    	       
+
 //]]>
 		

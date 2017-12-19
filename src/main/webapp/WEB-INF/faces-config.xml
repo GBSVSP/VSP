@@ -16,5 +16,10 @@
 	<var>msgbundle</var>
 	</resource-bundle>
   </application>
-
+  
+  <contex-param>
+    <param-name>facelets.SKIP_COMMENTS</param-name>
+    <param-value>true</param-value>
+  </contex-param>
+  
 </faces-config>

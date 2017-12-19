@@ -8,38 +8,32 @@
 	
 
 <h:head>
-	
-
 </h:head>
 
 <h:body>
-
 		
     <ui:composition template="commonLayout.xhtml">
     
     <ui:define name="content">
-<br></br>
+    <br></br><br></br>  
 	<h:form id="participantForm"  prependId="false"> 
-  
+    <br></br><br></br>   
 		<div align="center">
 			<h:panelGrid columns="1">
 				<h:messages for="validationMsg" id="validationMsg" style="color:red"></h:messages>
 			</h:panelGrid>
 			
 			<h:panelGrid width="80%">
-				<br></br><br></br> <br></br><br></br>    
 				<table border="0" width="110%">
 					<tr bgcolor="grey">
-						<td style="color: black; padding-left: 10px"><b>PARTICIPANT MASTER</b></td>				
+						<td style="color: black; padding-left: 10px"><h4>PARTICIPANT MASTER</h4></td>				
 					</tr>
 				</table>
 				
-				<p:scrollPanel mode="native" style="width:1200px;height:320px;overflow:auto;vertical-align: top" id="divTable" >
-					<center>
+				<p:scrollPanel mode="native" style="width:1200px;height:320px;overflow:auto" id="divTable" >
+					
 					<h:dataTable id="participantResult" var="participantData"
-						value="#{participant.allParticipantList}" styleClass = "vspTable"
-            headerClass = "vspTableHeader"
-            rowClasses = "vspTableOddRow,vspTableEvenRow">
+						value="#{participant.allParticipantList}" styleClass="table table-striped tablesorter">
 						<h:column>
 							<f:facet name="header"></f:facet>
 
@@ -50,13 +44,13 @@
 						</h:column>
 
 						<h:column>
+						    <f:facet name="header"></f:facet>
 							<h:inputHidden id="serialNo" value="#{participantData.serialNo}"></h:inputHidden>
 						</h:column>
 
 						<h:column>
 							<f:facet name="header">
-							<h:commandLink id="email_header" value="Email" style="text-decoration:underline; font-size:14px" 
-							styleClass="sort_header" action="#{participant.sortBy('email')}"></h:commandLink>
+							<h:outputLink id="email_header" style="text-decoration:underline; font-size:13px">Email</h:outputLink>
 							</f:facet>
 							
 							<h:outputText value="#{participantData.email}" rendered="#{participantData.serialNo != '0'}"></h:outputText>
@@ -74,13 +68,12 @@
 
 						<h:column>
 							<f:facet name="header">
-							<h:commandLink id="user_header" value="User" style="text-decoration:underline; font-size:13px" 
-							styleClass="sort_header" action="#{participant.sortBy('user')}">
-							</h:commandLink>
-						
+							<h:outputLink id="part_header" style="text-decoration:underline; font-size:13px">Participant
+							</h:outputLink>
 							</f:facet>
 
-							<h:outputText value="#{participantData.user_Name}" rendered="#{participantData.serialNo != '0'}"></h:outputText>
+							<h:outputText value="#{participantData.user_Name}" rendered="#{participantData.serialNo != '0'}">
+							</h:outputText>
 							
 						    <h:outputText style="color:red;font-size:8pt;" id="error_username"></h:outputText>
 						    <br></br>
@@ -94,15 +87,14 @@
 						</h:column>
 
 
-						<h:column >
+						<h:column>
 							<f:facet name="header">
-							<h:commandLink id="imt_header" value="IMT" style="text-decoration:underline; font-size:13px" 
-							styleClass="sort_header" action="#{participant.sortBy('imt')}"></h:commandLink>
+							<h:outputText id="imt_header" style="font-size:13px" value="IMT"></h:outputText>
 							</f:facet>
 							
 							<h:outputText style="color:red;font-size: 8pt;" id="error_imt_Id"></h:outputText>
 							 <br></br>
-							<h:selectOneMenu id="imt_Id" value="#{participantData.imt_Id}" style="width:140px">
+							<h:selectOneMenu id="imt_Id" value="#{participantData.imt_Id}" style="width:130px">
 								<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true" />
 								<f:selectItems value="#{participant.imtList}" />
 							</h:selectOneMenu>
@@ -112,34 +104,41 @@
 
 						<h:column>
 							<f:facet name="header">
-							<h:commandLink id="storm_header" value="Trained:&#10;&#10;Revenue Storm" style="text-decoration:underline; font-size:13px;
-							 white-space: pre;" action="#{participant.sortBy('storm')}">
-							</h:commandLink>
+							<h:outputLink id="storm_header" style="text-decoration:underline; font-size:13px;
+							 white-space: pre;">Trained:<br></br><br></br>Revenue Storm</h:outputLink>
 							</f:facet>
 							<h:selectBooleanCheckbox id="storm_Trained" value="#{participantData.storm_Trained}" style="width:50px">
 							</h:selectBooleanCheckbox>
 						</h:column>
 
                        <h:column>
-							<f:facet name="header"><h:outputText value="A2&#10;&#10;Invited" style="white-space: pre;font-size:13px"></h:outputText></f:facet>
+							<f:facet name="header">
+							<h:outputLink id="a2_invited_header" style="text-decoration:underline; font-size:13px;
+							 white-space: pre;">A2<br></br><br></br>Invited</h:outputLink></f:facet>
 							<h:outputText id="a2_invited" value="#{participantData.a2_invited}" rendered="#{participantData.a2_invited != '0'}"> 
 							</h:outputText>
 						</h:column>
 						
 						<h:column>
-							<f:facet name="header"><h:outputText value="A2&#10;&#10;Attended" style="white-space: pre;font-size:13px"></h:outputText></f:facet>
+							<f:facet name="header">
+							 <h:outputLink id="a2_attended_header" style="text-decoration:underline; font-size:13px; 
+							 white-space: pre;">A2<br></br><br></br>Attended</h:outputLink></f:facet>
 							<h:outputText id="a2_attended" value="#{participantData.a2_attended}" rendered="#{participantData.a2_attended != '0'}"> 
 							</h:outputText>
 						</h:column>
 						
 						<h:column>
-							<f:facet name="header"><h:outputText value="A3&#10;&#10;Invited" style="white-space: pre;font-size:13px"></h:outputText></f:facet>
+							<f:facet name="header">
+							<h:outputLink id="a3_invited_header" style="text-decoration:underline; font-size:13px;
+							 white-space: pre;">A3<br></br><br></br>Invited</h:outputLink></f:facet>
 							<h:outputText id="a3_invited" value="#{participantData.a3_invited}" rendered="#{participantData.a3_invited != '0'}"> 
 							</h:outputText>
 						</h:column>
 						
 						<h:column>
-							<f:facet name="header"><h:outputText value="A3&#10;&#10;Attended" style="white-space: pre;font-size:13px"></h:outputText></f:facet>
+							<f:facet name="header">
+							<h:outputLink id="a3_attended_header" style="text-decoration:underline; font-size:13px; 
+							white-space: pre;">A3<br></br><br></br>Attended</h:outputLink></f:facet>
 							<h:outputText id="a3_attended" value="#{participantData.a3_attended}" rendered="#{participantData.a3_attended != '0'}"> 
 							</h:outputText>
 						</h:column>
@@ -153,11 +152,12 @@
 
 
 						<h:column>
-							<f:facet name="header"><h:outputText value="Sentiment?" style="font-size:13px"></h:outputText></f:facet>
+							<f:facet name="header"><h:outputText value="Sentiment?" style="font-size:13px"></h:outputText>
+							</f:facet>
 							
 							<h:outputText style="color:red;font-size: 8pt;" id="error_sentiment_Id"></h:outputText>
 							 <br></br>
-							<h:selectOneMenu id="sent_Id" value="#{participantData.sentiment}" style="width:140px">
+							<h:selectOneMenu id="sent_Id" value="#{participantData.sentiment}" style="width:130px">
 								<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true" />
 								<f:selectItems value="#{participant.sentimentList}" />
 							</h:selectOneMenu>
@@ -166,7 +166,7 @@
 						</h:column>
 
 					</h:dataTable>
-					</center>
+					
 				</p:scrollPanel>
 				<h:panelGrid width="100%" style="text-align:right;">
 			      <h:outputText value="*All fields are mandatory" style="color:red;font-size:9pt;" rendered="#{participant.toggleButton}">
@@ -209,13 +209,12 @@
 			<h:outputScript rendered="#{participant.jscript == 'error'}">alert("#{msgbundle.database_error}");</h:outputScript>
 						
 			</h:panelGrid>
-			 
+			        
 					<div class="modal fade" id="searchUserModal">
 						<div class="modal-dialog">
 
 							<div class="modal-content">
 								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal">&times;</button>
 									<h4 class="modal-title">USER SEARCH</h4>
 								</div>
 								<div class="modal-body">
@@ -239,15 +238,13 @@
 											<tr>
 												<td colspan="3"> <h:outputText id="lastName"/></td>
 											</tr>
-											<tr>
-												<td align="center" colspan="3"><h:outputText id="userNotFound" /></td>
-											</tr>
 											<tr></tr>
 											<tr>
 												<td colspan="3">
-												<h:commandButton id="addUserBtn" value="Add User" class="btn-default"
+												<h:commandButton id="addPartBtn" value="Add User" class="btn-default"
 												actionListener="#{participant.toggleBtnAction}" action="#{participant.addNewRow}">
 												 </h:commandButton></td>
+												 
 											</tr>
 											<tr>
 											<td>
@@ -260,18 +257,20 @@
 										</table>
 									</div>
 								</div>
-								 <div class="modal-footer">
-                    			<button type="button" class="btn-danger" data-dismiss="modal">Close</button>
-                				</div>
+								<div class="modal-footer">
+								     <button type="button" class="btn-danger" data-dismiss="modal">Close</button>
+                                </div>
 							</div>
 						</div>
 					</div>
 
 				</div>
+		
 	
-	   </h:form>	
+	 </h:form>	
 	<script src="js/jquery-2.0.3.js"></script>
 	<script src="js/jquery-ui.js"></script>
+	<script src="js/jquery.tablesorter.js"></script>
 	<script src="js/bootstrap.js"></script> 
 	<script src="js/vsp.js"></script>
 	   <script>
@@ -282,7 +281,8 @@
 					$("#updateButton").hide();
 					$("#deleteButton").hide();
 					//hide add user button on modal load
-					$("#addUserBtn").hide();
+					$("#addPartBtn").hide();
+					$("#participantResult").tablesorter();
 					
 			   });
 	    //]]>
