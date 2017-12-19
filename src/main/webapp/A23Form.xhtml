@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:body>
+
+	<table border="0" width="100%" class="panelGrid">
+		<tr>
+			<td colspan="4" align="left"><b>WORKSHOP REF NO: <h:outputText
+						name="a1RefNo" value=" ${deal.workshopRefNo}"></h:outputText></b> </td>
+					<td align="right">
+					<h:commandButton
+					render="dataTableGroup" immediate="true"
+					rendered="${not deal.workshopstatusFlag}" id="wsButton"
+					value="CREATE WORKSHOP" class="btn-default"
+					actionListener="#{deal.addWorkshop}" onclick="return validate()">
+				</h:commandButton>
+				 <h:commandButton update="dataTableGroup"
+					rendered="${deal.workshopstatusFlag}" id="wsAddButton"
+					value="+ NEW WORKSHOP" class="btn-default"
+					actionListener="#{deal.addNewWorkshop}" onclick="return validate()">
+
+				</h:commandButton> 
+		</td></tr>
+	</table>
+<h:panelGroup id="dataTableA23Group">
+		   <h:dataTable  value="#{deal.a23FormList}" var="row" rows="1">
+		 <h:column>
+			<table width="70%" class="panelGrid">
+			<tr></tr>
+				<tr>
+					  <td colspan="10" align="left"><b>WORKSHOP EVALUATION:</b></td>
+				</tr>
+									
+				<tr>
+					 <td style="font-size:12px;">Workshop Status: <h:selectOneMenu disabled="#{not deal.workshopstatusFlag}" value="#{a23Form.workshop_Status}" style="width:120px">
+							<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true" />
+								<!-- <f:selectItems value="#{selectList.shouldweSellList}" immediate="true"/> -->
+							</h:selectOneMenu>
+					 </td>
+								
+					 <td style="font-size:12px;">Deal Coach: <h:inputText disabled="#{not deal.workshopstatusFlag }" value="#{a23Form.workshop_DealCoach}" style="width:120px" /> 
+					 </td>
+					 
+					 <td style="font-size:12px;">Complete: <h:inputText disabled="#{not deal.workshopstatusFlag }" value="#{a23Form.workshop_CompleteDate}" />
+					 </td>
+					  
+					 <td style="font-size:12px;">Length:<h:selectOneMenu disabled="#{not deal.workshopstatusFlag }" value="#{a23Form.workshop_Length}" style="width:140px">
+							<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
+							</h:selectOneMenu>
+					 
+					 </td>
+				</tr>
+				
+				<tr>
+				    <td style="font-size:12px;">Deal Coaching Evaluation: <h:selectOneMenu disabled="#{not deal.workshopstatusFlag }" 
+				    value="#{a23Form.workshop_DealCoachEval}" style="width:160px">
+							<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
+							</h:selectOneMenu>
+					 </td>
+								
+					 <td style="font-size:12px;">Evaluation Status History: <h:selectOneMenu disabled="#{not deal.workshopstatusFlag }" 
+					 value="#{a23Form.workshop_EvalStatusHistory}" style="width:120px">
+							<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
+					       </h:selectOneMenu>
+					 </td>
+					 
+					 <td style="font-size:12px;">Deal Coaching Justification: <h:inputTextarea disabled="#{not deal.workshopstatusFlag }" 
+					 value="#{a23Form.workshop_DealCoachJustification}"></h:inputTextarea>
+					 </td>
+				
+				</tr>
+				
+				<tr>
+				    <td style="font-size:12px;">Qualifier Tool:Should we sell? <h:selectOneMenu disabled="#{not deal.workshopstatusFlag }" 
+				    value="#{a23Form.workshop_ShouldSell}" style="width:120px">
+							<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
+								<!-- <f:selectItems value="#{selectList.shouldweSellList}" immediate="true" />-->
+							</h:selectOneMenu>
+					 </td>
+								
+					 <td style="font-size:12px;">Qualifier Tool:Can we sell? <h:selectOneMenu disabled="#{not deal.workshopstatusFlag }" 
+					 value="#{a23Form.workshop_CanSell}" style="width:140px">
+							<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
+							  <!-- <f:selectItems value="#{selectList.a1EvaluationList}" immediate="true" /> -->
+							</h:selectOneMenu> 
+					 </td>
+					 
+					 <td style="font-size:12px;">Qualifier Tool:Evaluation <h:selectOneMenu disabled="#{not deal.workshopstatusFlag }" 
+					 value="#{a23Form.workshop_Evaluation}" style="width:120px">
+							<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
+							  <!-- <f:selectItems value="#{selectList.a1EvaluationList}" immediate="true" /> -->
+							</h:selectOneMenu>  
+					 </td>
+					  
+					 <td style="font-size:12px;">Pursuit profile win chance:<h:inputText disabled="#{not deal.workshopstatusFlag }" 
+					 value="#{a23Form.workshop_Pursuit}" style="width:120px"/> 
+					 </td>
+				</tr>
+				</table>
+				
+				<!-- PARTICIPANTS -->
+				<table width="100%" >
+				<tr></tr>
+				<tr>
+					<td align="left"><b>PARTICIPANTS</b></td>				  
+				</tr>
+				<tr>
+				   <td style="font-size:12px;"> Invite and record participants activities</td>
+				   
+				   <td style="font-size:12px;" align="right"><h:commandButton id="managePart" value="Manage Participants" rendered="${deal.workshopstatusFlag}"></h:commandButton> 
+					 </td>
+				</tr></table>
+				<table>
+				
+				<!-- FOLLOW UP WITH DEAL TEAM -->
+				<tr></tr>
+				<tr>
+					<td colspan="10" align="left"><b>FOLLOW UP WITH DEAL TEAM</b></td>
+				
+				</tr>
+				<tr>
+				   <td style="font-size:12px;">Briefing Call held: <h:inputText disabled="#{not deal.workshopstatusFlag }" value="#{a23Form.workshop_BriefingCallDate}" />
+				   </td>
+				   
+				   <td style="font-size:12px;">Next Checkpoint call: <h:inputText disabled="#{not deal.workshopstatusFlag }" value="#{a23Form.workshop_CheckpointCallDate}" /> 
+				   </td>   
+				</tr>
+				
+				<!-- WORKSHOP CONTENT -->
+				<tr></tr>
+				<tr>
+					<td colspan="10" align="left"><b>WORKSHOP CONTENT</b></td>
+					  
+				</tr>
+				<tr>
+				   <td style="font-size:12px;">Modules Run: <h:inputText disabled="#{not deal.workshopstatusFlag }" value="#{a23Form.workshop_ModulesRun}" /></td>
+				   
+				   <td style="font-size:12px;">IBM Beloved Deal: <h:selectOneMenu disabled="#{not deal.workshopstatusFlag }" value="#{a23Form.workshop_IBMBelovedDeal}">
+							<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
+							 <!-- <f:selectItems value="#{selectList.a1EvaluationList}" immediate="true" /> -->
+							</h:selectOneMenu> 
+				   </td>
+					 
+				   <td style="font-size:12px;">Client Attended: <h:selectOneMenu disabled="#{not deal.workshopstatusFlag }" value="#{a23Form.workshop_ClientAttended}">
+							<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
+							 <!-- <f:selectItems value="#{selectList.a1EvaluationList}" immediate="true" /> -->
+							</h:selectOneMenu> 
+				   </td>
+				</tr>
+				<tr>
+				   <td style="font-size:12px;">Anticipated Power Base: <h:inputText disabled="#{not deal.workshopstatusFlag }" value="#{a23Form.workshop_AnticipatedPowerBase1}" /></td>
+				   
+				   <td style="font-size:12px;"><h:inputText disabled="#{not deal.workshopstatusFlag }" value="#{a23Form.workshop_AnticipatedPowerBase2}" /> 
+				   </td>
+					 
+				   <td style="font-size:12px;">Actual Power Base: <h:inputText disabled="#{not deal.workshopstatusFlag }" value="#{a23Form.workshop_ActualPowerBase}" />
+				   </td>
+				</tr>
+				
+				<tr>
+				   <td style="font-size:12px;">Anticipated Competitor(Top 2): <h:inputText disabled="#{not deal.workshopstatusFlag }" value="#{a23Form.workshop_AnticipatedCompetitor1}" /></td>
+				   
+				   <td style="font-size:12px;"><h:inputText disabled="#{not deal.workshopstatusFlag }" value="#{a23Form.workshop_AnticipatedCompetitor2}" /> 
+				   </td>
+					 
+				   <td style="font-size:12px;">Actual Competitor: <h:inputText disabled="#{not deal.workshopstatusFlag }" value="#{a23Form.workshop_ActualCompetitor}" />
+				   </td>
+				</tr>
+				<tr>
+				   <td style="font-size:12px;" colspan="3">Consortium: <h:inputText disabled="#{not deal.workshopstatusFlag }" value="#{a23Form.workshop_Consortium}" />
+				   </td>
+				</tr>
+				
+											
+			 </table>
+			 
+			 
+								 
+		</h:column>
+	 </h:dataTable>
+	 <table>
+	 <tr>
+		   <td style="font-size:12px;">Historical Workshop Info: </td>
+				</tr>
+				
+	 </table>
+   </h:panelGroup>
+									
+
+</h:body>
+
+</html>

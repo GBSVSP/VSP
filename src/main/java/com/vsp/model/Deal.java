@@ -47,6 +47,7 @@ public class Deal implements Serializable {
 	private static  List<DealInfo> searchList = new ArrayList<DealInfo>();
 	private static  List<Comments> commentsList = new ArrayList<Comments>();
 	private static List<A1Form> a1FormList = new ArrayList<A1Form>();
+	private static List<A23Form> a23FormList = new ArrayList<A23Form>();
 	private String jscript = "";
 	private static ArrayList<String> a1History;
 	private static HashMap<Integer, String> optionMap;
@@ -59,15 +60,25 @@ public class Deal implements Serializable {
 	private boolean a1DBStatus = false;
 	private int a1Count;
 	private boolean a1ButtonClick;
+	private boolean addWorkshopBtnClick;
 	private static String a1StatusMessage = null;
+	private static String wsStatusMessage = null;
 	private static String searchMsg = null;
 	
 
 	private static boolean a1statusFlag ;
+	private static boolean workshopstatusFlag ;
 	public static String a1RefNo;
+	public static String workshopRefNo;
 	public static String activeA1RefNo;
 	
 	
+	public  String getWorkshopRefNo() {
+		return workshopRefNo;
+	}
+	public  String getWsStatusMessage() {
+		return wsStatusMessage;
+	}
 	public  List<Comments> getCommentsList() {
 		return commentsList;
 	}
@@ -79,6 +90,10 @@ public class Deal implements Serializable {
 	}
 	public boolean getA1statusFlag() {
 		return a1statusFlag;
+	}
+	
+	public  boolean getWorkshopstatusFlag() {
+		return workshopstatusFlag;
 	}
 	public String getA1RefNo() {
 		return a1RefNo;
@@ -101,6 +116,10 @@ public class Deal implements Serializable {
 	return a1FormList;
 	}
 
+	public  List<A23Form> getA23FormList() {
+		return a23FormList;
+		}
+	
 	@ManagedProperty(value = "#{dealInfo}")
 	private DealInfo dealInfoObj  = new DealInfo();
 
@@ -115,10 +134,15 @@ public class Deal implements Serializable {
 	}
 	@ManagedProperty(value = "#{comments}")
 	private Comments commentsObj = new Comments();
-
 	public void setCommentsObj(Comments comments) {
 		this.commentsObj = comments;
 	}
+	@ManagedProperty(value = "#{a23Form}")
+	private A23Form a23FormObj = new A23Form();
+	public void setA23FormObj(A23Form a23Form) {
+		this.a23FormObj = a23Form;
+	}
+	
 	
 	// generating the reference number in YYYY+4 digit serial number format
 	public int getReference_No() {
@@ -318,10 +342,15 @@ public class Deal implements Serializable {
 	
 	}
 
-	// Invoked from NEW DEAL FORM button
+	/**
+	 * Method to handle ADD NEW DEAL button click 
+	 * Invoked from NEW DEAL FORM button
+	 * @param value
+	 * @return String
+	 * @throws Exception
+	 */
 	public String newDeal() throws Exception {
-		System.out.println("inside newDeal");
-		//searchValue = null;
+		System.out.println("In Deal: Entering newDeal()...");
 		searchType = Constants.DEFAULT_SEARCH_TYPE;
 		if (dealList != null) {
 		
@@ -331,11 +360,25 @@ public class Deal implements Serializable {
 		if(a1FormList!=null) {
 			a1FormList.clear();
 		}
+		if(a23FormList!=null) {
+			a23FormList.clear();
+		}
+		//generating A1 form
 		a1FormList = new ArrayList<A1Form> ();
 		a1FormList.add(new A1Form());
 		a1RefNo = null;
+		
+		//generating workshop form
+		a23FormList = new ArrayList<A23Form> ();
+		a23FormList.add(new A23Form());
+		workshopRefNo = null;
+		
+		//generating reference number
 		generateReferenceNo();
 		a1statusFlag = false;
+		workshopstatusFlag = false;
+		
+		System.out.println("In Deal: Exit newDeal()...");
 		
 		return "newDeal";
 
@@ -364,163 +407,9 @@ public class Deal implements Serializable {
 		System.out.println("New reference_No:"+reference_No);
 		
 	}
-	// Populating Led By drop down
-	public ArrayList<SelectItem> getLedByList() {
-		whereClause = Constants.LED_BY_CONDITION;
-		String sql = QueryBuilder.SELECT_OPTION + "" + whereClause;
-		ArrayList<SelectItem> optionList = new ArrayList<SelectItem>();
-		try {
-			optionMap = FormDAO.getOptionList(sql);
-			for (Map.Entry<Integer, String> entry : optionMap.entrySet()) {
-				optionList.add(new SelectItem(entry.getValue(), entry.getValue()));
-			}
-		} catch (Exception ex) {
-			System.out.println(ex.getMessage());
-		}
-		return optionList;
-	}
+	
 
-	// Populating Potential TCV drop down
-	public ArrayList<SelectItem> getPotentialTCVList() {
-		whereClause = Constants.PPOTENTIAL_TCV_CONDITION;
-		String sql = QueryBuilder.SELECT_OPTION + "" + whereClause;
-		ArrayList<SelectItem> optionList = new ArrayList<SelectItem>();
-		try {
-			optionMap = FormDAO.getOptionList(sql);
-			for (Map.Entry<Integer, String> entry : optionMap.entrySet()) {
-				optionList.add(new SelectItem(entry.getKey(), entry.getValue()));
-			}
-		} catch (Exception ex) {
-			System.out.println(ex.getMessage());
-		}
-		return optionList;
-	}
-
-	// Populating A1 Status drop down
-	public ArrayList<SelectItem> getA1StatusList() {
-		whereClause = Constants.A1STATUS_CONDITION;
-		String sql = QueryBuilder.SELECT_OPTION + "" + whereClause;
-		ArrayList<SelectItem> optionList = new ArrayList<SelectItem>();
-		try {
-			optionMap = FormDAO.getOptionList(sql);
-			for (Map.Entry<Integer, String> entry : optionMap.entrySet()) {
-				optionList.add(new SelectItem(entry.getValue(), entry.getValue()));
-			}
-		} catch (Exception ex) {
-			System.out.println(ex.getMessage());
-		}
-		return optionList;
-	}
-
-	// Populating Next Step drop down
-	public ArrayList<SelectItem> getNextStepList() {
-		whereClause = Constants.NEXT_STEP_CONDITION;
-		String sql = QueryBuilder.SELECT_OPTION + "" + whereClause;
-		ArrayList<SelectItem> optionList = new ArrayList<SelectItem>();
-		try {
-			optionMap = FormDAO.getOptionList(sql);
-			for (Map.Entry<Integer, String> entry : optionMap.entrySet()) {
-				optionList.add(new SelectItem(entry.getKey(), entry.getValue()));
-			}
-		} catch (Exception ex) {
-			System.out.println(ex.getMessage());
-		}
-		return optionList;
-	}
-
-	// Populating Should we sell drop down
-	public ArrayList<SelectItem> getShouldweSellList() {
-		whereClause = Constants.SHOULD_WE_SELL_CONDITION;
-		String sql = QueryBuilder.SELECT_OPTION + "" + whereClause;
-		ArrayList<SelectItem> optionList = new ArrayList<SelectItem>();
-		try {
-			optionMap = FormDAO.getOptionList(sql);
-			for (Map.Entry<Integer, String> entry : optionMap.entrySet()) {
-				optionList.add(new SelectItem(entry.getKey(), entry.getValue()));
-			}
-		} catch (Exception ex) {
-			System.out.println(ex.getMessage());
-		}
-		return optionList;
-	}
-
-	// Populating can we sell drop down
-	public ArrayList<SelectItem> getCanweSellList() {
-		whereClause = Constants.CAN_WE_SELL_CONDITION;
-		String sql = QueryBuilder.SELECT_OPTION + "" + whereClause;
-
-		ArrayList<SelectItem> optionList = new ArrayList<SelectItem>();
-		try {
-			optionMap = FormDAO.getOptionList(sql);
-			for (Map.Entry<Integer, String> entry : optionMap.entrySet()) {
-				optionList.add(new SelectItem(entry.getKey(), entry.getValue()));
-			}
-		} catch (Exception ex) {
-			System.out.println(ex.getMessage());
-		}
-		return optionList;
-	}
-
-	// Populating Evaluation drop down
-	public ArrayList<SelectItem> getA1EvaluationList() {
-		whereClause = Constants.A1EVALUATION_CONDITION;
-		String sql = QueryBuilder.SELECT_OPTION + "" + whereClause;
-		ArrayList<SelectItem> optionList = new ArrayList<SelectItem>();
-		try {
-			optionMap = FormDAO.getOptionList(sql);
-			for (Map.Entry<Integer, String> entry : optionMap.entrySet()) {
-				optionList.add(new SelectItem(entry.getKey(), entry.getValue()));
-			}
-		} catch (Exception ex) {
-			System.out.println(ex.getMessage());
-		}
-		return optionList;
-	}
-
-	// Populating IMT drop down
-	public List<SelectItem> getIMTList() {
-		String sql = QueryBuilder.SELECT_IMT;
-		ArrayList<SelectItem> optionList = new ArrayList<SelectItem>();
-		try {
-			optionMap = FormDAO.getOptionList(sql);
-			for (Map.Entry<Integer, String> entry : optionMap.entrySet()) {
-				optionList.add(new SelectItem(entry.getKey(), entry.getValue()));
-			}
-		} catch (Exception ex) {
-			System.out.println(ex.getMessage());
-		}
-		return optionList;
-	}
-
-	// Populating SCIMT drop down
-	public List<SelectItem> getSCIMTList() {
-		String sql = QueryBuilder.SELECT_IMT;
-		ArrayList<SelectItem> optionList = new ArrayList<SelectItem>();
-		try {
-			optionMap = FormDAO.getOptionList(sql);
-			for (Map.Entry<Integer, String> entry : optionMap.entrySet()) {
-				optionList.add(new SelectItem(entry.getKey(), entry.getValue()));
-			}
-		} catch (Exception ex) {
-			System.out.println(ex.getMessage());
-		}
-		return optionList;
-	}
-
-	// Populating Sector drop down
-	public ArrayList<SelectItem> getSectorList() {
-		String sql = QueryBuilder.SELECT_SECTOR;
-		ArrayList<SelectItem> optionList = new ArrayList<SelectItem>();
-		try {
-			optionMap = FormDAO.getOptionList(sql);
-			for (Map.Entry<Integer, String> entry : optionMap.entrySet()) {
-				optionList.add(new SelectItem(entry.getKey(), entry.getValue()));
-			}
-		} catch (Exception ex) {
-			System.out.println(ex.getMessage());
-		}
-		return optionList;
-	}
+	
 
 	/**
 	 * Method to add a new deal to database
@@ -804,9 +693,6 @@ public class Deal implements Serializable {
 		
 			jscript ="pendingA1";
 		}
-		
-	
-	
 	}
 	/**
 	 * Method to generate new A1 reference number
@@ -881,7 +767,7 @@ public class Deal implements Serializable {
 	 */
 	public void addComment()  {
 		
-		System.out.println("In Comments: Entering addComment()...");
+		System.out.println("In Deal: Entering addComment()...");
 		
 		try {
 			
@@ -899,7 +785,74 @@ public class Deal implements Serializable {
 		catch(Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("In Comments: Exit addComment()...");
+		System.out.println("In Deal: Exit addComment()...");
+	}
+	/**
+	 * Method to handle ADD WORKSHOP button click event
+	 * 
+	 * @param value
+	 * @return void
+	 * @throws Exception
+	 */
+	public void addWorkshop(ActionEvent e) throws Exception {
+		addWorkshopBtnClick = true;
+		generateWorkshopRefNo(false,0);
+	
+	}
+	/**
+	 * Method to generate new Workshop reference number
+	 * 
+	 * @param value
+	 * @return void
+	 * @throws Exception
+	 */
+	public void generateWorkshopRefNo (boolean workshopStatus,int workshopCount) {
+		
+		if (workshopStatus == true) {
+			
+			workshopRefNo = Constants.WORKSHOP_REF_NO_BASE+ String.format("%02d", workshopCount+1);
+			
+		}
+		else {
+			workshopRefNo = Constants.WORKSHOP_REF_NO_START;
+			if(addWorkshopBtnClick == true) {
+				workshopstatusFlag = true;
+			}
+			else {
+				workshopstatusFlag = true;
+			}
+			
+		}
+		System.out.println("Workshop Ref No:"+workshopRefNo);
+	
+		
+}
+/**
+ * Method to handle NEW WORKSHOP button click event
+ * 
+ * @param value
+ * @return void
+ * @throws Exception
+ */
+public void addNewWorkshop(ActionEvent e) throws Exception {
+	addWorkshopBtnClick = true;
+	
+	System.out.println("workshopRefNo:"+workshopRefNo);
+	System.out.println("Ref No:"+reference_No);
+	int wsCount = validateA1Status(reference_No,workshopRefNo);
+	System.out.println("wsCount:"+wsCount);
+	if(wsCount > 0) {
+		jscript = null;
+		wsStatusMessage = null;
+		a23FormList = new ArrayList<A23Form> ();
+		a23FormList.add(new A23Form());
+		generateWorkshopRefNo(true,wsCount);
+		
+	}
+	else {
+	
+		jscript ="pendingA1";
 	}
 	
+}
 }

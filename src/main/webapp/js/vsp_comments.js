@@ -1,3 +1,4 @@
+ /**** This is the java script file for validating the Comments form *****/
 $(document).ready(function() {
 	 $("#userComment").val("");
 	 $("#userComment").attr("placeholder","Add a comment at the selected stage. Maximum Length 400 characters");

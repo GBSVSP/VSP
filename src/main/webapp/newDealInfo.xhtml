@@ -8,28 +8,25 @@
 								<table border="0" width="70%">
 							
 							<tr>
-								<td colspan="4" align="left"><b>Deal Information:</b>
-									<hr /></td></tr>
-							<tr>
 																
-								<td style="font-size:12px;width:60px">SCIMT: <h:selectOneMenu value="#{dealInfo.sc_Imt_Id}">
+								<td style="font-size:12px;width:60px">SCIMT: <h:selectOneMenu value="#{dealInfo.sc_Imt_Id}" style="width:120px">
 											<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
-										<f:selectItems value="#{deal.SCIMTList}" immediate="true" />
+										<f:selectItems value="#{selectList.SCIMTList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
-								<td style="font-size:12px;width:60px">Decision Date:<h:inputText value="#{dealInfo.decision_Date}" id="datepicker" styleClass="form-control datepicker"/></td>
-								<td style="font-size:12px;width:60px">B and P Spend:<h:inputText value="#{dealInfo.bnp_Spent}" /></td>
+								<td style="font-size:12px;width:60px">Decision Date:<h:inputText value="#{dealInfo.decision_Date}" id="datepicker" style="width:100px"/></td>
+								<td style="font-size:12px;width:60px">B and P Spend:<h:inputText value="#{dealInfo.bnp_Spent}" style="width:100px"/></td>
 								<td style="font-size:12px;width:60px">Sales Connect Opportunity Owner:<h:inputText value="#{dealInfo.sc_Opp_Owner}" /></td>
 								</tr>
 								<tr>
 								
 								
-								<td style="font-size:12px;width:60px">IPFF Number:<h:inputText value="#{dealInfo.ippf_Number}" /></td>
+								<td style="font-size:12px;width:60px">IPFF Number:<h:inputText value="#{dealInfo.ippf_Number}" style="width:100px"/></td>
 									<td style="font-size:12px;width:60px">Other Linked Opp No:<h:inputText value="#{dealInfo.other_Linked_Opp_No}" />
 								</td>
-								<td style="font-size:12px;width:60px">Potential TCV($m):<h:selectOneMenu value="#{dealInfo.potential_TCV}" >
+								<td style="font-size:12px;width:60px">Potential TCV($m):<h:selectOneMenu value="#{dealInfo.potential_TCV}" style="width:120px">
 											<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
-										<f:selectItems value="#{deal.potentialTCVList}" immediate="true" />
+										<f:selectItems value="#{selectList.potentialTCVList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
 								</tr>

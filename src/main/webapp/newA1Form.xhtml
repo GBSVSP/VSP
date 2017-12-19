@@ -4,74 +4,103 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:body>
-	
-						<table border="0" width="60%" class="panelGrid">
-							<tr>
-								<td colspan="4" align="left"><b>A1 REF NO: <h:outputText name="a1RefNo" value=" ${deal.a1RefNo}"></h:outputText></b>
-								
-										<h:commandButton render="dataTableGroup" immediate="true"  rendered="${not deal.a1statusFlag}" disabled="" id="a1Button" value="CREATE A1"	class="btn-default" actionListener="#{deal.addA1Form}" onclick="return validate()">
-								    
-								</h:commandButton>
-									<h:commandButton update="dataTableGroup"  rendered="${deal.a1statusFlag}" id="a1AddButton" value="+ NEW A1 FORM"	class="btn-default" actionListener="#{deal.addNewA1Form}" onclick="return validate()">
-								    
-								</h:commandButton>
-						   &nbsp;&nbsp;<h:outputText  style="color:red;font-size: 7pt;" id="error" value="${deal.a1StatusMessage}"></h:outputText>
-								</td>
-								</tr>
-								</table>
-								
-									<h:panelGroup id="dataTableGroup">
-								<h:dataTable  value="#{deal.a1FormList}" var="row" rows="1">
-								<h:column>
-								<table width="60%" class="panelGrid">
-							<tr><td colspan="4" align="left"><b>A1 STATUS:#{row.a1_Status}</b>
-									</td></tr>
-							<tr>
-								<td  style="font-size:12px;">A1 Status: <h:selectOneMenu id="a1Status" name="a1Status" disabled="#{not deal.a1statusFlag }" value="#{row.a1_Status}" >
-									<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
-										<f:selectItems value="#{deal.a1StatusList}" immediate="true" />
-											
-									</h:selectOneMenu>
-								</td>
-								<td style="font-size:12px;">A1 Manager:<h:inputText disabled="#{not deal.a1statusFlag }" value="#{row.a1_Manager}" />
-								</td>
-								<td style="font-size:12px;">A1 Complete:<h:inputText  disabled="#{not deal.a1statusFlag }" value="#{row.a1_Complete}"/>
-								</td>
-								<td style="font-size:12px;">Next Step: <h:selectOneMenu disabled="#{not deal.a1statusFlag }" value="#{row.a1_NextStep}">
-											<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
-										<f:selectItems value="#{deal.nextStepList}" immediate="true" />
-									</h:selectOneMenu>
-								</td></tr>
-								<tr>
-								<td colspan="10" align="left"><b>A1 EVALUATION:</b>
-									</td></tr>
-							<tr>
-								<td style="font-size:12px;">Should we sell: <h:selectOneMenu disabled="#{not deal.a1statusFlag }" value="#{row.a1_ShouldSell}">
-											<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
-										<f:selectItems value="#{deal.shouldweSellList}" immediate="true" />
-									</h:selectOneMenu>
-								</td>
-								
-								<td style="font-size:12px;">A1 Can we sell?: <h:selectOneMenu disabled="#{not deal.a1statusFlag }" value="#{row.a1_CanSell}">
-											<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
-										<f:selectItems value="#{deal.canweSellList}" immediate="true" />
-									</h:selectOneMenu>
-								</td>
-								<td style="font-size:12px;">A1 Evaluation: <h:selectOneMenu disabled="#{not deal.a1statusFlag }" value="#{row.a1_Evaluation}">
-											<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
-										<f:selectItems value="#{deal.a1EvaluationList}" immediate="true" />
-									</h:selectOneMenu>
-								</td>
-								<td style="font-size:12px;">A1 Pursuit profile win chance:<h:inputText disabled="#{not deal.a1statusFlag }" value="#{row.a1_Pursuit}" />
-								</td>
-								</tr>
-											
-								</table>
-								 
-						</h:column>
-					</h:dataTable>
-					</h:panelGroup>
-									
+
+	<table border="0" width="100%" class="panelGrid">
+		<tr>
+			<td colspan="4" align="left"><b>A1 REF NO: <h:outputText
+						name="a1RefNo" value=" ${deal.a1RefNo}"></h:outputText></b> </td>
+					<td align="right"><h:commandButton
+					render="dataTableGroup" immediate="true"
+					rendered="${not deal.a1statusFlag}" id="a1Button"
+					value="CREATE A1" class="btn-default"
+					actionListener="#{deal.addA1Form}" onclick="return validate()">
+
+				</h:commandButton> <h:commandButton update="dataTableGroup"
+					rendered="${deal.a1statusFlag}" id="a1AddButton"
+					value="+ NEW A1 FORM" class="btn-default"
+					actionListener="#{deal.addNewA1Form}" onclick="return validate()">
+
+				</h:commandButton> &nbsp;&nbsp;<h:outputText style="color:red;font-size: 7pt;"
+					id="error" value="${deal.a1StatusMessage}"></h:outputText></td>
+		</tr>
+	</table>
+
+	<h:panelGroup id="dataTableGroup">
+		<h:dataTable value="#{deal.a1FormList}" var="row" rows="1">
+			<h:column>
+				<table width="60%" class="panelGrid">
+					<tr>
+						<td colspan="4" align="left"><b>A1
+								STATUS:#{row.a1_Status}</b></td>
+					</tr>
+					<tr>
+						<td style="font-size: 12px;">A1 Status: <h:selectOneMenu
+								id="a1Status" name="a1Status"
+								disabled="#{not deal.a1statusFlag }" value="#{row.a1_Status}" style="width:120px">
+								<f:selectItem itemLabel="Please Choose" itemValue="#{null}"
+									noSelectionOption="true" />
+								<f:selectItems value="#{selectList.a1StatusList}"
+									immediate="true" />
+
+							</h:selectOneMenu>
+						</td>
+						<td style="font-size: 12px;">A1 Manager:<h:inputText
+								disabled="#{not deal.a1statusFlag }" value="#{row.a1_Manager}" style="width:140px"/>
+						</td>
+						<td style="font-size: 12px;">A1 Complete:<h:inputText
+								disabled="#{not deal.a1statusFlag }" value="#{row.a1_Complete}" style="width:120px"/>
+						</td>
+						<td style="font-size: 12px;">Next Step: <h:selectOneMenu
+								disabled="#{not deal.a1statusFlag }" value="#{row.a1_NextStep}" style="width:120px">
+								<f:selectItem itemLabel="Please Choose" itemValue="#{null}"
+									noSelectionOption="true" />
+								<f:selectItems value="#{selectList.nextStepList}"
+									immediate="true" />
+							</h:selectOneMenu>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="10" align="left"><b>A1 EVALUATION:</b></td>
+					</tr>
+					<tr>
+						<td style="font-size: 12px;">Should we sell: <h:selectOneMenu
+								disabled="#{not deal.a1statusFlag }"
+								value="#{row.a1_ShouldSell}" style="width:120px">
+								<f:selectItem itemLabel="Please Choose" itemValue="#{null}"
+									noSelectionOption="true" />
+								<f:selectItems value="#{selectList.shouldweSellList}"
+									immediate="true" />
+							</h:selectOneMenu>
+						</td>
+
+						<td style="font-size: 12px;">A1 Can we sell?: <h:selectOneMenu
+								disabled="#{not deal.a1statusFlag }" value="#{row.a1_CanSell}" style="width:120px">
+								<f:selectItem itemLabel="Please Choose" itemValue="#{null}"
+									noSelectionOption="true" />
+								<f:selectItems value="#{selectList.canweSellList}"
+									immediate="true" />
+							</h:selectOneMenu>
+						</td>
+						<td style="font-size: 12px;">A1 Evaluation: <h:selectOneMenu
+								disabled="#{not deal.a1statusFlag }"
+								value="#{row.a1_Evaluation}" style="width:120px">
+								<f:selectItem itemLabel="Please Choose" itemValue="#{null}"
+									noSelectionOption="true" />
+								<f:selectItems value="#{selectList.a1EvaluationList}"
+									immediate="true" />
+							</h:selectOneMenu>
+						</td>
+						<td style="font-size: 12px;">A1 Pursuit profile win chance:<h:inputText
+								disabled="#{not deal.a1statusFlag }" value="#{row.a1_Pursuit}" style="width:140px"/>
+						</td>
+					</tr>
+
+				</table>
+
+			</h:column>
+		</h:dataTable>
+	</h:panelGroup>
+
 </h:body>
 
 </html>

@@ -11,15 +11,24 @@
 <ui:composition template="commonLayout.xhtml">
 		<ui:define name="content">
 		<p:scrollPanel mode="native" style="position: absolute; height: 88%;width:100%;">
-									
-			<ui:include src="search.xhtml" />
+		<center>
+				<table border="0" width="60%">
+				<tr bgcolor="#f9f9f9"><td><ui:include src="search.xhtml" /></td>				
+					</tr></table>
+					</center>
 			<h:form prependId="false">	
+				<center>
 						<table border="0" width="55%" >
 							<tr>
 								<td colspan="4" align="left"><b>REFERENCE NUMBER:
 										#{deal.reference_No}</b></td>
-							</tr>
-
+							</tr></table>
+							<table border="0" width="55%">
+					<tr bgcolor="grey">
+						<td style="color: #FFFF; padding-left: 10px">DEAL DESCRIPTION</td>				
+					</tr>
+				<tr bgcolor="#f9f9f9"><td>		
+			<table border="0" width="55%">
 							<tr>
 								<td style="font-size:12px;width:60px">Client Name * : &nbsp;&nbsp;<h:outputText  style="color:red;font-size: 7pt;" id="err_customer_Name">
 								</h:outputText><h:message  globalOnly="true" showSummary="false" showDetail="true" for="customer_Name" style="color:red;">
@@ -49,17 +58,17 @@
 							<tr>
 								<td style="font-size:12px;width:60px">IMT: <h:selectOneMenu value="#{dealInfo.imt_Id}" >
 										<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
-										<f:selectItems value="#{deal.IMTList}" immediate="true" />
+										<f:selectItems value="#{selectList.IMTList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
 								<td style="font-size:12px;width:60px">Sector: <h:selectOneMenu value="#{dealInfo.sector_Id}" >
 									<!-- 	<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>	 -->
-										<f:selectItems value="#{deal.sectorList}" immediate="true" />
+										<f:selectItems value="#{selectList.sectorList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
 								<td style="font-size:12px;width:60px">Led By: <h:selectOneMenu value="#{dealInfo.gbs_gts_Led}" >
 										<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
-										<f:selectItems value="#{deal.ledByList}" immediate="true" />
+										<f:selectItems value="#{selectList.ledByList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
 								</tr>
@@ -72,62 +81,38 @@
 										value="#{dealInfo.sales_Connect_No}" /></td>
 							</tr>
 						</table>
-						
-						<hr />
-			
-				<ui:include src="newA1Form.xhtml" />
+							* Mandatory Fields.Please fill these fields to save changes.
+					</td>
+					</tr>
+					</table>
+			<table border="0" width="55%">
+					<tr bgcolor="grey">
+						<td style="color: #FFFF; padding-left: 10px">DEAL COACHING A1-FORM</td>	
+					</tr><tr bgcolor="#f9f9f9"><td>	<ui:include src="newA1Form.xhtml" /></td>				
+					</tr></table>
+				<table border="0" width="55%">
+					<tr bgcolor="grey">
+						<td style="color: #FFFF; padding-left: 10px">WORKSHOP FORM</td>	
+					</tr><tr bgcolor="#f9f9f9"><td><ui:include src="newA23Form.xhtml" /></td>				
+					</tr></table>
+					
+					<table border="0" width="55%">
+					<tr bgcolor="grey">
+						<td style="color: #FFFF; padding-left: 10px">DEAL INFORMATION</td>	
+					</tr><tr bgcolor="#f9f9f9"><td><ui:include src="newDealInfo.xhtml" /></td>				
+					</tr></table>
 				
-			
-				<ui:include src="newDealInfo.xhtml" />
 				<h:commandButton id="saveButton"  value="SAVE CHANGES" onclick="return validate()"  action="#{deal.isDealExist}"
 					class="btn-default" />&nbsp;&nbsp;
 	
 					<h:commandButton id="cancelButton"  value="CANCEL" class="btn-default" action="#{deal.cancelDeal}"/>
-					<script>
-					//<![CDATA[
-					function validate(){
-			
-						//var status = $("#insertFlag").val();
-						var customer_Name = $("#customer_Name").val();
-						var opportunity_Name = $("#opportunity_Name").val();
-						var opportunity_Description = $("#opportunity_Description").val();
-						//var a1Status = $("#a1Form:j_idt61:0:a1Status").val();
-						//alert("a1Status:"+a1Status);
-						var status = false;
-						if (customer_Name == '') {
-							
-			    		   	 $("#err_customer_Name").html("Cannot be Blank");
-			    		   } 
-						if (opportunity_Name == '') {
-							
-			    		   	 $("#err_opportunity_Name").html("Cannot be Blank");
-			    		   } 
-						if (opportunity_Description == '') {
-							
-			    		   	 $("#err_opportunity_Description").html("Cannot be Blank");
-			    		   } 
-						 /*  if (a1Status == '') {
-							
-								 $("#err_a1_Status").html("Cannot be Blank");
-			    		   }  */ 
-						 if(customer_Name != '' && opportunity_Name != '' && opportunity_Description != '' ){
-							 status = true;
-						 }
-						 return status;
-						 
-			    }
-					
-					$("#cancelButton").click(function () {
-						var status;
-						status = confirm("You will lose un-saved data. Are you sure? ");
-						
-						return status;
-					}); 
-				    
-					//]]>
-			</script>	
+			</center>
 			</h:form>
 			</p:scrollPanel>
+			<script src="js/jquery-2.0.3.js"></script>
+			<script src="js/jquery-ui.js"></script>
+			<script src="js/bootstrap.js"></script> 
+			<script src="js/vsp_Deal.js"></script>
 		</ui:define>
 
 	</ui:composition>

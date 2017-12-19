@@ -13,7 +13,9 @@ package com.vsp.util;
 public class Constants {
 
 public static final String A1_REF_NO_START = "A101";
+public static final String WORKSHOP_REF_NO_START = "WS01";
 public static final String A1_REF_NO_BASE = "A1";
+public static final String WORKSHOP_REF_NO_BASE = "WS";
 
 //deal form constants	
 public static final String VSP_OPP_NO = "VSP_OPP_NO";

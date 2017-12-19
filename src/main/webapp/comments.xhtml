@@ -12,12 +12,12 @@
 <h:form id="comments" prependId="false">
 <a href="#" id="addComment">Add Comment</a>
 		<div id="commentDiv" style="display:none">
-         <table style="align:center;top:900px;width:65%" border="0">
+         <table style="align:center;top:900px;width:100%" border="0">
  		<tr><td align="left"  colspan="2"><b>Add New Comment:</b>
  		<h:outputScript rendered="#{deal.jscript == 'database_error'}">alert("#{msgbundle.database_error}");</h:outputScript>
  		</td></tr>   
      	<tr><td style="font-size:12px;width:60px"><img  src="https://w3.api.ibm.com/common/run/bluepages/photo?cnum=#{sessionScope.userName} &amp;client_id=#{msgbundle.client_id}"/></td>
-     	<td style="font-size:12px"><h:inputTextarea id="userComment" style=" width: 700px; height: 45px" 
+     	<td style="font-size:12px"><h:inputTextarea id="userComment" style=" width: 500px; height: 45px" 
      	value="#{comments.userComment}" onfocus="this.value==this.defaultValue?this.value='':null"/>
      	<p style="color:red" id="commentError"></p>
      	</td></tr>
@@ -37,7 +37,7 @@
 		$(document).ready( function(){  getUserNames("#{row.count}","#{row.createdUser}");} );
 		</h:outputScript></tr>
 		<tr><td></td><td colspan="2">#{row.userComment}</td></tr>
-			
+	
 		</table>
 		
 		</h:column>

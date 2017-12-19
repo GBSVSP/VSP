@@ -117,4 +117,6 @@ public static String INSERT_COMMENT ="Insert into DEAL_COMMENTS ( VSP_OPP_ID,COM
 		+ "values (?, ?, ?)";
 //select comments
 public static String SELECT_COMMENTS ="Select COMMENT,CREATION_DATE,CREATED_BY from DEAL_COMMENTS where IS_DELETE='N' and VSP_OPP_ID=? order by COMMENT_ID desc";
+//insert workshop form
+public static String INSERT_WORKSHOP ="";
 }

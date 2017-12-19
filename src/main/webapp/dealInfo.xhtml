@@ -10,29 +10,27 @@
 
 			<h:column>
 
-						<table border="0" width="70%">
+						<table border="0" width="100%">
 							
 							<tr>
-								<td colspan="4" align="left"><b>Deal Information:</b>
-									<hr /></td></tr>
-							<tr>
 																
-								<td style="font-size:12px;width:60px">SCIMT: <h:selectOneMenu value="#{row.sc_Imt_Id}">
-										<f:selectItems value="#{deal.IMTList}" immediate="true" />
+								<td style="font-size:12px">SCIMT: <h:selectOneMenu value="#{row.sc_Imt_Id}" style="width:120px">
+										<f:selectItems value="#{selectList.SCIMTList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
-								<td style="font-size:12px;width:60px">Decision Date:<h:inputText value="#{row.decision_Date}" /></td>
-								<td style="font-size:12px;width:60px">B and P Spend:<h:inputText value="#{row.bnp_Spent}" /></td>
-								<td style="font-size:12px;width:60px">Sales Connect Opportunity Owner:<h:inputText value="#{row.opportunity_Owner}" /></td>
+								<td style="font-size:12px">Decision Date:<h:inputText value="#{row.decision_Date}"  style="width:100px"/></td>
+								<td style="font-size:12px">B and P Spend:<h:inputText value="#{row.bnp_Spent}" style="width:100px"/></td>
+								<td style="font-size:12px">Sales Connect Opportunity Owner:<h:inputText value="#{row.opportunity_Owner}" /></td>
 								</tr>
 								<tr>
 								
 								
-								<td style="font-size:12px;width:60px">IPFF Number:<h:inputText value="#{row.ippf_Number}" /></td>
-									<td style="font-size:12px;width:60px">Other Linked Opp No:<h:inputText value="#{row.other_Linked_Opp_No}" />
+								<td style="font-size:12px">IPFF Number:<h:inputText value="#{row.ippf_Number}" style="width:100px"/></td>
+									<td style="font-size:12px;width:60px">Other Linked Opp No:<h:inputText value="#{row.other_Linked_Opp_No}" style="width:100px"/>
 								</td>
-								<td style="font-size:12px;width:60px">Potential TCV($m):<h:selectOneMenu value="#{row.potential_TCV}" >
-										<f:selectItems value="#{deal.potentialTCVList}" immediate="true" />
+								<td style="font-size:12px;width:60px">Potential TCV($m):
+								<h:selectOneMenu value="#{row.potential_TCV}" style="width:120px">
+										<f:selectItems value="#{selectList.potentialTCVList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
 								</tr>
