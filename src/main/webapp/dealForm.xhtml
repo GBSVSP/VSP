@@ -14,10 +14,11 @@
 	<ui:composition template="commonLayout.xhtml">
 		<ui:define name="content">
 		<p:scrollPanel mode="native" style="position: absolute; height: 88%; width:100%;">
+			<center>
 			<table border="0" width="53%">
 				<tr bgcolor="#f9f9f9"><td><ui:include src="search.xhtml" /></td>				
 					</tr></table>
-		
+			</center>
 			<h:form prependId="false">	
 			<center>
 				<h:dataTable id="dealResult" var="row" value="#{deal.dealList}">
@@ -90,7 +91,7 @@
 						<td style="color: #FFFF; padding-left: 10px">DEAL COACHING A1-FORM</td>	
 					</tr><tr bgcolor="#f9f9f9"><td><ui:include src="A1Form.xhtml" /></td>				
 					</tr></table>
-						<table border="0" width="55%">
+						<table border="0" width="53%">
 					<tr bgcolor="grey">
 						<td style="color: #FFFF; padding-left: 10px">WORKSHOP FORM</td>	
 					</tr><tr bgcolor="#f9f9f9"><td><ui:include src="A23Form.xhtml" /></td>				

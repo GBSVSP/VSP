@@ -334,6 +334,13 @@ public class Deal implements Serializable {
 			a1statusFlag = false;
 			
 		}
+		
+		//getting A23 form
+		a23FormList = new ArrayList<A23Form> ();
+		a23FormList.add(new A23Form());
+		workshopstatusFlag = false;
+		
+		
 		sql = QueryBuilder.SELECT_COMMENTS;
 		commentsList = CommentsDAO.getComments(sql,reference_No);
 		
