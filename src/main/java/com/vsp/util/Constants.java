@@ -35,10 +35,18 @@ public static final String A1STATUS_CONDITION="VALUE_NAME='A1_status'";
 public static final String NEXT_STEP_CONDITION="VALUE_NAME='Next_step?'";
 public static final String SHOULD_WE_SELL_CONDITION="VALUE_NAME='Should_we_sell?'";
 public static final String CAN_WE_SELL_CONDITION="VALUE_NAME='Can_we_sell?'";
+public static final String WORKSHOP_STATUS="VALUE_NAME='Workshop_Status'";
+public static final String WORKSHOP_LENGTH="VALUE_NAME='Length'";
+public static final String WORKSHOP_DEAL_COACHING_EVALUATION="VALUE_NAME='Deal_Coaching_Evaluation'";
 public static final String A1EVALUATION_CONDITION="VALUE_NAME='Evaluation'";
+public static final String WORKSHOP_EVALUATION_CONDITION="VALUE_NAME='Evaluation'";
+public static final String WORKSHOP_MODULES_RUN="VALUE_NAME='Modules_Run'";
+
+
 public static final String VSP_REF_NO_START="0001";
 public static final String VSP_REF_NO = "REFERENCE_NO=?";
 public static final String A1_REF_NO = "A1_REF_NO=?";
+public static final String A23_REF_NO = "WORKSHOP_REF_NUMBER=?";
 public static final String A1_STATUS = "A1_STATUS_ID in ('Complete','Cancelled')";
 public static final String SEARCH_MESSAGE = "search_message";
 

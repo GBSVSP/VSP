@@ -11,9 +11,8 @@
 	<table border="0" width="100%">
 		<tr>
 			<td colspan="4" align="left"><b>A1 REF NO: <h:outputText
-						name="a1RefNo" value=" ${deal.a1RefNo}"
-						rendered="#{not empty deal.activeA1RefNo}" /></b> <h:outputText
-					value="No A1 Exists" rendered="#{empty deal.activeA1RefNo}" /> <h:outputScript
+						name="a1RefNo" value=" ${deal.a1RefNo}"/></b> <h:outputText
+					value="No A1 Exists" rendered="#{empty deal.a1RefNo}" /> <h:outputScript
 					rendered="#{deal.jscript == 'pendingA1'}">alert("#{msgbundle.pending_A1_error}");</h:outputScript>
 					</td>
 					<td align="right">

@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Locale;
 
 import com.vsp.model.A1Form;
+import com.vsp.model.A23Form;
 import com.vsp.model.DealInfo;
 import com.vsp.util.DBConnect;
 import com.vsp.util.SessionUtils;
@@ -261,7 +262,7 @@ public class DealDAO {
 		System.out.println("In DealDAO: Exiting insertDealOnly()...");
 		return insertFlag;
 	}
-	public static int insertDeal_A1(String dealSQL, String a1SQL, DealInfo dealInfo, A1Form a1Form, boolean a1statusFlag) throws Exception {
+	public static int insertDeal(String dealSQL, String a1SQL, String a23SQL, DealInfo dealInfo, A1Form a1Form, A23Form a23Form, boolean a1statusFlag, boolean a23statusFlag) throws Exception {
 
 		System.out.println("In DealDAO: Entering insertDeal()..."+a1statusFlag);
 		PreparedStatement ps = null;
@@ -305,11 +306,49 @@ public class DealDAO {
 
 			insertFlag = ps.executeUpdate();
 			System.out.println("Deal insert status:"+insertFlag);
-			if(a1statusFlag == true) {
+		
 			if(insertFlag > 0) {
-				insertFlag = 0;
+		
+				if(a1statusFlag == true) {
+					insertFlag = 0;
+					insertFlag = insertA1(a1SQL, a1Form, con);
+					if(insertFlag > 0) {	
+						if(a23statusFlag == true) {
+							insertFlag = 0;
+							insertFlag = insertA23(a23SQL, a23Form, con);
+						}
+					}
+				}
+				else {
+					if(a23statusFlag == true) {
+						insertFlag = 0;
+						insertFlag = insertA23(a23SQL, a23Form, con);
+					}
+				}
+				
+			}
+			if(insertFlag > 0) {
+				con.commit();
+			}
+			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+
+		}
+
+		System.out.println("In DealDAO: Exiting insertDeal()...");
+		return insertFlag;
+	}
+	// inserting A1 Workshop
+	public static int insertA1(String a1SQL,A1Form a1Form,Connection con) throws Exception {
+
+		System.out.println("In DealDAO: Entering insertA1()...");
+		PreparedStatement ps = null;
+		int insertFlag = 0;
+			try {
+
 				ps = con.prepareStatement(a1SQL);
-				ps.setInt(1,dealInfo.getReference_No());
+				ps.setInt(1,a1Form.getReferenceNo());
 				ps.setString(2, a1Form.getA1_RefNo());
 				ps.setString(3, a1Form.getA1_Status());
 										
@@ -330,23 +369,110 @@ public class DealDAO {
 				ps.setString(11, SessionUtils.getUserName());
 				insertFlag = ps.executeUpdate();
 				System.out.println("A1Form insert status:"+insertFlag);
-				
-			}
-			}
-			if(insertFlag > 0) {
-				con.commit();
-			}
-			
+		
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 
 		}
 
-		System.out.println("In DealDAO: Exiting insertDeal()...");
+		System.out.println("In DealDAO: Exiting insertA1()...");
 		return insertFlag;
 	}
+//inserting A23 form
+		public static int insertA23(String a23SQL,A23Form a23Form,Connection con) throws Exception {
+
+			System.out.println("In DealDAO: Entering insertA23()...");
+			PreparedStatement ps = null;
+			int insertFlag = 0;
+			DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+				try {
+
+					ps = con.prepareStatement(a23SQL);
+					
+					ps.setInt(1,a23Form.getReference_No());
+					ps.setString(2, a23Form.getWorkshop_Ref_Number());
+						
+					if (a23Form.getWorkshop_CompleteDate()!=null && !(a23Form.getWorkshop_CompleteDate().isEmpty())) {
+						Date completeDate = format.parse(a23Form.getWorkshop_CompleteDate());
+						java.sql.Date completeSqlDate = new java.sql.Date(completeDate.getTime());
+						ps.setDate(3, completeSqlDate);
+					} else {
+						ps.setDate(3, null);
+					}
+					
+					ps.setString(4, a23Form.getWorkshop_DealCoach());
+					ps.setString(5, a23Form.getWorkshop_Status());
+					ps.setString(6, a23Form.getWorkshop_Length());
+					ps.setString(7, a23Form.getWorkshop_DealCoachEval());
+					ps.setString(8, a23Form.getWorkshop_DealCoachJustification());
+					ps.setString(9, a23Form.getWorkshop_ShouldSell());
+					ps.setString(10, a23Form.getWorkshop_CanSell());
+					ps.setInt(11, a23Form.getWorkshop_Pursuit());
+					ps.setString(12, a23Form.getEvaluation());
+					
+				    if (a23Form.getBriefingCallDate()!=null && !(a23Form.getBriefingCallDate().isEmpty())) {
+							
+							Date briefingDate = format.parse(a23Form.getBriefingCallDate());
+							java.sql.Date briefingSqlDate = new java.sql.Date(briefingDate.getTime());
+							ps.setDate(13, briefingSqlDate);
+					} else {
+							ps.setDate(13, null);
+					}
+	                    
+			
+	               if (a23Form.getNextFollowUpCallDate()!=null && !(a23Form.getNextFollowUpCallDate().isEmpty())) {
+							
+							Date nextFollowUpDate = format.parse(a23Form.getNextFollowUpCallDate());
+							java.sql.Date nextFollowUpSqlDate = new java.sql.Date(nextFollowUpDate.getTime());
+							ps.setDate(14, nextFollowUpSqlDate);
+				   } else {
+							ps.setDate(14, null);
+				   }
 	
-	public static int updateDeal(String dealSQL, String a1SQL, DealInfo dealInfo, A1Form a1Form) throws Exception {
+					
+					if(a23Form.getWorkshop_ModulesRun().length != 0) {
+					    String[] modulesRun = a23Form.getWorkshop_ModulesRun();
+						
+						String modules = "";
+						
+					    for(int i = 0; i < modulesRun.length; i++) {
+					    	
+					    	if(i ==0)
+					    	  modules = modulesRun[i].trim(); 
+					    	else 
+					    	  modules= modules+ " , " + modulesRun[i].trim(); 
+					    }
+					  
+						ps.setString(15, modules);
+						
+					} else {
+					     ps.setString(15, "");
+					}
+					
+					ps.setString(16, a23Form.getWorkshop_IBMBelovedDeal());
+					ps.setDouble(17, a23Form.getWorkshop_AnticipatedPowerBase1());
+					ps.setDouble(18, a23Form.getWorkshop_AnticipatedPowerBase2());
+					ps.setDouble(19, a23Form.getWorkshop_ActualPowerBase());
+					ps.setString(20, a23Form.getWorkshop_AnticipatedCompetitor1());
+					ps.setString(21, a23Form.getWorkshop_AnticipatedCompetitor2());
+					ps.setString(22, a23Form.getWorkshop_ActualCompetitor());
+					ps.setString(23, a23Form.getWorkshop_ClientAttended());
+					ps.setString(24, a23Form.getWorkshop_Consortium());
+					ps.setString(25, SessionUtils.getUserName());
+					ps.setString(26, "N");
+					
+					insertFlag = ps.executeUpdate();
+					System.out.println("A1Form insert status:"+insertFlag);
+			
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+
+			}
+
+			System.out.println("In DealDAO: Exiting insertA23()...");
+			return insertFlag;
+		}
+	public static int updateDeal(String dealSQL, String a1SQL, String a23SQL, DealInfo dealInfo, A1Form a1Form, A23Form a23Form, boolean a1ExistFlag, boolean a23ExistFlag) throws Exception {
 
 		System.out.println("In DealDAO: Entering updateDeal()...");
 		PreparedStatement ps = null;
@@ -397,7 +523,48 @@ public class DealDAO {
 			updateFlag = ps.executeUpdate();
 			
 			if(updateFlag > 0) {
-				updateFlag = 0;
+				
+				if(a1ExistFlag == true) {
+					updateFlag = 0;
+					updateFlag = updateA1(a1SQL, a1Form, con);
+					if(updateFlag > 0) {
+						
+						if(a23ExistFlag == true) {
+							updateFlag = 0;
+							updateFlag = updateA23(a23SQL, a23Form, con);
+						}
+					}
+				}
+				else {
+					if(a23ExistFlag == true) {
+						updateFlag = 0;
+						updateFlag = updateA23(a23SQL, a23Form, con);
+					}
+				}
+				
+			}
+				
+			
+			if(updateFlag > 0) {
+				con.commit();
+			}
+
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+
+		}
+
+		System.out.println("In DealDAO: Exiting updateDeal()...");
+		return updateFlag;
+	}
+	//update A1 workshop
+	public static int updateA1(String a1SQL, A1Form a1Form, Connection con) throws Exception {
+
+		System.out.println("In DealDAO: Entering updateA1()...");
+		PreparedStatement ps = null;
+		int updateFlag = 0;
+		try {
+			
 				ps = con.prepareStatement(a1SQL);
 				ps.setString(1, a1Form.getA1_Status());
 				if (!(a1Form.getA1_Complete().isEmpty())) {
@@ -412,25 +579,39 @@ public class DealDAO {
 				ps.setString(7, a1Form.getA1_Evaluation());
 				ps.setInt(8, a1Form.getA1_Pursuit());
 				ps.setString(9, SessionUtils.getUserName());
-				ps.setInt(10,dealInfo.getReference_No());
+				ps.setInt(10,a1Form.getReferenceNo());
 				ps.setString(11, a1Form.getA1_RefNo());
 				updateFlag = ps.executeUpdate();	
 				
 			}
-			
-			if(updateFlag > 0) {
-				con.commit();
-			}
-
-		} catch (SQLException ex) {
+		catch (SQLException ex) {
 			ex.printStackTrace();
 
 		}
-
-		System.out.println("In DealDAO: Exiting updateDeal()...");
+		System.out.println("In DealDAO: Exiting updateA1()...");
 		return updateFlag;
 	}
-	public static int updateDeal_A1Insert(String dealSQL, String a1SQL, DealInfo dealInfo, A1Form a1Form,boolean a1statusFlag) throws Exception {
+	//update A23 workshop
+		public static int updateA23(String a23SQL, A23Form a23Form, Connection con) throws Exception {
+
+			System.out.println("In DealDAO: Entering updateA1()...");
+			PreparedStatement ps = null;
+			int updateFlag = 0;
+			try {
+				
+					ps = con.prepareStatement(a23SQL);
+					
+					updateFlag = ps.executeUpdate();	
+					
+				}
+			catch (SQLException ex) {
+				ex.printStackTrace();
+
+			}
+			System.out.println("In DealDAO: Exiting updateA1()...");
+			return updateFlag;
+		}
+	public static int updateDeal_InsertA123(String dealSQL, String a1SQL,String a23SQL, DealInfo dealInfo, A1Form a1Form,A23Form a23Form,boolean a1statusFlag,boolean a23statusFlag) throws Exception {
 
 		System.out.println("In DealDAO: Entering updateDeal()...");
 		PreparedStatement ps = null;
@@ -484,25 +665,23 @@ public class DealDAO {
 			if(a1statusFlag == true){
 				updateFlag = 0;
 				ps = con.prepareStatement(a1SQL);
-				ps.setInt(1,dealInfo.getReference_No());
-				ps.setString(2, a1Form.getA1_RefNo());
-				
-				ps.setString(3, a1Form.getA1_Status());
-				if (!(a1Form.getA1_Complete().isEmpty())) {
-					ps.setDate(4, java.sql.Date.valueOf(a1Form.getA1_Complete()));
-				} else {
-					ps.setDate(4, null);
-				}
-				ps.setString(5, a1Form.getA1_Manager());
-				ps.setString(6, a1Form.getA1_NextStep());
-				ps.setString(7, a1Form.getA1_ShouldSell());
-				ps.setString(8, a1Form.getA1_CanSell());
-				ps.setString(9, a1Form.getA1_Evaluation());
-				ps.setInt(10, a1Form.getA1_Pursuit());
-				ps.setString(11, SessionUtils.getUserName());
-				updateFlag = ps.executeUpdate();
+				updateFlag = insertA1(a1SQL,a1Form,con);
+				if(updateFlag > 0) {
+					
+					if(a23statusFlag == true) {
+						updateFlag = 0;
+						updateFlag = insertA23(a23SQL, a23Form, con);
+					}
 				}
 			}
+			else {
+				if(a23statusFlag == true) {
+					updateFlag = 0;
+					updateFlag = insertA23(a23SQL, a23Form, con);
+				}
+			}
+			
+		}
 			
 			if(updateFlag > 0) {
 				con.commit();
@@ -662,5 +841,58 @@ public class DealDAO {
 
 		}
 		return a1HistoryList;
+	}
+	public static int isA23Exist(String sql, int ref_No, String a23RefNo) throws Exception {
+
+		System.out.println("In DealDAO: Entering isA23Exist()...");
+		PreparedStatement ps = null;
+			int count = 0;
+				try {
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, ref_No);
+			ps.setString(2, a23RefNo);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next()) {
+			    count = rs.getInt(1);
+			}
+			
+			
+			
+			
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		
+		System.out.println("In DealDAO: Exiting isA23Exist()...");
+		return count;
+	}
+	
+	public static int hasA23Exist(String sql, int ref_No) throws Exception {
+
+		System.out.println("In DealDAO: Entering hasA23Exist()...");
+		PreparedStatement ps = null;
+	
+		int count = 0;
+		System.out.println("Reference No: " + ref_No);
+
+		try {
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, ref_No);
+			
+			
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next()) {
+			    count = rs.getInt(1);
+			}
+			
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		
+		System.out.println("In DealDAO: Exiting hasA23Exist()...");
+		return count;
 	}
 }

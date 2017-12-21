@@ -15,6 +15,7 @@
 							<tr>
 																
 								<td style="font-size:12px">SCIMT: <h:selectOneMenu value="#{row.sc_Imt_Id}" style="width:120px">
+										<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
 										<f:selectItems value="#{selectList.SCIMTList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
@@ -30,6 +31,7 @@
 								</td>
 								<td style="font-size:12px;width:60px">Potential TCV($m):
 								<h:selectOneMenu value="#{row.potential_TCV}" style="width:120px">
+										<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
 										<f:selectItems value="#{selectList.potentialTCVList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
