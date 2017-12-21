@@ -459,8 +459,7 @@ public class DealDAO {
 					ps.setString(23, a23Form.getWorkshop_ClientAttended());
 					ps.setString(24, a23Form.getWorkshop_Consortium());
 					ps.setString(25, SessionUtils.getUserName());
-					ps.setString(26, "N");
-					
+										
 					insertFlag = ps.executeUpdate();
 					System.out.println("A1Form insert status:"+insertFlag);
 			
@@ -821,6 +820,30 @@ public class DealDAO {
 		System.out.println("a1FormList size:"+a1FormList.size());
 		return a1FormList;
 	}
+	public static ArrayList<A23Form> getA23List(String sql, int referenceNo) {
+		PreparedStatement ps = null;
+		ArrayList<A23Form> a23FormList = new ArrayList<A23Form>();
+
+		try {
+
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, referenceNo);
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				A23Form a23Form = new A23Form();
+
+				
+				a23FormList.add(a23Form);
+				
+	}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("a23FormList size:"+a23FormList.size());
+		return a23FormList;
+	}
 	public static ArrayList<String> getA1History(String sql,int referenceNo) throws Exception {
 
 		PreparedStatement ps = null;
@@ -841,6 +864,27 @@ public class DealDAO {
 
 		}
 		return a1HistoryList;
+	}
+	public static ArrayList<String> getA23History(String sql,int referenceNo) throws Exception {
+
+		PreparedStatement ps = null;
+		ArrayList<String> a23HistoryList = new ArrayList<String>();
+			try {
+
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, referenceNo);
+
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				a23HistoryList.add(rs.getString(1));
+			}
+
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+
+		}
+		return a23HistoryList;
 	}
 	public static int isA23Exist(String sql, int ref_No, String a23RefNo) throws Exception {
 

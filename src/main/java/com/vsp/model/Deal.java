@@ -50,6 +50,7 @@ public class Deal implements Serializable {
 	private static List<A23Form> a23FormList = new ArrayList<A23Form>();
 	private String jscript = "";
 	private static ArrayList<String> a1History;
+	private static ArrayList<String> a23History;
 	private static HashMap<Integer, String> optionMap;
 	private static String searchValue;
 
@@ -58,6 +59,7 @@ public class Deal implements Serializable {
 	private static String whereClause = null;
 	private boolean show = false;
 	private boolean a1DBStatus = false;
+	private boolean a23DBStatus = false;
 	private int a1Count;
 	private boolean a1ButtonClick;
 	private boolean a23ButtonClick;
@@ -325,7 +327,7 @@ public class Deal implements Serializable {
 			sql = QueryBuilder.GET_A1_FORMS;
 			a1FormList = DealDAO.getA1List (sql,referenceNo);
 			a1RefNo = a1FormList.get(0).getA1_RefNo();
-			activeA1RefNo = a1FormList.get(0).getA1_RefNo();
+			activeA1RefNo = a1RefNo;
 			whereClause = Constants.A1_STATUS ;
 			sql = QueryBuilder.A1_HISTORY + " " + whereClause;
 			//System.out.println("reference_No:"+reference_No);
@@ -339,11 +341,23 @@ public class Deal implements Serializable {
 			
 		}
 		
-		//getting A23 form
+		a23DBStatus = hasA23Exist(referenceNo);
+		if(a23DBStatus == true) {
+			a23statusFlag = true;
+			sql = QueryBuilder.GET_A23_FORMS;
+			a23FormList = DealDAO.getA23List (sql,referenceNo);
+			a23RefNo = a23FormList.get(0).getWorkshop_Ref_Number();
+			activeA23RefNo = a23RefNo;
+			whereClause = Constants.A23_STATUS ;
+			sql = QueryBuilder.A23_HISTORY + " " + whereClause;
+			//System.out.println("reference_No:"+reference_No);
+			a23History = DealDAO.getA23History(sql,reference_No);
+		}
+		else {
 		a23FormList = new ArrayList<A23Form> ();
 		a23FormList.add(new A23Form());
 		a23statusFlag = false;
-		
+		}
 		
 		sql = QueryBuilder.SELECT_COMMENTS;
 		commentsList = CommentsDAO.getComments(sql,reference_No);
@@ -934,4 +948,37 @@ public void addNewWorkshop(ActionEvent e) throws Exception {
 	}
 	
 }
+/**
+ * Method to check A1 status of a deal
+ * 
+ * @param value
+ * @return void
+ * @throws Exception
+ */
+public boolean hasA23Exist(int referenceNo) throws Exception {
+	boolean status = false;
+	int a23Count = 0;
+	try {
+
+		whereClause = Constants.VSP_REF_NO ;
+		String sql = QueryBuilder.COUNT_A23 + " " + whereClause;
+	
+		a23Count = DealDAO.hasA23Exist(sql, referenceNo);
+       if(a23Count> 0 ) {
+    	  status = true; 
+       }
+       else {
+    	   status = false; 
+       }
+		
+		System.out.println("count:"+a1Count+":"+status);
+		
+	} catch (Exception e) {
+		System.out.println("Error in hasA1Exist():" + e);
+		e.printStackTrace();
+	}
+	return status;
+}
+
+
 }

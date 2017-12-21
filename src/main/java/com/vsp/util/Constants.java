@@ -48,6 +48,7 @@ public static final String VSP_REF_NO = "REFERENCE_NO=?";
 public static final String A1_REF_NO = "A1_REF_NO=?";
 public static final String A23_REF_NO = "WORKSHOP_REF_NUMBER=?";
 public static final String A1_STATUS = "A1_STATUS_ID in ('Complete','Cancelled')";
+public static final String A23_STATUS = "WORKSHOP_STATUS in ('Complete','Cancelled')";
 public static final String SEARCH_MESSAGE = "search_message";
 
 //comments constants
