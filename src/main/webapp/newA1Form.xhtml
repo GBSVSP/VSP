@@ -17,14 +17,10 @@
 					
 					<td align="right"><h:commandButton
 					render="dataTableGroup" immediate="true"
-					rendered="${not deal.a1statusFlag}" id="a1Button"
+					 id="a1Button"
 					value="CREATE A1" class="btn-default"
+					disabled="#{deal.a1statusFlag }"
 					actionListener="#{deal.addA1Form}" onclick="return validate()">
-
-				</h:commandButton> <h:commandButton update="dataTableGroup"
-					rendered="${deal.a1statusFlag}" id="a1AddButton"
-					value="+ NEW A1 FORM" class="btn-default"
-					actionListener="#{deal.addNewA1Form}" onclick="return validate()">
 
 				</h:commandButton> &nbsp;&nbsp;<h:outputText style="color:red;font-size: 7pt;"
 					id="error" value="${deal.a1StatusMessage}"></h:outputText></td>

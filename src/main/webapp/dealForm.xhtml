@@ -6,11 +6,6 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 
 <h:body>
-
-	<script src="js/jquery-2.0.3.js"></script>
-	<script src="js/jquery-ui.js"></script>
-	<script src="js/bootstrap.js"></script> 
-	<script src="js/vsp_Deal.js"></script>
 	<ui:composition template="commonLayout.xhtml">
 		<ui:define name="content">
 		<p:scrollPanel mode="native" style="position: absolute; height: 88%; width:100%;">
@@ -19,9 +14,11 @@
 				<tr bgcolor="#f9f9f9"><td><ui:include src="search.xhtml" /></td>				
 					</tr></table>
 			</center>
-			<h:form prependId="false">	
+				<h:inputHidden id="a1Flag" value="#{empty deal.a1RefNo}" />
+			<h:form prependname="false">
+	
 			<center>
-				<h:dataTable id="dealResult" var="row" value="#{deal.dealList}">
+				<h:dataTable name="dealResult" var="row" value="#{deal.dealList}">
 			
 					<h:column>
 
@@ -39,15 +36,25 @@
 				<tr bgcolor="#f9f9f9"><td>
 						<table border="0" width="55%">
 							<tr>
-								<td style="font-size:12px;width:60px">Client Name *: <h:inputText value="#{row.customer_Name}"></h:inputText></td>
-								<td style="font-size:12px;width:60px" align="left">Opportunity Name *: <h:inputText
-										value="#{row.opportunity_Name}" /></td>
+								<td style="font-size:12px;width:60px">Client Name * : &nbsp;&nbsp;<h:outputText  style="color:red;font-size: 7pt;" name="err_customer_Name">
+								</h:outputText><h:message  globalOnly="true" showSummary="false" showDetail="true" for="customer_Name" style="color:red;">
+								</h:message> <h:inputText id="customer_Name"  name="customer_Name" value="#{row.customer_Name}" />
+						</td>
+								<td style="font-size:12px;width:60px" align="left">Opportunity Name * : &nbsp;&nbsp;<h:outputText  style="color:red;font-size: 7pt;" name="err_opportunity_Name">
+								</h:outputText>	<h:message  globalOnly="true" showSummary="false" showDetail="true" for="opportunity_Name" style="color:red;"></h:message>
+								<h:inputText id="opportunity_Name" name="opportunity_Name" value="#{row.opportunity_Name}" />
+								
+										</td>
 								<td style="font-size:12px;width:60px" align="left">Opportunity Owner: <h:inputText
 										value="#{row.opportunity_Owner}" /></td>
 							</tr>
 							<tr>
-								<td style="font-size:12px;width:60px">Opportunity Description *:<h:inputTextarea
-										value="#{row.opportunity_Description}" /></td>
+								<td style="font-size:12px;width:60px">Opportunity Description * : &nbsp;&nbsp;<h:outputText  style="color:red;font-size: 7pt;" name="err_opportunity_Description">
+								</h:outputText><h:message name="od" globalOnly="true" showSummary="false" showDetail="true"  for="opportunity_Description" style="color:red;"></h:message>
+								<h:inputTextarea id="opportunity_Description" name="opportunity_Description" value="#{row.opportunity_Description}" />
+						
+											
+										</td>
 								<td style="font-size:12px;width:60px">Additional Contacts:<h:inputText
 										value="#{row.additional_Contacts}" /></td>
 								<td style="font-size:12px;width:60px">Box :<h:inputText value="#{row.box_Link}" /></td>
@@ -55,18 +62,18 @@
 
 
 							<tr>
-								<td style="font-size:12px;width:60px">IMT: <h:selectOneMenu value="#{row.imt_Id}">
+								<td style="font-size:12px;width:60px">IMT: <h:selectOneMenu value="#{row.imt_Id}" >
 										<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
 										<f:selectItems value="#{selectList.IMTList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
-								<td style="font-size:12px;width:60px">Sector: <h:selectOneMenu value="#{row.sector_Id}">
-									<!-- 	<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/> -->
+								<td style="font-size:12px;width:60px">Sector: <h:selectOneMenu value="#{row.sector_Id}" >
+									<!-- 	<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>	 -->
 										<f:selectItems value="#{selectList.sectorList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
 								<td style="font-size:12px;width:60px">Led By: <h:selectOneMenu value="#{row.gbs_gts_Led}" >
-											<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
+										<f:selectItem itemLabel="Please Choose" itemValue="#{null}" noSelectionOption="true"/>
 										<f:selectItems value="#{selectList.ledByList}" immediate="true" />
 									</h:selectOneMenu>
 								</td>
@@ -102,9 +109,9 @@
 					</tr><tr bgcolor="#f9f9f9"><td><ui:include src="dealInfo.xhtml" /></td>				
 					</tr></table>
 				
-				<h:commandButton id="saveButton" value="SAVE CHANGES" class="btn-default" onclick="return validate()" action="#{deal.isDealExist}">
+				<h:commandButton name="saveButton" value="SAVE CHANGES" class="btn-default" onclick="return validate()" action="#{deal.isDealExist}">
 				</h:commandButton>&nbsp;&nbsp;
-				<h:commandButton id="cancelButton"  value="CANCEL" class="btn-default" action="#{deal.cancelDeal}"/>
+				<h:commandButton name="cancelButton"  value="CANCEL" class="btn-default" action="#{deal.cancelDeal}"/>
 		
 		<br></br><br></br>
 		<table border="0" width="53%">
@@ -115,6 +122,10 @@
 		</center>
 		</h:form>
 			</p:scrollPanel>
+					<script src="js/jquery-2.0.3.js"></script>
+			<script src="js/jquery-ui.js"></script>
+			<script src="js/bootstrap.js"></script> 
+			<script src="js/vsp_Deal.js"></script>
 		</ui:define>
 
 	</ui:composition>

@@ -3,6 +3,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
+
 <h:body>
 
 	<table border="0" width="100%" class="panelGrid">
@@ -12,21 +13,21 @@
 					value="No Workshop Exists"  rendered="#{empty deal.a23RefNo}"/> <h:outputScript
 					rendered="#{deal.jscript == 'pendingA23'}">alert("#{msgbundle.pending_A23_error}");</h:outputScript>
 			</td>
-			<td align="right"><h:commandButton render="dataTableGroup"
+			<td align="right"><h:commandButton 
 					immediate="true" rendered="${empty deal.activeA23RefNo}"
-					disabled="#{deal.a23statusFlag }" id="wsButton"
+					disabled="#{deal.a23statusFlag }" id="wsButton" render="dataTableA23Group"
 					value="CREATE WORKSHOP" class="btn-default"
-					actionListener="#{deal.addWorkshop}" onclick="return validate()">
+					actionListener="#{deal.addWorkshop}" onclick="validateA1();var status = validate(); return status;">
 				</h:commandButton> <h:commandButton update="dataTableGroup"
 					rendered="${not empty deal.activeA23RefNo}" id="wsAddButton"
-					value="+ NEW WORKSHOP" class="btn-default"
-					actionListener="#{deal.addNewWorkshop}" onclick="return validate()">
+					value="+ NEW WORKSHOP" class="btn-default" render="dataTableA23Group"
+					actionListener="#{deal.addNewWorkshop}" onclick="validateA1();var status = validate(); return status;">
 
 				</h:commandButton></td>
 		</tr>
 	</table>
 	<h:panelGroup id="dataTableA23Group">
-		<h:dataTable value="#{deal.a23FormList}" var="a23Form" rows="1">
+		<h:dataTable value="#{deal.a23FormList}" var="row" rows="1">
 			<h:column>
 				<table width="70%" class="panelGrid">
 					<tr></tr>
@@ -37,7 +38,7 @@
 					<tr>
 						<td style="font-size: 12px;">Workshop Status: <h:selectOneMenu
 								disabled="#{not deal.a23statusFlag}"
-								value="#{a23Form.workshop_Status}" style="width:120px">
+								value="#{row.workshop_Status}" style="width:120px">
 								<f:selectItem itemLabel="Please Choose" itemValue="#{null}"
 									noSelectionOption="true" />
 								<f:selectItems value="#{selectList.workshopStatusList}"
@@ -47,17 +48,17 @@
 
 						<td style="font-size: 12px;">Deal Coach: <h:inputText
 								disabled="#{not deal.a23statusFlag }"
-								value="#{a23Form.workshop_DealCoach}" style="width:120px" />
+								value="#{row.workshop_DealCoach}" style="width:120px" />
 						</td>
 
 						<td style="font-size: 12px;">Complete: <h:inputText
 								disabled="#{not deal.a23statusFlag }"
-								value="#{a23Form.workshop_CompleteDate}" style="width:120px" />
+								value="#{row.workshop_CompleteDate}" style="width:120px" />
 						</td>
 
 						<td style="font-size: 12px;">Length:<h:selectOneMenu
 								disabled="#{not deal.a23statusFlag }"
-								value="#{a23Form.workshop_Length}" style="width:140px">
+								value="#{row.workshop_Length}" style="width:140px">
 								<f:selectItem itemLabel="Please Choose" itemValue="#{null}"
 									noSelectionOption="true" />
 								<f:selectItems value="#{selectList.lengthList}" immediate="true" />
@@ -69,7 +70,7 @@
 					<tr>
 						<td style="font-size: 12px;">Deal Coaching Evaluation: <h:selectOneMenu
 								disabled="#{not deal.a23statusFlag }"
-								value="#{a23Form.workshop_DealCoachEval}" style="width:160px">
+								value="#{row.workshop_DealCoachEval}" style="width:160px">
 								<f:selectItem itemLabel="Please Choose" itemValue="#{null}"
 									noSelectionOption="true" />
 								<f:selectItems value="#{selectList.dealCoachingEvaluationList}"
@@ -79,7 +80,7 @@
 
 						<td style="font-size: 12px;">Deal Coaching Justification: <h:inputTextarea
 								disabled="#{not deal.a23statusFlag }"
-								value="#{a23Form.workshop_DealCoachJustification}"></h:inputTextarea>
+								value="#{row.workshop_DealCoachJustification}"></h:inputTextarea>
 						</td>
 
 					</tr>
@@ -87,7 +88,7 @@
 					<tr>
 						<td style="font-size: 12px;">Qualifier Tool:Should we sell? <h:selectOneMenu
 								disabled="#{not deal.a23statusFlag }"
-								value="#{a23Form.workshop_ShouldSell}" style="width:120px">
+								value="#{row.workshop_ShouldSell}" style="width:120px">
 								<f:selectItem itemLabel="Please Choose" itemValue="#{null}"
 									noSelectionOption="true" />
 								<f:selectItems value="#{selectList.shouldweSellList}"
@@ -97,7 +98,7 @@
 
 						<td style="font-size: 12px;">Qualifier Tool:Can we sell? <h:selectOneMenu
 								disabled="#{not deal.a23statusFlag }"
-								value="#{a23Form.workshop_CanSell}" style="width:140px">
+								value="#{row.workshop_CanSell}" style="width:140px">
 								<f:selectItem itemLabel="Please Choose" itemValue="#{null}"
 									noSelectionOption="true" />
 								<f:selectItems value="#{selectList.canweSellList}"
@@ -107,7 +108,7 @@
 
 						<td style="font-size: 12px;">Qualifier Tool:Evaluation <h:selectOneMenu
 								disabled="#{not deal.a23statusFlag }"
-								value="#{a23Form.evaluation}" style="width:120px">
+								value="#{row.evaluation}" style="width:120px">
 								<f:selectItem itemLabel="Please Choose" itemValue="#{null}"
 									noSelectionOption="true" />
 								<f:selectItems value="#{selectList.evaluationList}"
@@ -117,7 +118,7 @@
 
 						<td style="font-size: 12px;">Pursuit profile win chance:<h:inputText
 								disabled="#{not deal.a23statusFlag }"
-								value="#{a23Form.workshop_Pursuit}" style="width:120px" />
+								value="#{row.workshop_Pursuit}" style="width:120px" />
 						</td>
 					</tr>
 				</table>
@@ -148,12 +149,12 @@
 					<tr>
 						<td style="font-size: 12px;">Briefing Call held: <h:inputText
 								disabled="#{not deal.a23statusFlag }"
-								value="#{a23Form.briefingCallDate}" />
+								value="#{row.briefingCallDate}" />
 						</td>
 
 						<td style="font-size: 12px;">Next Checkpoint call: <h:inputText
 								disabled="#{not deal.a23statusFlag }"
-								value="#{a23Form.nextFollowUpCallDate}" />
+								value="#{row.nextFollowUpCallDate}" />
 						</td>
 					</tr>
 
@@ -167,17 +168,15 @@
 						<td style="font-size: 12px;">Modules Run: 
 								<h:selectManyListbox
 								disabled="#{not deal.a23statusFlag }"
-								value="#{a23Form.workshop_ModulesRun}" style="width:140px;height: 70px">
-								<f:selectItem itemLabel="Please Choose" itemValue="#{null}"
-									noSelectionOption="true" />
-									<f:selectItems value="#{selectList.modulesRunList}"
+								value="#{row.workshop_ModulesRun}" style="width:140px;height: 70px">
+								<f:selectItems value="#{selectList.modulesRunList}"
 									immediate="true" />
 							</h:selectManyListbox>
 								</td>
 
 						<td style="font-size: 12px;">IBM Beloved Deal: <h:selectOneMenu
 								disabled="#{not deal.a23statusFlag }"
-								value="#{a23Form.workshop_IBMBelovedDeal}" style="width:120px">
+								value="#{row.workshop_IBMBelovedDeal}" style="width:120px">
 								<f:selectItem itemLabel="Please Choose" itemValue="#{null}"
 									noSelectionOption="true" />
 								<f:selectItem itemLabel="Yes" itemValue="Y" />
@@ -187,7 +186,7 @@
 
 						<td style="font-size: 12px;">Client Attended: <h:selectOneMenu
 								disabled="#{not deal.a23statusFlag }"
-								value="#{a23Form.workshop_ClientAttended}" style="width:120px">
+								value="#{row.workshop_ClientAttended}" style="width:120px">
 								<f:selectItem itemLabel="Please Choose" itemValue="#{null}"
 									noSelectionOption="true" />
 								<f:selectItem itemLabel="Yes" itemValue="Y" />
@@ -198,60 +197,72 @@
 					<tr>
 						<td style="font-size: 12px;">Anticipated Power Base: <h:inputText
 								disabled="#{not deal.a23statusFlag }"
-								value="#{a23Form.workshop_AnticipatedPowerBase1}"
+								value="#{row.workshop_AnticipatedPowerBase1}"
 								style="width:120px" /></td>
 
 						<td style="font-size: 12px;"><h:inputText
 								disabled="#{not deal.a23statusFlag }"
-								value="#{a23Form.workshop_AnticipatedPowerBase2}"
+								value="#{row.workshop_AnticipatedPowerBase2}"
 								style="width:120px" /></td>
 
 						<td style="font-size: 12px;">Actual Power Base: <h:inputText
 								disabled="#{not deal.a23statusFlag }"
-								value="#{a23Form.workshop_ActualPowerBase}" />
+								value="#{row.workshop_ActualPowerBase}" />
 						</td>
 					</tr>
 
 					<tr>
 						<td style="font-size: 12px;">Anticipated Competitor(Top 2): <h:inputText
 								disabled="#{not deal.a23statusFlag }"
-								value="#{a23Form.workshop_AnticipatedCompetitor1}"
+								value="#{row.workshop_AnticipatedCompetitor1}"
 								style="width:120px" /></td>
 
 						<td style="font-size: 12px;"><h:inputText
 								disabled="#{not deal.a23statusFlag }"
-								value="#{a23Form.workshop_AnticipatedCompetitor2}"
+								value="#{row.workshop_AnticipatedCompetitor2}"
 								style="width:120px" /></td>
 
 						<td style="font-size: 12px;">Actual Competitor: <h:inputText
 								disabled="#{not deal.a23statusFlag }"
-								value="#{a23Form.workshop_ActualCompetitor}" />
+								value="#{row.workshop_ActualCompetitor}" />
 						</td>
 					</tr>
 					<tr>
 						<td style="font-size: 12px;" colspan="3">Consortium: <h:inputText
 								disabled="#{not deal.a23statusFlag }"
-								value="#{a23Form.workshop_Consortium}" />
+								value="#{row.workshop_Consortium}" />
 						</td>
 					</tr>
-
-
 				</table>
-
-
 
 			</h:column>
 		</h:dataTable>
 	</h:panelGroup>
 	<table>
 		<tr>
-			<td style="font-size: 12px;">Historical Workshop Info:</td>
-		</tr>
+			<td align="right"><h:outputText value="Current:"
+								rendered="#{not empty deal.a23History}" /> <h:commandButton
+								value="#{deal.activeA23RefNo}"
+								rendered="#{not empty deal.a23History}" class="btn-default"
+								actionListener="#{deal.historyListenerA23}" /> <h:outputText
+								value="Historical Workshop Info:"
+								rendered="#{not empty deal.a23History}" /></td>
+						<td colspan="4">
+							<table>
+								<tr>
+									<ui:repeat value="#{deal.a23History}" var="row">
+										<ui:repeat value="#{row}" var="column">
+											<td><h:commandButton value="#{column}"
+													class="btn-default"
+													actionListener="#{deal.historyListenerA23}" /></td>
+										</ui:repeat>
+									</ui:repeat>
+								</tr>
 
 	</table>
-
-
-
+</td>
+</tr>
+</table>
 </h:body>
 
 </html>

@@ -44,7 +44,7 @@ public static final String WORKSHOP_MODULES_RUN="VALUE_NAME='Modules_Run'";
 
 
 public static final String VSP_REF_NO_START="0001";
-public static final String VSP_REF_NO = "REFERENCE_NO=?";
+public static final String VSP_REF_NO = "REFERENCE_NO=? ";
 public static final String A1_REF_NO = "A1_REF_NO=?";
 public static final String A23_REF_NO = "WORKSHOP_REF_NUMBER=?";
 public static final String A1_STATUS = "A1_STATUS_ID in ('Complete','Cancelled')";

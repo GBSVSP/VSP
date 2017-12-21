@@ -5,7 +5,7 @@ function validate(){
 						var opportunity_Name = $("#opportunity_Name").val();
 						var opportunity_Description = $("#opportunity_Description").val();
 						//var a1Status = $("#a1Form:j_idt61:0:a1Status").val();
-						//alert("a1Status:"+a1Status);
+					
 						var status = false;
 						if (customer_Name == '') {
 							
@@ -24,6 +24,7 @@ function validate(){
 								 $("#err_a1_Status").html("Cannot be Blank");
 			    		   }  */ 
 						 if(customer_Name != '' && opportunity_Name != '' && opportunity_Description != '' ){
+
 							 status = true;
 						 }
 						 return status;
@@ -38,4 +39,10 @@ function validate(){
 						return status;
 					}); 
 					
-					
+function validateA1(){
+	var a1Flag = $('#a1Flag').val();
+	if(a1Flag == 'true'){
+		alert("No A1 Workshop has been planned yet for this Opportunity- please create an A1");
+	}
+	
+}			

@@ -205,63 +205,7 @@ public class DealDAO {
 		return referenceNum;
 	}
 
-	public static int insertDealOnly(String dealSQL, String a1SQL, DealInfo dealInfo) throws Exception {
-
-		System.out.println("In DealDAO: Entering insertDealOnly()...");
-		PreparedStatement ps = null;
-		int insertFlag = 0;
-		System.out.println("Deal Ref. No.: " + dealInfo.getReference_No());
-
-		try {
-
-			con.setAutoCommit(false);
-			ps = con.prepareStatement(dealSQL);
-
-			ps.setInt(1, dealInfo.getReference_No());
-			ps.setInt(2, dealInfo.getSector_Id());
-			ps.setInt(3, dealInfo.getIndustry_Id());
-			ps.setInt(4, dealInfo.getImt_Id());
-			ps.setString(5, dealInfo.getSc_No());
-			ps.setString(6, dealInfo.getCustomer_Name());
-			ps.setString(7, dealInfo.getOpportunity_Name());
-			ps.setString(8, dealInfo.getOpportunity_Owner());
-			ps.setString(9, dealInfo.getOpportunity_Description());
-			ps.setString(10, dealInfo.getAdditional_Contacts());
-			ps.setDouble(11, dealInfo.getTcv());
-			ps.setString(12, dealInfo.getPotential_TCV());
-			ps.setString(13, dealInfo.getBox_Link());
-			ps.setString(14, dealInfo.getIppf_Number());
-			ps.setString(15, dealInfo.getGbs_gts_Led());
-			ps.setString(16, dealInfo.getOther_Linked_Opp_No());
-			ps.setInt(17, dealInfo.getSsm_Stage_Id());
-			ps.setInt(18, dealInfo.getSsm_Stage());
-			ps.setString(19, dealInfo.getSales_Connect_No());
-			ps.setString(20, dealInfo.getSc_Opp_Owner());
 	
-			if (!(dealInfo.getDecision_Date().isEmpty()) ) {
-				ps.setDate(21, java.sql.Date.valueOf(dealInfo.getDecision_Date()));
-			} else {
-				ps.setDate(21, null);
-			}
-			ps.setDouble(22, dealInfo.getBnp_Spent());
-			ps.setDouble(23, dealInfo.getSc_Imt_Id());
-			ps.setString(24, SessionUtils.getUserName());
-
-			insertFlag = ps.executeUpdate();
-			System.out.println("Deal insert status:"+insertFlag);
-			
-			if(insertFlag > 0) {
-				con.commit();
-			}
-			
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-
-		}
-
-		System.out.println("In DealDAO: Exiting insertDealOnly()...");
-		return insertFlag;
-	}
 	public static int insertDeal(String dealSQL, String a1SQL, String a23SQL, DealInfo dealInfo, A1Form a1Form, A23Form a23Form, boolean a1statusFlag, boolean a23statusFlag) throws Exception {
 
 		System.out.println("In DealDAO: Entering insertDeal()..."+a1statusFlag);
@@ -450,9 +394,9 @@ public class DealDAO {
 					}
 					
 					ps.setString(16, a23Form.getWorkshop_IBMBelovedDeal());
-					ps.setDouble(17, a23Form.getWorkshop_AnticipatedPowerBase1());
-					ps.setDouble(18, a23Form.getWorkshop_AnticipatedPowerBase2());
-					ps.setDouble(19, a23Form.getWorkshop_ActualPowerBase());
+					ps.setString(17, a23Form.getWorkshop_AnticipatedPowerBase1());
+					ps.setString(18, a23Form.getWorkshop_AnticipatedPowerBase2());
+					ps.setString(19, a23Form.getWorkshop_ActualPowerBase());
 					ps.setString(20, a23Form.getWorkshop_AnticipatedCompetitor1());
 					ps.setString(21, a23Form.getWorkshop_AnticipatedCompetitor2());
 					ps.setString(22, a23Form.getWorkshop_ActualCompetitor());
@@ -461,7 +405,7 @@ public class DealDAO {
 					ps.setString(25, SessionUtils.getUserName());
 										
 					insertFlag = ps.executeUpdate();
-					System.out.println("A1Form insert status:"+insertFlag);
+					System.out.println("A23Form insert status:"+insertFlag);
 			
 			} catch (SQLException ex) {
 				ex.printStackTrace();
@@ -471,7 +415,7 @@ public class DealDAO {
 			System.out.println("In DealDAO: Exiting insertA23()...");
 			return insertFlag;
 		}
-	public static int updateDeal(String dealSQL, String a1SQL, String a23SQL, DealInfo dealInfo, A1Form a1Form, A23Form a23Form, boolean a1ExistFlag, boolean a23ExistFlag) throws Exception {
+	public static int updateDeal(String dealSQL, String a1UpdateSQL,String a1InsertSQL, String a23UpdateSQL,String a23InsertSQL, DealInfo dealInfo, A1Form a1Form, A23Form a23Form, boolean a1ExistFlag, boolean a23ExistFlag,boolean a1ButtonClick,boolean a23ButtonClick) throws Exception {
 
 		System.out.println("In DealDAO: Entering updateDeal()...");
 		PreparedStatement ps = null;
@@ -522,27 +466,27 @@ public class DealDAO {
 			updateFlag = ps.executeUpdate();
 			
 			if(updateFlag > 0) {
-				
+				System.out.println(a1ExistFlag+""+a1ButtonClick+""+a23ExistFlag+""+a23ButtonClick);
 				if(a1ExistFlag == true) {
 					updateFlag = 0;
-					updateFlag = updateA1(a1SQL, a1Form, con);
-					if(updateFlag > 0) {
-						
-						if(a23ExistFlag == true) {
-							updateFlag = 0;
-							updateFlag = updateA23(a23SQL, a23Form, con);
-						}
-					}
+					updateFlag = updateA1(a1UpdateSQL, a1Form, con);
+					
 				}
-				else {
-					if(a23ExistFlag == true) {
-						updateFlag = 0;
-						updateFlag = updateA23(a23SQL, a23Form, con);
-					}
+				else if (a1ButtonClick == true){
+					updateFlag = 0;
+					updateFlag = insertA1(a1InsertSQL, a1Form, con);	
+								
 				}
-				
-			}
-				
+				if(a23ExistFlag == true) {
+					updateFlag = 0;
+					updateFlag = updateA23(a23UpdateSQL, a23Form, con);
+				}
+				else if(a23ButtonClick == true){
+					updateFlag = 0;
+					updateFlag = insertA23(a23InsertSQL, a23Form, con);
+					
+				}
+			}	
 			
 			if(updateFlag > 0) {
 				con.commit();
@@ -593,12 +537,82 @@ public class DealDAO {
 	//update A23 workshop
 		public static int updateA23(String a23SQL, A23Form a23Form, Connection con) throws Exception {
 
-			System.out.println("In DealDAO: Entering updateA1()...");
+			System.out.println("In DealDAO: Entering updateA23()...");
 			PreparedStatement ps = null;
 			int updateFlag = 0;
+			DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 			try {
 				
 					ps = con.prepareStatement(a23SQL);
+					if (a23Form.getWorkshop_CompleteDate()!=null && !(a23Form.getWorkshop_CompleteDate().isEmpty())) {
+						Date completeDate = format.parse(a23Form.getWorkshop_CompleteDate());
+						java.sql.Date completeSqlDate = new java.sql.Date(completeDate.getTime());
+						ps.setDate(1, completeSqlDate);
+					} else {
+						ps.setDate(1, null);
+					}
+					
+					ps.setString(2, a23Form.getWorkshop_DealCoach());
+					ps.setString(3, a23Form.getWorkshop_Status());
+					ps.setString(4, a23Form.getWorkshop_Length());
+					ps.setString(5, a23Form.getWorkshop_DealCoachEval());
+					ps.setString(6, a23Form.getWorkshop_DealCoachJustification());
+					ps.setString(7, a23Form.getWorkshop_ShouldSell());
+					ps.setString(8, a23Form.getWorkshop_CanSell());
+					ps.setInt(9, a23Form.getWorkshop_Pursuit());
+					ps.setString(10, a23Form.getEvaluation());
+					
+				    if (a23Form.getBriefingCallDate()!=null && !(a23Form.getBriefingCallDate().isEmpty())) {
+							
+							Date briefingDate = format.parse(a23Form.getBriefingCallDate());
+							java.sql.Date briefingSqlDate = new java.sql.Date(briefingDate.getTime());
+							ps.setDate(11, briefingSqlDate);
+					} else {
+							ps.setDate(11, null);
+					}
+	                    
+			
+	               if (a23Form.getNextFollowUpCallDate()!=null && !(a23Form.getNextFollowUpCallDate().isEmpty())) {
+							
+							Date nextFollowUpDate = format.parse(a23Form.getNextFollowUpCallDate());
+							java.sql.Date nextFollowUpSqlDate = new java.sql.Date(nextFollowUpDate.getTime());
+							ps.setDate(12, nextFollowUpSqlDate);
+				   } else {
+							ps.setDate(12, null);
+				   }
+	
+					
+					if(a23Form.getWorkshop_ModulesRun().length != 0) {
+					    String[] modulesRun = a23Form.getWorkshop_ModulesRun();
+						
+						String modules = "";
+						
+					    for(int i = 0; i < modulesRun.length; i++) {
+					    	
+					    	if(i ==0)
+					    	  modules = modulesRun[i].trim(); 
+					    	else 
+					    	  modules= modules+ " , " + modulesRun[i].trim(); 
+					    }
+					  
+						ps.setString(13, modules);
+						
+					} else {
+					     ps.setString(13, "");
+					}
+					
+					ps.setString(14, a23Form.getWorkshop_IBMBelovedDeal());
+					ps.setString(15, a23Form.getWorkshop_AnticipatedPowerBase1());
+					ps.setString(16, a23Form.getWorkshop_AnticipatedPowerBase2());
+					ps.setString(17, a23Form.getWorkshop_ActualPowerBase());
+					ps.setString(18, a23Form.getWorkshop_AnticipatedCompetitor1());
+					ps.setString(19, a23Form.getWorkshop_AnticipatedCompetitor2());
+					ps.setString(20, a23Form.getWorkshop_ActualCompetitor());
+					ps.setString(21, a23Form.getWorkshop_ClientAttended());
+					ps.setString(22, a23Form.getWorkshop_Consortium());
+					ps.setString(23, SessionUtils.getUserName());
+					ps.setInt(24,a23Form.getReference_No());
+					ps.setString(25, a23Form.getWorkshop_Ref_Number());
 					
 					updateFlag = ps.executeUpdate();	
 					
@@ -607,93 +621,10 @@ public class DealDAO {
 				ex.printStackTrace();
 
 			}
-			System.out.println("In DealDAO: Exiting updateA1()...");
+			System.out.println("In DealDAO: Exiting updateA23()...");
 			return updateFlag;
 		}
-	public static int updateDeal_InsertA123(String dealSQL, String a1SQL,String a23SQL, DealInfo dealInfo, A1Form a1Form,A23Form a23Form,boolean a1statusFlag,boolean a23statusFlag) throws Exception {
-
-		System.out.println("In DealDAO: Entering updateDeal()...");
-		PreparedStatement ps = null;
-		int updateFlag = 0;
-		System.out.println("customer name:" + dealInfo.getCustomer_Name());
-		try {
-			con.setAutoCommit(false);
-			ps = con.prepareStatement(dealSQL);
-			
-			// Set clause
-			ps.setInt(1, dealInfo.getSector_Id());
-			ps.setInt(2, dealInfo.getIndustry_Id());
-			ps.setInt(3, dealInfo.getImt_Id());
-			ps.setString(4, dealInfo.getSc_No());
-			ps.setString(5, dealInfo.getCustomer_Name());
-			ps.setString(6, dealInfo.getOpportunity_Name());
-			ps.setString(7, dealInfo.getOpportunity_Owner());
-			ps.setString(8, dealInfo.getOpportunity_Description());
-			ps.setString(9, dealInfo.getAdditional_Contacts());
-			ps.setDouble(10, dealInfo.getTcv());
-			ps.setString(11, dealInfo.getPotential_TCV());
-			ps.setString(12, dealInfo.getBox_Link());
-			ps.setString(13, dealInfo.getIppf_Number());
-			ps.setString(14, dealInfo.getGbs_gts_Led());
-			ps.setString(15, dealInfo.getOther_Linked_Opp_No());
-			ps.setInt(16, dealInfo.getSsm_Stage_Id());
-			ps.setInt(17, dealInfo.getSsm_Stage());
-			ps.setString(18, dealInfo.getSales_Connect_No());
-			ps.setString(19, dealInfo.getSc_Opp_Owner());
-		
-			if ( dealInfo.getDecision_Date()!=null &&!(dealInfo.getDecision_Date().isEmpty())) {
-				DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-				Date decisionDate = format.parse(dealInfo.getDecision_Date());
-				java.sql.Date decisionSqlDate = new java.sql.Date(decisionDate.getTime());
-				ps.setDate(20, decisionSqlDate);
-			} else {
-				ps.setDate(20, null);
-			}
-
-			ps.setDouble(21, dealInfo.getBnp_Spent());
-			ps.setDouble(22, dealInfo.getSc_Imt_Id());
-			ps.setString(23, SessionUtils.getUserName());
-
-			// where clause
-			System.out.println("dealInfo.getReference_No():"+dealInfo.getReference_No());
-			ps.setInt(24, dealInfo.getReference_No());
-
-			updateFlag = ps.executeUpdate();
-			
-			if(updateFlag > 0) {
-			if(a1statusFlag == true){
-				updateFlag = 0;
-				ps = con.prepareStatement(a1SQL);
-				updateFlag = insertA1(a1SQL,a1Form,con);
-				if(updateFlag > 0) {
-					
-					if(a23statusFlag == true) {
-						updateFlag = 0;
-						updateFlag = insertA23(a23SQL, a23Form, con);
-					}
-				}
-			}
-			else {
-				if(a23statusFlag == true) {
-					updateFlag = 0;
-					updateFlag = insertA23(a23SQL, a23Form, con);
-				}
-			}
-			
-		}
-			
-			if(updateFlag > 0) {
-				con.commit();
-			}
-
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-
-		}
-
-		System.out.println("In DealDAO: Exiting updateDeal()...");
-		return updateFlag;
-	}
+	
 	public static boolean isDealExist(String sql, int dealRefNo) throws Exception {
 
 		System.out.println("In DealDAO: Entering isDealExist()...");
@@ -833,7 +764,49 @@ public class DealDAO {
 			while (rs.next()) {
 				A23Form a23Form = new A23Form();
 
-				
+				a23Form.setReference_No(rs.getInt(1));
+				a23Form.setWorkshop_Ref_Number(rs.getString(2));
+				if (rs.getDate(3) != null) {
+				a23Form.setWorkshop_CompleteDate(rs.getDate(3).toString());
+				}
+				else {
+				a23Form.setWorkshop_CompleteDate("");
+					}
+
+				a23Form.setWorkshop_DealCoach(rs.getString(4));
+				a23Form.setWorkshop_Status(rs.getString(5));
+				a23Form.setWorkshop_Length(rs.getString(6));
+				a23Form.setWorkshop_DealCoachEval(rs.getString(7));
+				a23Form.setWorkshop_DealCoachJustification(rs.getString(8));
+				a23Form.setWorkshop_ShouldSell(rs.getString(9));
+				a23Form.setWorkshop_CanSell(rs.getString(10));
+				a23Form.setWorkshop_Pursuit(rs.getInt(11));
+				a23Form.setEvaluation(rs.getString(12));
+				if (rs.getDate(13) != null) {
+				a23Form.setBriefingCallDate(rs.getDate(13).toString());
+				}
+				else {
+				a23Form.setBriefingCallDate("");
+					}					
+				 if (rs.getDate(14) != null) {
+				a23Form.setNextFollowUpCallDate(rs.getDate(13).toString());
+				}
+				else {
+				a23Form.setNextFollowUpCallDate("");
+					}	
+							
+				String[] moduleRun = rs.getString(15).split(",");
+				a23Form.setWorkshop_ModulesRun(moduleRun);
+
+				a23Form.setWorkshop_IBMBelovedDeal(rs.getString(16));				
+				a23Form.setWorkshop_AnticipatedPowerBase1(rs.getString(17));					
+				a23Form.setWorkshop_AnticipatedPowerBase2(rs.getString(18));
+				a23Form.setWorkshop_ActualPowerBase(rs.getString(19));				
+				a23Form.setWorkshop_AnticipatedCompetitor1(rs.getString(20));
+				a23Form.setWorkshop_AnticipatedCompetitor2(rs.getString(21));
+				a23Form.setWorkshop_ActualCompetitor(rs.getString(22));
+				a23Form.setWorkshop_ClientAttended(rs.getString(23));
+				a23Form.setWorkshop_Consortium(rs.getString(24));
 				a23FormList.add(a23Form);
 				
 	}

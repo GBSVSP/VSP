@@ -41,9 +41,9 @@ public class A23Form implements Serializable {
 	private String nextFollowUpCallDate;
 	private String[] workshop_ModulesRun;
 	private String workshop_IBMBelovedDeal;
-	private double workshop_AnticipatedPowerBase1;
-	private double workshop_AnticipatedPowerBase2;
-	private double workshop_ActualPowerBase;
+	private String workshop_AnticipatedPowerBase1;
+	private String workshop_AnticipatedPowerBase2;
+	private String workshop_ActualPowerBase;
 	private String workshop_AnticipatedCompetitor1;
 	private String workshop_AnticipatedCompetitor2;
 	private String workshop_ActualCompetitor;
@@ -175,27 +175,27 @@ public class A23Form implements Serializable {
 		this.workshop_IBMBelovedDeal = workshop_IBMBelovedDeal;
 	}
 
-	public double getWorkshop_AnticipatedPowerBase1() {
+	public String getWorkshop_AnticipatedPowerBase1() {
 		return workshop_AnticipatedPowerBase1;
 	}
 
-	public void setWorkshop_AnticipatedPowerBase1(double workshop_AnticipatedPowerBase1) {
+	public void setWorkshop_AnticipatedPowerBase1(String workshop_AnticipatedPowerBase1) {
 		this.workshop_AnticipatedPowerBase1 = workshop_AnticipatedPowerBase1;
 	}
 
-	public double getWorkshop_AnticipatedPowerBase2() {
+	public String getWorkshop_AnticipatedPowerBase2() {
 		return workshop_AnticipatedPowerBase2;
 	}
 
-	public void setWorkshop_AnticipatedPowerBase2(double workshop_AnticipatedPowerBase2) {
+	public void setWorkshop_AnticipatedPowerBase2(String workshop_AnticipatedPowerBase2) {
 		this.workshop_AnticipatedPowerBase2 = workshop_AnticipatedPowerBase2;
 	}
 
-	public double getWorkshop_ActualPowerBase() {
+	public String getWorkshop_ActualPowerBase() {
 		return workshop_ActualPowerBase;
 	}
 
-	public void setWorkshop_ActualPowerBase(double workshop_ActualPowerBase) {
+	public void setWorkshop_ActualPowerBase(String workshop_ActualPowerBase) {
 		this.workshop_ActualPowerBase = workshop_ActualPowerBase;
 	}
 

@@ -76,6 +76,9 @@ public class Deal implements Serializable {
 	public static String activeA23RefNo;
 	
 	
+	public  ArrayList<String> getA23History() {
+		return a23History;
+	}
 	public String getActiveA23RefNo() {
 		return activeA23RefNo;
 	}
@@ -105,6 +108,9 @@ public class Deal implements Serializable {
 		return a1RefNo;
 	}
 	
+	public  void setA1RefNo(String a1RefNo) {
+		this.a1RefNo = a1RefNo;
+	}
 	public  String getA1StatusMessage() {
 		return a1StatusMessage;
 	}
@@ -312,6 +318,11 @@ public class Deal implements Serializable {
 	public String openDeal(int referenceNo) throws Exception {
 		System.out.println("In Deal: Entering openDeal()...");
 		dealList.clear();
+		a1FormList.clear();
+		a23FormList.clear();
+		commentsList.clear();
+		a1RefNo = null;
+		a23RefNo = null;
 		activeA1RefNo = null;
 		reference_No = referenceNo;
 		String sql = QueryBuilder.GET_DEAL;
@@ -342,15 +353,18 @@ public class Deal implements Serializable {
 		}
 		
 		a23DBStatus = hasA23Exist(referenceNo);
+		System.out.println("a23DBStatus:"+a23DBStatus);
 		if(a23DBStatus == true) {
 			a23statusFlag = true;
 			sql = QueryBuilder.GET_A23_FORMS;
 			a23FormList = DealDAO.getA23List (sql,referenceNo);
+	
 			a23RefNo = a23FormList.get(0).getWorkshop_Ref_Number();
+			System.out.println("a23FormList size:"+a23FormList.get(0).getWorkshop_DealCoachJustification());
 			activeA23RefNo = a23RefNo;
 			whereClause = Constants.A23_STATUS ;
 			sql = QueryBuilder.A23_HISTORY + " " + whereClause;
-			//System.out.println("reference_No:"+reference_No);
+			
 			a23History = DealDAO.getA23History(sql,reference_No);
 		}
 		else {
@@ -376,6 +390,7 @@ public class Deal implements Serializable {
 	 */
 	public String newDeal() throws Exception {
 		System.out.println("In Deal: Entering newDeal()...");
+		jscript = null;
 		searchType = Constants.DEFAULT_SEARCH_TYPE;
 		if (dealList != null) {
 		
@@ -466,10 +481,7 @@ public class Deal implements Serializable {
 				}
 				System.out.println("a23FormObj val:"+a23FormObj.getWorkshop_Status());
 			insertFlag = DealDAO.insertDeal(dealSQL, a1SQL, a23SQL, dealInfoObj, a1FormObj,a23FormObj, a1statusFlag,a23statusFlag);
-			//}
-			/*else {
-				insertFlag = DealDAO.insertDealOnly(dealSQL, a1SQL, dealInfoObj);
-			}*/
+			
 			if (insertFlag > 0) {
 				activeA1RefNo = a1FormObj.getA1_RefNo();
 				activeA23RefNo = a23FormObj.getWorkshop_Ref_Number();
@@ -496,39 +508,43 @@ public class Deal implements Serializable {
 	public void updateDeal() throws Exception {
 
 		System.out.println("In Deal: Entering updateDeal()...");
-		String a1SQL = null;
-		String a23SQL = null;
+		String a1UpdateSQL = null;
+		String a1InsertSQL = null;
+		String a23UpdateSQL = null;
+		String a23InsertSQL = null;
 		String whereClause_A23 = null;
+		String whereClause_A1 = null;
 		int updateFlag = 0;
 		try {
 			a1StatusMessage = null;
 			a23StatusMessage = null;
-			whereClause = Constants.VSP_REF_NO + "and" +  Constants.A1_REF_NO;
-			whereClause_A23 = Constants.VSP_REF_NO + "and" +  Constants.A23_REF_NO;
+			whereClause_A1 = Constants.VSP_REF_NO + " and " +  Constants.A1_REF_NO;
+			whereClause_A23 = Constants.VSP_REF_NO + " and " +  Constants.A23_REF_NO;
 			String dealSQL = QueryBuilder.UPDATE_DEAL + " " + Constants.VSP_REF_NO;
-			a1FormObj.setA1_RefNo(a1RefNo);
+			//a1FormObj.setA1_RefNo(a1RefNo);
 			activeA1RefNo = a1RefNo;
 			activeA23RefNo = a23RefNo;
-			System.out.println("getReferenceNo:"+a1FormObj.getReferenceNo()+":"+a1RefNo);
+		
+			if(a1ButtonClick == true){
+				
+				a1FormObj.setA1_RefNo(a1RefNo);
+				a1FormObj.setReferenceNo(reference_No);
+				}
+				if(a23ButtonClick == true) {
+					
+					a23FormObj.setWorkshop_Ref_Number(a23RefNo);;
+					a23FormObj.setReference_No(reference_No);
+				}
 			boolean a1ExistFlag = isA1Exist();
 			boolean a23ExistFlag = isA23Exist();
-				if (a1ExistFlag == true || a23ExistFlag == true) {
+				
+					a1UpdateSQL = QueryBuilder.UPDATE_A1_WORKSHOP + " " +whereClause_A1;
+					a1InsertSQL = QueryBuilder.INSERT_A1_WORKSHOP;
+					a23UpdateSQL = QueryBuilder.UPDATE_A23_WORKSHOP + " " +whereClause_A23;
+					a23InsertSQL = QueryBuilder.INSERT_A23_WORKSHOP;
 					
-					a1SQL = QueryBuilder.UPDATE_A1_WORKSHOP + " " +whereClause;
-					updateFlag = DealDAO.updateDeal(dealSQL,a1SQL,a23SQL,dealInfoObj, a1FormObj, a23FormObj,a1ExistFlag,a23ExistFlag);
-					a1statusFlag = true;
-				}
-				else {
-					a1statusFlag = a1ButtonClick ;
-					a23statusFlag = a23ButtonClick ;
-					if(a1ButtonClick == true || a23ButtonClick==true) {	
-					a1SQL = QueryBuilder.INSERT_A1_WORKSHOP;
-					a23SQL = QueryBuilder.INSERT_A23_WORKSHOP;
-					updateFlag = DealDAO.updateDeal_InsertA123(dealSQL,a1SQL,a23SQL,dealInfoObj,a1FormObj,a23FormObj,a1statusFlag,a23statusFlag);
-					}
-					}
-		
-
+					updateFlag = DealDAO.updateDeal(dealSQL,a1UpdateSQL,a1InsertSQL,a23UpdateSQL,a23InsertSQL,dealInfoObj, a1FormObj, a23FormObj,a1ExistFlag,a23ExistFlag,a1ButtonClick,a23ButtonClick);
+					
 			if (updateFlag > 0) {
 				System.out.println("Deal update successful.");
 			} else {
@@ -558,7 +574,7 @@ public class Deal implements Serializable {
 		System.out.println("In Deal: Entering isDealExist()...");
 		String page = null;
 		try {
-
+			jscript = null;
 			whereClause = Constants.VSP_REF_NO;
 			String sql = QueryBuilder.COUNT_DEAL + " " + whereClause;
 			if(dealList!=null) {
@@ -592,10 +608,9 @@ public class Deal implements Serializable {
 							a1FormList.clear();
 							a23FormList.clear();
 							dealList.add(dealInfoObj);
-							System.out.println("a1statusFlag:"+a1statusFlag);
-							System.out.println("a23statusFlag:"+a23statusFlag);
+				
 							if(a1statusFlag == true) {
-								System.out.println("A1 status:"+a1FormObj.getA1_Status());
+						
 								a1FormList.add(a1FormObj);
 							}
 							else {
@@ -716,6 +731,30 @@ public class Deal implements Serializable {
 		return a1Count;
 	}
 	/**
+	 * Method to validate A23 form status
+	 * 
+	 * @param value
+	 * @return void
+	 * @throws Exception
+	 */
+	public int validateA23Status(int reference_No, String a2_RefNo) throws Exception {
+		int a23Count = 0;
+		try {
+	
+			whereClause = Constants.VSP_REF_NO +" and " + Constants.A23_REF_NO + "and " +Constants.A23_STATUS ;
+			String sql = QueryBuilder.COUNT_A23 + " " + whereClause;
+	
+			a23Count = DealDAO.isA23Exist(sql, reference_No, a2_RefNo);
+	        			
+			
+		} catch (Exception e) {
+			System.out.println("Error in validateA1Status():" + e);
+			e.printStackTrace();
+		}
+		return a23Count;
+	}
+	
+	/**
 	 * Method to check A1 status of a deal
 	 * 
 	 * @param value
@@ -755,6 +794,7 @@ public class Deal implements Serializable {
 	 */
 	public void addA1Form(ActionEvent e) throws Exception {
 		a1ButtonClick = true;
+		jscript = null;
 		generateA1RefNo(false,0);
 		System.out.println("New A1 Ref No:"+a1RefNo +a1statusFlag);
 	
@@ -768,7 +808,7 @@ public class Deal implements Serializable {
 	 */
 	public void addNewA1Form(ActionEvent e) throws Exception {
 		a1ButtonClick = true;
-		
+		jscript = null;
 		System.out.println("A1 Ref No:"+a1RefNo);
 		System.out.println("Ref No:"+reference_No);
 		int a1Count = validateA1Status(reference_No,a1RefNo);
@@ -784,6 +824,7 @@ public class Deal implements Serializable {
 		else {
 		
 			jscript ="pendingA1";
+			System.out.println("jscript:"+jscript);
 		}
 	}
 	/**
@@ -834,7 +875,7 @@ public class Deal implements Serializable {
 	 * @return void
 	 * @throws Exception
 	 */
-	public void historyListener(ActionEvent e) throws Exception {
+	public void historyListenerA1(ActionEvent e) throws Exception {
 		String buttonValue = (String)e.getComponent().getAttributes().get("value");
 		System.out.println("buttonValue:"+buttonValue);
 		if(a1FormList!=null) {
@@ -846,6 +887,30 @@ public class Deal implements Serializable {
 				a1FormList.remove(a1form);
 				a1FormList.add(0,a1form);
 				a1RefNo = a1form.getA1_RefNo();
+		}
+			}
+		}
+			
+	}
+	/**
+	 * Method to handle A23 history button listener
+	 * 
+	 * @param value
+	 * @return void
+	 * @throws Exception
+	 */
+	public void historyListenerA23(ActionEvent e) throws Exception {
+		String buttonValue = (String)e.getComponent().getAttributes().get("value");
+		System.out.println("buttonValue:"+buttonValue);
+		if(a23FormList!=null) {
+		for(A23Form a23form:a23FormList)
+		{
+			if(a23form.getWorkshop_Ref_Number().equals(buttonValue)) {
+				int index = a23FormList.indexOf(a23form);
+				System.out.println("index:"+index);
+				a23FormList.remove(a23form);
+				a23FormList.add(0,a23form);
+				a23RefNo = a23form.getWorkshop_Ref_Number();
 		}
 			}
 		}
@@ -889,6 +954,7 @@ public class Deal implements Serializable {
 	 */
 	public void addWorkshop(ActionEvent e) throws Exception {
 		a23ButtonClick = true;
+		jscript = null;
 		generatea23RefNo(false,0);
 	
 	}
@@ -929,11 +995,8 @@ public class Deal implements Serializable {
  */
 public void addNewWorkshop(ActionEvent e) throws Exception {
 	a23ButtonClick = true;
-	
-	System.out.println("a23RefNo:"+a23RefNo);
-	System.out.println("Ref No:"+reference_No);
-	int wsCount = validateA1Status(reference_No,a23RefNo);
-	System.out.println("wsCount:"+wsCount);
+	jscript = null;
+	int wsCount = validateA23Status(reference_No,a23RefNo);
 	if(wsCount > 0) {
 		jscript = null;
 		a23StatusMessage = null;
@@ -944,7 +1007,7 @@ public void addNewWorkshop(ActionEvent e) throws Exception {
 	}
 	else {
 	
-		jscript ="pendingA1";
+		jscript ="pendingA23";
 	}
 	
 }
@@ -970,11 +1033,10 @@ public boolean hasA23Exist(int referenceNo) throws Exception {
        else {
     	   status = false; 
        }
-		
-		System.out.println("count:"+a1Count+":"+status);
+
 		
 	} catch (Exception e) {
-		System.out.println("Error in hasA1Exist():" + e);
+		System.out.println("Error in hasA23Exist():" + e);
 		e.printStackTrace();
 	}
 	return status;

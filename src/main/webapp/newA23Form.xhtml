@@ -13,15 +13,10 @@
 					rendered="#{deal.jscript == 'pendingA23'}">alert("#{msgbundle.pending_A23_error}");</h:outputScript>
 			</td>
 			<td align="right"><h:commandButton render="dataTableGroup"
-					immediate="true" rendered="${empty deal.activeA23RefNo}"
+					immediate="true" 
 					disabled="#{deal.a23statusFlag }" id="wsButton"
 					value="CREATE WORKSHOP" class="btn-default"
-					actionListener="#{deal.addWorkshop}" onclick="return validate()">
-				</h:commandButton> <h:commandButton update="dataTableGroup"
-					rendered="${not empty deal.activeA23RefNo}" id="wsAddButton"
-					value="+ NEW WORKSHOP" class="btn-default"
-					actionListener="#{deal.addNewWorkshop}" onclick="return validate()">
-
+					actionListener="#{deal.addWorkshop}" onclick="validateA1();var status = validate(); return status;">
 				</h:commandButton></td>
 		</tr>
 	</table>
@@ -168,8 +163,7 @@
 								<h:selectManyListbox
 								disabled="#{not deal.a23statusFlag }"
 								value="#{row.workshop_ModulesRun}" style="width:140px;height: 70px">
-								<f:selectItem itemLabel="Please Choose" itemValue="#{null}"
-									noSelectionOption="true" />
+								
 									<f:selectItems value="#{selectList.modulesRunList}"
 									immediate="true" />
 							</h:selectManyListbox>
