@@ -8,7 +8,13 @@
 	<table border="0" width="100%" class="panelGrid">
 		<tr>
 			<td colspan="4" align="left"><b>A1 REF NO: <h:outputText
-						name="a1RefNo" value=" ${deal.a1RefNo}"></h:outputText></b> </td>
+						name="a1RefNo" value=" ${deal.a1RefNo}"></h:outputText></b> 
+						<h:outputText
+					value="No A1 Exists" rendered="#{empty deal.a1RefNo}" /> 
+					<h:outputScript
+					rendered="#{deal.jscript == 'pendingA1'}">alert("#{msgbundle.pending_A1_error}");</h:outputScript>
+					</td>
+					
 					<td align="right"><h:commandButton
 					render="dataTableGroup" immediate="true"
 					rendered="${not deal.a1statusFlag}" id="a1Button"
