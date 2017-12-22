@@ -112,6 +112,8 @@
 				<h:commandButton name="saveButton" value="SAVE CHANGES" class="btn-default" onclick="return validate()" action="#{deal.isDealExist}">
 				</h:commandButton>&nbsp;&nbsp;
 				<h:commandButton name="cancelButton"  value="CANCEL" class="btn-default" action="#{deal.cancelDeal}"/>
+				
+		<h:outputScript rendered="#{deal.jscript == 'error'}">alert("#{msgbundle.database_error}");</h:outputScript>
 		
 		<br></br><br></br>
 		<table border="0" width="53%">

@@ -275,9 +275,14 @@ public class DealDAO {
 				con.commit();
 			}
 			
-		} catch (SQLException ex) {
+		} catch (Exception ex) {
 			ex.printStackTrace();
-
+			System.out.println("In DealDAO: exception caught in insertDeal()...");
+			con.rollback();
+			ex.printStackTrace();
+			throw ex;
+		}finally {
+			ps.close();
 		}
 
 		System.out.println("In DealDAO: Exiting insertDeal()...");
@@ -314,9 +319,19 @@ public class DealDAO {
 				insertFlag = ps.executeUpdate();
 				System.out.println("A1Form insert status:"+insertFlag);
 		
-		} catch (SQLException ex) {
+		} catch(SQLException ex) {
+			System.out.println("SQL exception caught");
+			con.rollback();
 			ex.printStackTrace();
-
+			throw ex;
+			
+		} catch (Exception ex) {
+			System.out.println("Exception caught");
+			ex.printStackTrace();
+            con.rollback();
+            throw ex;
+		} finally {
+			ps.close();
 		}
 
 		System.out.println("In DealDAO: Exiting insertA1()...");
@@ -374,7 +389,7 @@ public class DealDAO {
 				   }
 	
 					
-					if(a23Form.getWorkshop_ModulesRun().length != 0) {
+					if( a23Form.getWorkshop_ModulesRun() != null && a23Form.getWorkshop_ModulesRun().length != 0) {
 					    String[] modulesRun = a23Form.getWorkshop_ModulesRun();
 						
 						String modules = "";
@@ -407,9 +422,19 @@ public class DealDAO {
 					insertFlag = ps.executeUpdate();
 					System.out.println("A23Form insert status:"+insertFlag);
 			
-			} catch (SQLException ex) {
+			} catch(SQLException ex) {
+				System.out.println("SQL exception caught");
+				con.rollback();
 				ex.printStackTrace();
-
+				throw ex;
+				
+			} catch (Exception ex) {
+				System.out.println("Exception caught");
+				ex.printStackTrace();
+	            con.rollback();
+	            throw ex;
+			}finally {
+				ps.close();
 			}
 
 			System.out.println("In DealDAO: Exiting insertA23()...");
@@ -492,9 +517,14 @@ public class DealDAO {
 				con.commit();
 			}
 
-		} catch (SQLException ex) {
+		} catch (Exception ex) {
+			System.out.println("In DealDAO: exception caught in updateDeal()...");
+			con.rollback();
 			ex.printStackTrace();
+			throw ex;
 
+		}finally {
+			ps.close();
 		}
 
 		System.out.println("In DealDAO: Exiting updateDeal()...");
@@ -526,11 +556,21 @@ public class DealDAO {
 				ps.setString(11, a1Form.getA1_RefNo());
 				updateFlag = ps.executeUpdate();	
 				
+			}catch(SQLException ex) {
+				System.out.println("SQL exception caught");
+				con.rollback();
+				ex.printStackTrace();
+				throw ex;
+				
+			 } catch (Exception ex) {
+				System.out.println("Exception caught");
+				ex.printStackTrace();
+	            con.rollback();
+	            throw ex;
+			}finally {
+				ps.close();
 			}
-		catch (SQLException ex) {
-			ex.printStackTrace();
-
-		}
+		
 		System.out.println("In DealDAO: Exiting updateA1()...");
 		return updateFlag;
 	}
@@ -582,7 +622,7 @@ public class DealDAO {
 				   }
 	
 					
-					if(a23Form.getWorkshop_ModulesRun().length != 0) {
+					if(a23Form.getWorkshop_ModulesRun() != null && a23Form.getWorkshop_ModulesRun().length != 0) {
 					    String[] modulesRun = a23Form.getWorkshop_ModulesRun();
 						
 						String modules = "";
@@ -616,11 +656,21 @@ public class DealDAO {
 					
 					updateFlag = ps.executeUpdate();	
 					
-				}
-			catch (SQLException ex) {
-				ex.printStackTrace();
-
+			}catch(SQLException ex) {
+					System.out.println("SQL exception caught");
+					con.rollback();
+					ex.printStackTrace();
+					throw ex;
+					
+		    } catch (Exception ex) {
+					System.out.println("Exception caught");
+					ex.printStackTrace();
+		            con.rollback();
+		            throw ex;
+		    }finally {
+				ps.close();
 			}
+		
 			System.out.println("In DealDAO: Exiting updateA23()...");
 			return updateFlag;
 		}
@@ -795,8 +845,12 @@ public class DealDAO {
 				a23Form.setNextFollowUpCallDate("");
 					}	
 							
-				String[] moduleRun = rs.getString(15).split(",");
-				a23Form.setWorkshop_ModulesRun(moduleRun);
+				if(rs.getString(15)!= null || !rs.getString(15).isEmpty()) {
+					String modules = rs.getString(15).trim();
+					String[] moduleRun = modules.split(",");
+					a23Form.setWorkshop_ModulesRun(moduleRun);
+				}
+				
 
 				a23Form.setWorkshop_IBMBelovedDeal(rs.getString(16));				
 				a23Form.setWorkshop_AnticipatedPowerBase1(rs.getString(17));					

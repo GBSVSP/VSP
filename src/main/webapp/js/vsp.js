@@ -491,7 +491,7 @@
 	    		});
 	    		
 	    		
-	    		$(document).on('change','.checkboxUserEventClass',function(){ 
+	    	$(document).on('change','.checkboxUserEventClass',function(){ 
 	    			//alert("In checkbox to page load");
 	    			var count =0;
 	    			
@@ -506,9 +506,9 @@
 	    				$("#updateUserButton").show();
 	    				$("#deleteUserButton").show();
 	    			}else{
-	    				$("#divUserTable").load("userInfo.xhtml #userResult");
 	    				$("#updateUserButton").hide();
 	    				$("#deleteUserButton").hide();
+	    				$("#divUserTable").load("userInfo.xhtml #userResult");
 	    				
 	    			}
 	    			

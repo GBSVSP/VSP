@@ -103,33 +103,26 @@
 								disabled="#{not deal.a1statusFlag }" value="#{row.a1_Pursuit}" style="width:140px"/>
 						</td>
 					</tr>
-					<tr>
 
-						<td align="left"><h:outputText value="Current:"
-								rendered="#{not empty deal.a1History}" /> <h:commandButton
-								value="#{deal.activeA1RefNo}"
-								rendered="#{not empty deal.a1History}" class="btn-default"
-								actionListener="#{deal.historyListenerA1}" /> 
-								
-								
-								</td>
-								<td colspan="4"><h:outputText
-								value="Historical A1 Info:"
-								rendered="#{not empty deal.a1History}" />
-							<table>
-								<tr><td >
-									<ui:repeat value="#{deal.a1History}" var="row">
-										<ui:repeat value="#{row}" var="column">
-											<td><h:commandButton value="#{column}"
-													class="btn-default"
-													actionListener="#{deal.historyListenerA1}" /></td>
-										</ui:repeat>
-									</ui:repeat>
-									</td>
-								</tr>
-							</table>
-						</td>
-					</tr>
+				   <tr>
+					<td>
+						<h:outputText value="Current: " rendered="#{not empty deal.a1History}" /> 
+						<h:commandButton value="#{deal.activeA1RefNo}" rendered="#{not empty deal.a1History}" class="btn-default" 
+						 actionListener="#{deal.historyListenerA1}" />
+					</td>
+				    </tr>
+				    <tr><td></td></tr>
+				    <tr>
+				       <td>
+                          <h:outputText value="Historical A1 Info: " rendered="#{not empty deal.a1History}" />
+							<ui:repeat value="#{deal.a1History}" var="hrow">
+											<ui:repeat value="#{hrow}" var="column">
+												<h:commandButton value="#{column}" class="btn-default" actionListener="#{deal.historyListenerA1}" />
+												 &nbsp;
+											</ui:repeat>
+							</ui:repeat>
+				      </td>
+			       </tr>
 				</table>
 			</h:column>
 		</h:dataTable>

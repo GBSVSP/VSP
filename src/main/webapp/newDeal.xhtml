@@ -106,7 +106,8 @@
 				<h:commandButton id="saveButton"  value="SAVE CHANGES" onclick="return validate()"  action="#{deal.isDealExist}"
 					class="btn-default" />&nbsp;&nbsp;
 	
-					<h:commandButton id="cancelButton"  value="CANCEL" class="btn-default" action="#{deal.cancelDeal}"/>
+				<h:commandButton id="cancelButton"  value="CANCEL" class="btn-default" action="#{deal.cancelDeal}"/>
+				<h:outputScript rendered="#{deal.jscript == 'error'}">alert("#{msgbundle.database_error}");</h:outputScript>	
 			</center>
 			</h:form>
 			</p:scrollPanel>

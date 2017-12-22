@@ -49,8 +49,8 @@ public class Deal implements Serializable {
 	private static List<A1Form> a1FormList = new ArrayList<A1Form>();
 	private static List<A23Form> a23FormList = new ArrayList<A23Form>();
 	private String jscript = "";
-	private static ArrayList<String> a1History;
-	private static ArrayList<String> a23History;
+	private static ArrayList<String> a1History = new ArrayList<String>();
+	private static ArrayList<String> a23History = new ArrayList<String>();
 	private static HashMap<Integer, String> optionMap;
 	private static String searchValue;
 
@@ -321,6 +321,8 @@ public class Deal implements Serializable {
 		a1FormList.clear();
 		a23FormList.clear();
 		commentsList.clear();
+		a1History.clear();
+		a23History.clear();
 		a1RefNo = null;
 		a23RefNo = null;
 		activeA1RefNo = null;
@@ -349,7 +351,7 @@ public class Deal implements Serializable {
 			a1FormList = new ArrayList<A1Form> ();
 			a1FormList.add(new A1Form());
 			a1statusFlag = false;
-			
+		
 		}
 		
 		a23DBStatus = hasA23Exist(referenceNo);
@@ -505,7 +507,7 @@ public class Deal implements Serializable {
 	 * @return void
 	 * @throws Exception
 	 */
-	public void updateDeal() throws Exception {
+	public int updateDeal() throws Exception {
 
 		System.out.println("In Deal: Entering updateDeal()...");
 		String a1UpdateSQL = null;
@@ -530,11 +532,11 @@ public class Deal implements Serializable {
 				a1FormObj.setA1_RefNo(a1RefNo);
 				a1FormObj.setReferenceNo(reference_No);
 				}
-				if(a23ButtonClick == true) {
+			if(a23ButtonClick == true) {
 					
 					a23FormObj.setWorkshop_Ref_Number(a23RefNo);;
 					a23FormObj.setReference_No(reference_No);
-				}
+			}
 			boolean a1ExistFlag = isA1Exist();
 			boolean a23ExistFlag = isA23Exist();
 				
@@ -557,6 +559,7 @@ public class Deal implements Serializable {
 		}
 
 		System.out.println("In Deal: Exiting updateDeal()...");
+		return updateFlag;
 	}
 	//cancel deal
 	public String cancelDeal() {
@@ -599,11 +602,11 @@ public class Deal implements Serializable {
 		           
 					if(existDealFlag == false) {
 						//Insert new deal
-						
 						int insertStatus = insertDeal();
-						 insertStatus = 1;
-						if(insertStatus > 0) {
-						
+					    if(insertStatus == 0) {
+								System.out.println("Deal insert unsuccessful.");
+								jscript= "error";
+					    } else {					
 							dealList.clear();
 							a1FormList.clear();
 							a23FormList.clear();
@@ -633,7 +636,12 @@ public class Deal implements Serializable {
 						System.out.println("Page name after insert:"+page);
 					}else {
 						//update existing deal
-						updateDeal();
+						int updateFlag = updateDeal();
+						
+						if(updateFlag == 0) {
+							System.out.println("Deal update unsuccessful.");
+							jscript= "error";
+						}
 					}
 			}
 			
@@ -685,18 +693,18 @@ public class Deal implements Serializable {
 	 * @throws Exception
 	 */
 	public boolean isA23Exist() throws Exception {
-		 boolean a1ExistFlag = false;
+		 boolean a23ExistFlag = false;
 		try {
 
 			whereClause = Constants.VSP_REF_NO +" and " + Constants.A23_REF_NO;
 			String sql = QueryBuilder.COUNT_A23 + " " + whereClause;
 
-			int count =  DealDAO.isA23Exist(sql, dealInfoObj.getReference_No(),a23FormObj.getWorkshop_Ref_Number());
+			int count =  DealDAO.isA23Exist(sql, dealInfoObj.getReference_No(), a23FormObj.getWorkshop_Ref_Number());
 			if (count > 0) {
-				a1ExistFlag =true;
+				a23ExistFlag =true;
 			}
 			else {
-				a1ExistFlag = false;
+				a23ExistFlag = false;
 			}
           
 			
@@ -705,7 +713,7 @@ public class Deal implements Serializable {
 			System.out.println("Error in isA1Exist():" + e);
 			e.printStackTrace();
 		}
-		return a1ExistFlag;
+		return a23ExistFlag;
 	}
 	/**
 	 * Method to validate A1 form status
@@ -740,7 +748,7 @@ public class Deal implements Serializable {
 	public int validateA23Status(int reference_No, String a2_RefNo) throws Exception {
 		int a23Count = 0;
 		try {
-	
+
 			whereClause = Constants.VSP_REF_NO +" and " + Constants.A23_REF_NO + "and " +Constants.A23_STATUS ;
 			String sql = QueryBuilder.COUNT_A23 + " " + whereClause;
 	

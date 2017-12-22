@@ -3,7 +3,6 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
-
 <h:body>
 
 	<table border="0" width="100%" class="panelGrid">
@@ -13,15 +12,15 @@
 					value="No Workshop Exists"  rendered="#{empty deal.a23RefNo}"/> <h:outputScript
 					rendered="#{deal.jscript == 'pendingA23'}">alert("#{msgbundle.pending_A23_error}");</h:outputScript>
 			</td>
-			<td align="right"><h:commandButton 
+			<td align="right"><h:commandButton render="dataTableGroup"
 					immediate="true" rendered="${empty deal.activeA23RefNo}"
-					disabled="#{deal.a23statusFlag }" id="wsButton" render="dataTableA23Group"
+					disabled="#{deal.a23statusFlag }" id="wsButton"
 					value="CREATE WORKSHOP" class="btn-default"
-					actionListener="#{deal.addWorkshop}" onclick="validateA1();var status = validate(); return status;">
+					actionListener="#{deal.addWorkshop}" onclick="return validate()">
 				</h:commandButton> <h:commandButton update="dataTableGroup"
 					rendered="${not empty deal.activeA23RefNo}" id="wsAddButton"
-					value="+ NEW WORKSHOP" class="btn-default" render="dataTableA23Group"
-					actionListener="#{deal.addNewWorkshop}" onclick="validateA1();var status = validate(); return status;">
+					value="+ NEW WORKSHOP" class="btn-default"
+					actionListener="#{deal.addNewWorkshop}" onclick="return validate()">
 
 				</h:commandButton></td>
 		</tr>
@@ -169,8 +168,7 @@
 								<h:selectManyListbox
 								disabled="#{not deal.a23statusFlag }"
 								value="#{row.workshop_ModulesRun}" style="width:140px;height: 70px">
-								<f:selectItems value="#{selectList.modulesRunList}"
-									immediate="true" />
+									<f:selectItems value="#{selectList.modulesRunList}" immediate="true" />
 							</h:selectManyListbox>
 								</td>
 
@@ -233,36 +231,37 @@
 								value="#{row.workshop_Consortium}" />
 						</td>
 					</tr>
-				</table>
+	
+			   <tr>
+					<td>
+					<h:outputText value="Current: " rendered="#{not empty deal.a23History}"/> 
+					<h:commandButton value="#{deal.activeA23RefNo}" rendered="#{not empty deal.a23History}" class="btn-default"   
+					actionListener="#{deal.a23HistoryListener}"/>
+					</td>
+				</tr>
+				<tr><td></td></tr>
+				<tr>
+				    <td>
+                       <h:outputText value="Historical Workshop Info: " rendered="#{not empty deal.a23History}" />
+							<ui:repeat value="#{deal.a23History}" var="hrow">
+											<ui:repeat value="#{hrow}" var="column">
+											 
+												<h:commandButton value="#{column}" class="btn-default" actionListener="#{deal.a23HistoryListener}"/>
+											     &nbsp;
+											</ui:repeat>
+							</ui:repeat>
 
-			</h:column>
-		</h:dataTable>
+				   </td>
+			   </tr>
+	    </table>		
+
+	 </h:column>
+       </h:dataTable>
 	</h:panelGroup>
-	<table>
-		<tr>
-			<td align="right"><h:outputText value="Current:"
-								rendered="#{not empty deal.a23History}" /> <h:commandButton
-								value="#{deal.activeA23RefNo}"
-								rendered="#{not empty deal.a23History}" class="btn-default"
-								actionListener="#{deal.historyListenerA23}" /> <h:outputText
-								value="Historical Workshop Info:"
-								rendered="#{not empty deal.a23History}" /></td>
-						<td colspan="4">
-							<table>
-								<tr>
-									<ui:repeat value="#{deal.a23History}" var="row">
-										<ui:repeat value="#{row}" var="column">
-											<td><h:commandButton value="#{column}"
-													class="btn-default"
-													actionListener="#{deal.historyListenerA23}" /></td>
-										</ui:repeat>
-									</ui:repeat>
-								</tr>
 
-	</table>
-</td>
-</tr>
-</table>
+
+
+
 </h:body>
 
 </html>
